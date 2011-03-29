@@ -13,6 +13,13 @@ def normalize(A):
     A -= A.min()
     return A / A.max()
 
+def equal(g1, g2):
+    if sorted(g1.edges()) != sorted(g2.edges()):
+        return False
+    if sorted(g1.nodes()) != sorted(g2.nodes()):
+        return False
+    return True
+
 def reduce_edge_set(graph, remove_label):
     """
     Return new graph with edges removed.

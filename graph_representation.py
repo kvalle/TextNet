@@ -88,7 +88,7 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
 
     return graph
 
-def _cooccurrence_preprocess(doc, context)
+def _cooccurrence_preprocess(doc, context):
     if context=='window':
         if not already_preprocessed:
             doc = preprocess.preprocess_text(doc)
@@ -257,6 +257,18 @@ def test_dependency_graph():
     pos = nx.spring_layout(g)
     graph.draw_with_centrality(g, layout=pos)
 
+def test_co_occurrences():
+    doc1 = data.read_file('../data/tasa/TASATest/Science/Agatha09.07.03.txt')
+    doc2 = data.read_file('../data/tasa/TASATest_preprocessed/Science/Agatha09.07.03.txt')
+    g0 = construct_cooccurrence_network(doc1, context='window', already_preprocessed=False)
+    g1 = construct_cooccurrence_network(doc2, context='window', already_preprocessed=True)
+    g2 = construct_cooccurrence_network(doc1, context='sentence', already_preprocessed=False)
+    graphs = data.pickle_from_file('output/testdata/co-occurrence-graphs.pkl')
+    assert(graph.equal(g0,graphs[0]))
+    assert(graph.equal(g1,graphs[1]))
+    assert(graph.equal(g2,graphs[2]))
+    print 'ok'
+
 def test_graph_to_dict():
     import pprint as pp
     g = nx.DiGraph()
@@ -267,4 +279,5 @@ def test_graph_to_dict():
 
 if __name__=="__main__":
     #~ test_dependency_graph()
-    test_graph_to_dict()
+    #~ test_graph_to_dict()
+    test_co_occurrences()
