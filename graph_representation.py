@@ -48,32 +48,32 @@ def _cooccurrence_preprocessing(doc, context, already_preprocessed):
             doc[i] = sentence
     return doc
 
-def _construct_cooccurrence_matrix(doc, context_type, direction='undirected', window_size=2):
-    if context_type == 'sentence':
-        term_list = np.array(list(set(util.flatten(doc))))
-    else:
-        term_list = np.array(list(set(doc)))
+def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
+    term_list = np.array(list(set(doc)))
     A = sparse.lil_matrix( (len(term_list), len(term_list)) )
-    if context_type == 'window':
-        for i, word in enumerate(doc):
-            context = doc[i+1:i+1+window_size]
-            for context_word in context:
+    for i, word in enumerate(doc):
+        context = doc[i+1:i+1+window_size]
+        for context_word in context:
+            x = np.where(term_list==word)[0][0]
+            y = np.where(term_list==context_word)[0][0]
+            if direction == 'forward' or direction == 'undirected':
+                A[x,y] += 1
+            if direction == 'backward' or direction == 'undirected':
+                A[y,x] += 1
+    return A, term_list
+
+def _sentence_cooccurrence_matrix(doc, direction='undirected'):
+    term_list = np.array(list(set(util.flatten(doc))))
+    A = sparse.lil_matrix( (len(term_list), len(term_list)) )
+    for sentence in doc:
+        for w, word in enumerate(sentence):
+            for c, context_word in enumerate(sentence):
+                if word == context_word: continue
+                if direction=='forward' and w > c: continue
+                if direction=='backward' and w < c: continue
                 x = np.where(term_list==word)[0][0]
                 y = np.where(term_list==context_word)[0][0]
-                if direction == 'forward' or direction == 'undirected':
-                    A[x,y] += 1
-                if direction == 'backward' or direction == 'undirected':
-                    A[y,x] += 1
-    elif context_type == 'sentence':
-        for sentence in doc:
-            for w, word in enumerate(sentence):
-                for c, context_word in enumerate(sentence):
-                    if word == context_word: continue
-                    if direction=='forward' and w > c: continue
-                    if direction=='backward' and w < c: continue
-                    x = np.where(term_list==word)[0][0]
-                    y = np.where(term_list==context_word)[0][0]
-                    A[x,y] += 1
+                A[x,y] += 1
     return A, term_list
 
 def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False):
@@ -87,39 +87,16 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
     edges are created in both directions.
     """
     doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
-
-    matrix, term_list = _construct_cooccurrence_matrix(doc, context, 'forward', window_size)
-
-    # create graph
-    if direction == 'undirected': graph = nx.Graph()
-    else: graph = nx.DiGraph()
+    if context is 'sentence':
+        matrix, term_list = _sentence_cooccurrence_matrix(doc, direction)
+    elif context is 'window':
+        matrix, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
+    graph = nx.DiGraph()
     graph.add_nodes_from(term_list)
-
-    # add edges: context-window
-    if context=='window':
-        for i, word in enumerate(doc):
-            context = doc[i+1:i+1+window_size]
-            for context_word in context:
-                if direction == 'forward' or direction == 'undirected':
-                    # it is irrelevant whether 'undirected' is included here
-                    # or for 'backward', as long as it gets updated
-                    _update_edge_weight(graph, word, context_word)
-                elif direction == 'backward':
-                    _update_edge_weight(graph, context_word, word)
-    elif context=='sentence':
-        for sentence in doc:
-            for word in sentence:
-                for context in sentence:
-                    if word != context:
-                        _update_edge_weight(graph, word, context)
-
-
-    if direction == 'undirected' or context =='sentence':
-        # Each edge is replaced by one edge for each direction.
-        # This is done because some centrality measures required directed
-        # edges, and it is thus easier to use DiGraph all around.
-        graph = graph.to_directed()
-
+    for i, term in enumerate(term_list):
+        for j in matrix.rows[i]:
+            other = term_list[j]
+            graph.add_edge(term, other, weight=matrix[i,j])
     return graph
 
 def construct_higher_order_cooccurrence_network(doc, order, window_size=2,
