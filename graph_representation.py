@@ -32,6 +32,50 @@ def create_graphs(documents, graph_type='co-occurrence', verbose=False):
         graphs.append(g)
     return graphs
 
+def _cooccurrence_preprocessing(doc, context, already_preprocessed):
+    """
+    Preprocess document as needed for co-occurrence network creation
+    """
+    if context=='window':
+        if already_preprocessed:
+            doc = doc.split(' ')
+        else:
+            doc = preprocess.preprocess_text(doc)
+    elif context=='sentence':
+        doc = preprocess.tokenize_sentences(doc)
+        for i, sentence in enumerate(doc):
+            sentence = preprocess.preprocess_text(sentence)
+            doc[i] = sentence
+    return doc
+
+def _construct_cooccurrence_matrix(doc, context_type, direction='undirected', window_size=2):
+    if context_type == 'sentence':
+        term_list = np.array(list(set(util.flatten(doc))))
+    else:
+        term_list = np.array(list(set(doc)))
+    A = sparse.lil_matrix( (len(term_list), len(term_list)) )
+    if context_type == 'window':
+        for i, word in enumerate(doc):
+            context = doc[i+1:i+1+window_size]
+            for context_word in context:
+                x = np.where(term_list==word)[0][0]
+                y = np.where(term_list==context_word)[0][0]
+                if direction == 'forward' or direction == 'undirected':
+                    A[x,y] += 1
+                if direction == 'backward' or direction == 'undirected':
+                    A[y,x] += 1
+    elif context_type == 'sentence':
+        for sentence in doc:
+            for w, word in enumerate(sentence):
+                for c, context_word in enumerate(sentence):
+                    if word == context_word: continue
+                    if direction=='forward' and w > c: continue
+                    if direction=='backward' and w < c: continue
+                    x = np.where(term_list==word)[0][0]
+                    y = np.where(term_list==context_word)[0][0]
+                    A[x,y] += 1
+    return A, term_list
+
 def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False):
     """
     Construct co-occurrence network from text.
@@ -42,24 +86,14 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
     A DiGraph is created regardless of direction parameter, but with 'undirected',
     edges are created in both directions.
     """
-    # preprocess text
-    if context=='window':
-        if not already_preprocessed:
-            doc = preprocess.preprocess_text(doc)
-        else:
-            doc = doc.split(' ')
-        words = list(set(doc)) # list of unique words
-    elif context=='sentence':
-        doc = preprocess.tokenize_sentences(doc)
-        for i, sentence in enumerate(doc):
-            sentence = preprocess.preprocess_text(sentence)
-            doc[i] = sentence
-        words = list(set(util.flatten(doc))) # list of unique words
+    doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
+
+    matrix, term_list = _construct_cooccurrence_matrix(doc, context, 'forward', window_size)
 
     # create graph
     if direction == 'undirected': graph = nx.Graph()
     else: graph = nx.DiGraph()
-    graph.add_nodes_from(words)
+    graph.add_nodes_from(term_list)
 
     # add edges: context-window
     if context=='window':
@@ -87,20 +121,6 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
         graph = graph.to_directed()
 
     return graph
-
-def _cooccurrence_preprocess(doc, context):
-    if context=='window':
-        if not already_preprocessed:
-            doc = preprocess.preprocess_text(doc)
-        else:
-            doc = doc.split(' ')
-        words = list(set(doc)) # list of unique words
-    elif context=='sentence':
-        doc = preprocess.tokenize_sentences(doc)
-        for i, sentence in enumerate(doc):
-            sentence = preprocess.preprocess_text(sentence)
-            doc[i] = sentence
-        words = list(set(util.flatten(doc))) # list of unique words
 
 def construct_higher_order_cooccurrence_network(doc, order, window_size=2,
         direction='undirected', context='window', already_preprocessed=False):
