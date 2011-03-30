@@ -5,6 +5,7 @@ Methods for calculating things like centrality, etc
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy
+from scipy import sparse
 from random import random as rand
 import plotter
 
@@ -12,6 +13,14 @@ def normalize(A):
     A = numpy.array(A, float)
     A -= A.min()
     return A / A.max()
+
+def add_edges_from_matrix(graph, matrix, nodes):
+    if sparse.isspmatrix(matrix):
+        matrix = matrix.todense()
+    for i, node in enumerate(nodes):
+        for j, other in enumerate(nodes):
+            if matrix[i,j]>0:
+                graph.add_edge(node, other, weight=matrix[i,j])
 
 def equal(g1, g2):
     if sorted(g1.edges()) != sorted(g2.edges()):
