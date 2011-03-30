@@ -12,13 +12,27 @@ import scipy.spatial.distance
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
-def test():
-    path = '../data/air/problem_descriptions_preprocessed'
+def test_classification(orders=[1,2,3]):
+    #~ path = '../data/air/problem_descriptions_preprocessed'
+    path = '../data/tasa/TASA900_preprocessed'
     texts, labels = data.read_files(path)
-    lengths = []
+    rep = []
     for i, text in enumerate(texts):
         print str(i)+"/"+str(len(texts))
-        g = graph_representation.construct_higher_order_cooccurrence_network(text, 3)
+        g = graph_representation.construct_cooccurrence_network(text, orders=orders)
+        d = graph_representation.graph_to_dict(g, graph.GraphMetrics.WEIGHTED_DEGREE)
+        rep.append(d)
+    rep = graph_representation.dicts_to_vectors(rep)
+    score = evaluation.evaluate_classification(rep, labels)
+    print score
+    return score
+
+def store_higher_orders():
+    path = '../data/tasa/TASA900_preprocessed'
+    texts, labels = data.read_files(path)
+    for i, text in enumerate(texts):
+        print str(i)+"/"+str(len(texts))
+        first, second, third = graph_representation.construct_cooccurrence_network(text, orders=orders)
 
 def test_vocabulary_size():
     path = '../data/air/problem_descriptions_preprocessed'
@@ -35,4 +49,4 @@ def test_vocabulary_size():
     print 'min', lengths.min()
 
 if __name__ == "__main__":
-    test()
+    test_classification()

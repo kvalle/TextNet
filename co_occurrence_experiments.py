@@ -28,7 +28,7 @@ def do_context_size_evaluation_retrieval():
     solution_texts, labels = data.read_files(solutions_path)
     solution_vectors = freq_representation.text_to_vector(solution_texts, freq_representation.FrequencyMetrics.TF_IDF)
 
-    for window_size in [20,40,80]:#range(1,11)+[20,40,80]:
+    for window_size in range(1,11)+[20,40,80]:
         print '-- window size:',window_size
 
         rep = {}
