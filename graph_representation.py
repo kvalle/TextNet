@@ -9,6 +9,7 @@ import selector
 import preprocess
 import util
 import data
+import os.path
 
 ######
 ##
@@ -76,7 +77,7 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[]):
+def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[], doc_id=None):
     """
     Construct co-occurrence network from text.
 
@@ -96,7 +97,11 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
     if len(orders)==0:
         graph.add_edges_from_matrix(g, matrix, term_list)
     else:
-        first, second, third = _higher_order_matrix(matrix.todense())
+        if doc_id is not None and os.path.exists(doc_id):
+            first, second, third = data.pickle_from_file(doc_id)
+        else:
+            first, second, third = _higher_order_matrix(matrix.todense())
+            data.pickle_to_file((first,second,third), doc_id)
     if 1 in orders:
         graph.add_edges_from_matrix(g, first, term_list)
     if 2 in orders:
