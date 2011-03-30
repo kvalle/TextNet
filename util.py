@@ -3,6 +3,13 @@ import time
 import operator
 import numpy as np
 
+def fill_matrix_diagonal(matrix, value):
+    """
+    Implementation of fill_diagonal from numpy
+    """
+    matrix.flat[::matrix.shape[1]+1] = value
+    return matrix
+
 def flatten(list):
     return [item for sublist in list for item in sublist]
 

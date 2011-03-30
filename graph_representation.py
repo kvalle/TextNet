@@ -76,33 +76,32 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False):
-    """
-    Construct co-occurrence network from text.
-
-    @param direction: forward | backward | undirected
-    @param context: window | sentence
-
-    A DiGraph is created regardless of direction parameter, but with 'undirected',
-    edges are created in both directions.
-    """
-    doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
-    if context is 'sentence':
-        matrix, term_list = _sentence_cooccurrence_matrix(doc, direction)
-    elif context is 'window':
-        matrix, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
-    graph = nx.DiGraph()
-    graph.add_nodes_from(term_list)
-    for i, term in enumerate(term_list):
-        for j in matrix.rows[i]:
-            other = term_list[j]
-            graph.add_edge(term, other, weight=matrix[i,j])
-    return graph
-
 def construct_higher_order_cooccurrence_network(doc, order, window_size=2,
         direction='undirected', context='window', already_preprocessed=False):
-    A = sparse.lil_matrix((1000, 1000))
-    pass
+    doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
+    if context is 'sentence':
+        A, term_list = _sentence_cooccurrence_matrix(doc, direction)
+    elif context is 'window':
+        A, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
+    first, second, third = _higher_order_matrix(A.todense())
+    graph = nx.DiGraph()
+    return graph
+
+def _higher_order_matrix(matrix):
+    dim = matrix.shape[0]
+    matrix = np.clip(matrix, 0, 1)
+    first_order = util.fill_matrix_diagonal(matrix, 0.0)
+    second_order = first_order**2
+    third_order = first_order**3
+    col_sums = np.sum(first_order, axis=0)
+    discount_matrix = np.matrix(np.zeros((dim,dim), np.int8))
+    for i in range(dim):
+        for j in range(dim):
+            d = col_sums[0,i] + col_sums[0,j] - 1
+            if i!=j:
+                discount_matrix[i,j] = d
+    third_order = third_order - np.multiply(discount_matrix,first_order)
+    return first_order, second_order, third_order
 
 def construct_random_network(doc, p=0.2):
     """
@@ -254,6 +253,16 @@ def test_dependency_graph():
     pos = nx.spring_layout(g)
     graph.draw_with_centrality(g, layout=pos)
 
+def test_graph_to_dict():
+    import pprint as pp
+    g = nx.DiGraph()
+    g.add_nodes_from(range(0,7))
+    edge_list = [(0,1),(0,6),(0,5),(1,2),(1,6),(2,0),(2,1),(2,3),(3,4),(4,5),(4,6),(5,0),(5,3),(5,4)]
+    g.add_edges_from(edge_list)
+    pp.pprint(graph_to_dict(g,'PageRank'))
+
+### TESTS ###
+
 def test_co_occurrences():
     doc1 = data.read_file('../data/tasa/TASATest/Science/Agatha09.07.03.txt')
     doc2 = data.read_file('../data/tasa/TASATest_preprocessed/Science/Agatha09.07.03.txt')
@@ -266,15 +275,34 @@ def test_co_occurrences():
     assert(graph.equal(g2,graphs[2]))
     print 'ok'
 
-def test_graph_to_dict():
-    import pprint as pp
-    g = nx.DiGraph()
-    g.add_nodes_from(range(0,7))
-    edge_list = [(0,1),(0,6),(0,5),(1,2),(1,6),(2,0),(2,1),(2,3),(3,4),(4,5),(4,6),(5,0),(5,3),(5,4)]
-    g.add_edges_from(edge_list)
-    pp.pprint(graph_to_dict(g,'PageRank'))
+def test_higher_order():
+    matrix = np.matrix([[3,1,1,2],
+                        [1,2,0,2],
+                        [2,0,2,1],
+                        [2,2,1,3]])
+    first, second, third = _higher_order_matrix(matrix)
+    ref_1 = np.matrix([[0,1,1,1],
+                       [1,0,0,1],
+                       [1,0,0,1],
+                       [1,1,1,0]])
+    assert(np.equal(first,ref_1).all())
+    ref_2 = np.matrix([[3,1,1,2],
+                       [1,2,2,1],
+                       [1,2,2,1],
+                       [2,1,1,3]])
+    assert(np.equal(second,ref_2).all())
+    ref_3 = np.matrix([[4,1,1,0],
+                       [1,2,2,1],
+                       [1,2,2,1],
+                       [0,1,1,4]])
+    assert(np.equal(third,ref_3).all())
+    print 'ok'
+
+def run_tests():
+    test_co_occurrences()
+    test_higher_order()
 
 if __name__=="__main__":
     #~ test_dependency_graph()
     #~ test_graph_to_dict()
-    test_co_occurrences()
+    run_tests()
