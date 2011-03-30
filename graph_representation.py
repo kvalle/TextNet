@@ -76,7 +76,7 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False):
+def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[]):
     """
     Construct co-occurrence network from text.
 
@@ -93,24 +93,15 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
         matrix, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
     g = nx.DiGraph()
     g.add_nodes_from(term_list)
-    graph.add_edges_from_matrix(g, matrix, term_list)
-    return g
-
-def construct_higher_order_cooccurrence_network(doc, order, window_size=2,
-        direction='undirected', context='window', already_preprocessed=False):
-    doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
-    if context is 'sentence':
-        A, term_list = _sentence_cooccurrence_matrix(doc, direction)
-    elif context is 'window':
-        A, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
-    first, second, third = _higher_order_matrix(A.todense())
-    g = nx.DiGraph()
-    g.add_nodes_from(term_list)
-    if order>=1:
+    if len(orders)==0:
+        graph.add_edges_from_matrix(g, matrix, term_list)
+    else:
+        first, second, third = _higher_order_matrix(matrix.todense())
+    if 1 in orders:
         graph.add_edges_from_matrix(g, first, term_list)
-    if order>=2:
+    if 2 in orders:
         graph.add_edges_from_matrix(g, second, term_list)
-    if order>=3:
+    if 3 in orders:
         graph.add_edges_from_matrix(g, third, term_list)
     return g
 
