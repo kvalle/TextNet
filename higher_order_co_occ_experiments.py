@@ -36,7 +36,7 @@ def test_retrieval(orders=[1,2,3]):
     print 'orders:', orders
     print 'score:', score
     fname = 'output/higher_order/results/retr'
-    with open(fname, 'a') as f:
+    with open(fname, 'a+') as f:
         s = reduce(lambda x,y:str(x)+str(y), orders)
         f.write(str(s)+' '+str(score)+'\n')
     return score
@@ -50,7 +50,7 @@ def test_classification(orders=[1,2,3]):
     rep = []
     for i, text in enumerate(texts):
         print '    '+str(i)+"/"+str(len(texts))
-        g = graph_representation.construct_cooccurrence_network(text, orders=orders, doc_id='output/higher_order/tasa/'+labels[i]+'/'+filenames[i])
+        g = graph_representation.construct_cooccurrence_network(text, context='sentence', orders=[], doc_id='output/higher_order/tasa/'+labels[i]+'/'+filenames[i])
         d = graph_representation.graph_to_dict(g, graph.GraphMetrics.WEIGHTED_DEGREE)
         rep.append(d)
     rep = graph_representation.dicts_to_vectors(rep)
@@ -59,7 +59,7 @@ def test_classification(orders=[1,2,3]):
     print 'orders:', orders
     print 'score:', score
     fname = 'output/higher_order/results/class'
-    with open(fname, 'a') as f:
+    with open(fname, 'a+') as f:
         s = reduce(lambda x,y:str(x)+str(y), orders)
         f.write(str(s)+' '+str(score)+'\n')
     return score
