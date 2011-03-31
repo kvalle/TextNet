@@ -101,7 +101,8 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
             first, second, third = data.pickle_from_file(doc_id)
         else:
             first, second, third = _higher_order_matrix(matrix.todense())
-            data.pickle_to_file((first,second,third), doc_id)
+            if doc_id is not None:
+                data.pickle_to_file((first,second,third), doc_id)
     if 1 in orders:
         graph.add_edges_from_matrix(g, first, term_list)
     if 2 in orders:
@@ -296,6 +297,22 @@ def test_co_occurrences():
     assert(graph.equal(g0,graphs[0]))
     assert(graph.equal(g1,graphs[1]))
     assert(graph.equal(g2,graphs[2]))
+
+    doc = data.read_file('output/testdata/higher.order.testdoc.preprocessed.txt')
+    g1 = construct_cooccurrence_network(doc, already_preprocessed=True, window_size=1, orders=[1])
+    g12 = construct_cooccurrence_network(doc, already_preprocessed=True, window_size=1, orders=[1,2])
+    g123 = construct_cooccurrence_network(doc, already_preprocessed=True, window_size=1, orders=[1,2,3])
+    g13 = construct_cooccurrence_network(doc, already_preprocessed=True, window_size=1, orders=[1,3])
+    assert(('foo','bar') in g1.edges())
+    assert(('foo','baz') not in g1.edges())
+    assert(('foo','cake') not in g1.edges())
+    assert(('foo','bar') in g12.edges())
+    assert(('foo','baz') in g12.edges())
+    assert(('foo','cake') not in g12.edges())
+    assert(('foo','bar') in g123.edges())
+    assert(('foo','baz') in g123.edges())
+    assert(('foo','cake') in g123.edges())
+    assert(('foo','baz') not in g13.edges())
     print 'ok'
 
 def test_higher_order():
