@@ -16,6 +16,7 @@ import pprint as pp
 import plotter
 import numpy
 import scipy.spatial.distance
+import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
@@ -132,8 +133,32 @@ def print_network_props():
             print '%2.3f'%tasa[prop+sep+'mean'],' & ','%2.3f'%tasa[prop+sep+'std'],' & ',
             print '%2.3f'%air[prop+sep+'mean'],' & ','%2.3f'%air[prop+sep+'std'],'\\\\'
 
+def dataset_stats(dataset):
+    print '> Reading data..', dataset
+    corpus_path = '../data/'+dataset
+    (documents, labels) = data.read_files(corpus_path)
+    file_names = data.get_file_names(corpus_path)
+    lengths = []
+    empty = 0
+    for i,d in enumerate(documents):
+        d = preprocess.tokenize_tokens(d)
+        lengths.append(len(d))
+        if len(d)==0:
+            print file_names[i],'is empty'
+            empty += 1
+    lengths = numpy.array(lengths)
+    print '# documents:',len(documents)
+    print '# empty documents:',empty
+    print '# words:',sum(lengths)
+    print 'length avg:',lengths.mean()
+    print 'length stddev:',lengths.std()
+    print
+    print 'document lengths (sorted):',sorted(lengths)
+    plotter.histogram(lengths,'# tokens','# documents','',bins=80)
+
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
     #~ plot_sentence_lengths('output/tasa_sentence_lengths.pkl')
-    print_network_props()
+    #~ print_network_props()
+    dataset_stats('tasa/TASA900_text')

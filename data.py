@@ -215,30 +215,7 @@ def pickle_to_file(data, filename):
     pickle.dump(data, output)
     output.close()
 
-######
-
-def dataset_stats(dataset):
-    print '> Reading data..', dataset
-    corpus_path = '../data/'+dataset
-    (documents, labels) = read_files(corpus_path)
-    file_names = get_file_names(corpus_path)
-    lengths = []
-    empty = 0
-    for i,d in enumerate(documents):
-        d = preprocess.tokenize_tokens(d)
-        lengths.append(len(d))
-        if len(d)==0:
-            print file_names[i],'is empty'
-            empty += 1
-    lengths = numpy.array(lengths)
-    print '# documents:',len(documents)
-    print '# empty documents:',empty
-    print '# words:',sum(lengths)
-    print 'length avg:',lengths.mean()
-    print 'length stddev:',lengths.std()
-    print
-    print 'document lengths (sorted):',sorted(lengths)
-    plotter.histogram(lengths,'# tokens','# documents','',bins=80)
+###### Utility functions
 
 def test_ascii(path='../data/air/reports_text'):
     (documents, labels) = read_files(path)
@@ -251,7 +228,6 @@ def test_ascii(path='../data/air/reports_text'):
     print "done"
 
 if __name__ == "__main__":
-    #~ dataset_stats('air/text')
     #~ test_ascii()
     #~ create_dataset_html_to_text('../data/air/html', '../data/air/text')
     #~ create_dataset_html_to_case('../data/air/html', '../data/air/text')
