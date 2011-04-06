@@ -601,4 +601,5 @@ if __name__ == "__main__":
     #~ corpus_dependency_properties()
     #~ print_common_hub_words(False)
     #~ evaluate_dep_type_sets()
-    plot_type_sets_evaluation()
+    #~ plot_type_sets_evaluation()
+    centrality_weights_retrieval(False)

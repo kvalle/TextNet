@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy
 from scipy import sparse
-from random import random as rand
+
 import plotter
 
 def normalize(A):

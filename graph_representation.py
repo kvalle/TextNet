@@ -3,12 +3,12 @@ import numpy as np
 import networkx as nx
 import pickle
 from scipy import sparse
+import os.path
 
 import graph
 import preprocess
 import util
 import data
-import os.path
 
 ######
 ##

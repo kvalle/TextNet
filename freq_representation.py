@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import networkx as nx
+
 import preprocess
 
 #~ from nltk.corpus.reader.plaintext import PlaintextCorpusReader

@@ -4,9 +4,8 @@ Methods for preprocessing text.
 @author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
 
-import nltk, re, os
-from tempfile import mkstemp
-from shutil import move
+import nltk
+import re
 
 #####
 ##

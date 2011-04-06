@@ -4,11 +4,9 @@ k-NN classifier and evaluation methods.
 @author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
 
-import random
 import nltk
 import numpy
 import scipy.spatial.distance
-import time
 
 from nltk.probability import FreqDist
 
