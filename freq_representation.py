@@ -1,13 +1,12 @@
 import numpy as np
 import math
 import networkx as nx
-import selector
 import preprocess
 
 #~ from nltk.corpus.reader.plaintext import PlaintextCorpusReader
 from nltk.probability import FreqDist
 
-def text_to_vector(docs, metric, feature_selection=False):
+def text_to_vector(docs, metric):
     """ Create frequency based feature-vector from text """
     doc_freqs = FreqDist() # Distribution over how many documents each word appear in.
     tf_dists = [] # List of TF distributions per document
@@ -36,11 +35,6 @@ def text_to_vector(docs, metric, feature_selection=False):
         else:
             raise ValueError("No such feature type: %s" % feature_type);
         matrix[:,i] = v
-
-    if feature_selection:
-        sel = selector.MaxSelector(matrix)
-        indices = sel.select_features(100)
-        matrix = matrix[indices,:]
 
     return matrix
 

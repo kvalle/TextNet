@@ -8,7 +8,6 @@ import tempfile
 import shutil
 import pickle
 
-import plotter
 import preprocess
 import report_data
 
