@@ -77,7 +77,7 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[], doc_id=None):
+def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None):
     """
     Construct co-occurrence network from text.
 
@@ -104,16 +104,16 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
             if doc_id is not None:
                 data.pickle_to_file((first,second,third), doc_id)
     if 1 in orders:
-        graph.add_edges_from_matrix(g, first, term_list)
+        graph.add_edges_from_matrix(g, first, term_list, rel_weight=order_weights[0])
     if 2 in orders:
-        graph.add_edges_from_matrix(g, second, term_list)
+        graph.add_edges_from_matrix(g, second, term_list, rel_weight=order_weights[1])
     if 3 in orders:
-        graph.add_edges_from_matrix(g, third, term_list)
+        graph.add_edges_from_matrix(g, third, term_list, rel_weight=order_weights[2])
     return g
 
-def _higher_order_matrix(matrix):
+def _higher_order_matrix(matrix, do_clip=False):
     dim = matrix.shape[0]
-    matrix = np.clip(matrix, 0, 1)
+    if do_clip: matrix = np.clip(matrix, 0, 1)
     first_order = util.fill_matrix_diagonal(matrix, 0.0)
     second_order = first_order**2
     third_order = first_order**3
@@ -343,6 +343,4 @@ def run_tests():
     test_higher_order()
 
 if __name__=="__main__":
-    #~ test_dependency_graph()
-    #~ test_graph_to_dict()
     run_tests()
