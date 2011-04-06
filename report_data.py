@@ -1,3 +1,15 @@
+"""
+Helper module for 'data', used to extract problem description and solution parts from cases.
+
+Parses reports formatted in HTML, structured as those in the AIR dataset, and split them into
+problem description part and solution part of textual CBR cases.
+Solutions are identified based on section titles in the reports.
+Titles matching words such as 'finding' or 'conclusion' are considered as part of the solution.
+The remaining report is by default the problem description.
+
+@author: Gleb Sizov <sizov@idi.ntnu.no>
+"""
+
 from HTMLParser import HTMLParser, HTMLParseError
 import re
 import os

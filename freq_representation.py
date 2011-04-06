@@ -1,3 +1,14 @@
+"""
+Functions for creating frequency based feature vector from text.
+
+The function of interest is text_to_vector(), which creates
+term frequency (TF) or term frequency-inverse document frequency (TF-IDF)
+vectors from lists of documents. Results are output in form of a
+term-document matrix.
+
+@author: Kjetil Valle <kjetilva@stud.ntnu.no>
+"""
+
 import numpy as np
 import math
 

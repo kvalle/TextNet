@@ -1,6 +1,23 @@
 """
-Methods for reading data from files
+Module for reading and writing case files.
+
+The read_* methods provide reading of cases in various formats from dataset.
+For converting dataset between formats, use the appropriate create_dataset_* function.
+It is also possible to provide custom conversion functions to the create_dataset function.
+
+The module expects to work with datasets structured so that each category
+is in a separate subfolder named after the category.
+
+The following formats are supported for dataset conversion:
+- HTML: Expected formatted similarly to AIR dataset reports for conversion to cases.
+        Conversion to text/dependencies should work regardless.
+- Text: Raw text. Anything within <p> if extracted from HTML.
+- Preprocessed text: Processed using the default parameters from preprocess.preprocess_text().
+- Dependencies: As defined by the stanford dependency parser.
+
+@author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
+
 import os
 import os.path
 import re

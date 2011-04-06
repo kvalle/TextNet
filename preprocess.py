@@ -1,5 +1,17 @@
 """
-Methods for preprocessing text.
+Toolbox of functions for preprocessing text.
+
+The module contains methods for a variety of preprocessing tasks, such as
+filtering out words with special characters, stemming, stop-word removal,
+case folding and more, as well as functions for splitting text into lists
+of tokens or sentences. Use preprocess_text() and preprocess_token() for
+full preprocessing.
+
+Extraction of within-sentence word dependnecies is also available through
+the extract_dependencies() function, which works as an interface to the
+'stanford_parser' module.
+
+The Natural Language Toolkit (NLTK) is used for most of the heavy lifting.
 
 @author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """

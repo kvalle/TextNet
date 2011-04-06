@@ -1,6 +1,10 @@
 """
 Module containing methods for evaluating representations.
 
+This module acts as an interface to evaluation against the 'classify'
+and 'retrieval' modules through the evaluate_classification() and
+evaluate_retrieval() functions, respectively.
+
 @author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
 

@@ -1,5 +1,16 @@
 """
-Util. functions for plotting using matplotlib.
+Utility functions facititating easy plotting with matplotlib.
+
+Functions of note:
+- plot: plot a regular plot, given input x,y-coordinates.
+- bar_graph: plot a horizontal bar graph from x-coordinates and named
+        groups of lists of y-corrdinates.
+- histogram: plots a histogram from a set of samples and a given number
+        of bins.
+- plot_degree_distribution: plot the degree distribution provided a
+        networkx graph.
+
+@author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
 
 import matplotlib.pyplot as plt
@@ -108,17 +119,6 @@ def demo():
     y_label = 'Number of features'
     title = 'Accuracy of feature selectors'
     plot(x_vals, y_vals, x_label, y_label, title, [0,x_vals[-1],0,1])
-
-def plot_context_sizes():
-    x_vals = [1,2,3,4,5,6,7,8,9,10]#,20,50]
-    y_vals = {
-                'PageRank': [0.558, 0.550, 0.553, 0.542, 0.544, 0.547, 0.547, 0.538, 0.539, 0.536],#, 0.542, 0.539],
-                'Degree centrality': [0.528, 0.533, 0.536, 0.533, 0.539, 0.542, 0.536, 0.528, 0.531, 0.531]#, 0.536, 0.517]
-             }
-    x_label = 'classification accuracy'
-    y_label = 'n, context size'
-    title = ''
-    plot(x_vals, y_vals, x_label, y_label, title, [1,10,0.51,0.57])
 
 def test_plot_degree_distribution():
     #~ g=nx.erdos_renyi_graph(100,0.15)

@@ -1,3 +1,25 @@
+"""
+Construct graph representations from text.
+
+The module contains functions from creating networks based on text documents,
+and for converting the networks into feature-vectors.
+Feature vectors are created based on node centrality in the text networks.
+
+The following text representations are supported:
+- random:
+    Will create a network with all distinct terms in the provided document
+    as nodes. Edges are created at random between the nodes, based on provided
+    probabilities.
+- co-occurrence:
+    Distinct terms in the document are used as nodes. Edges are created
+    between any terms that occurs closely together in the text.
+- dependency:
+    Words as nodes. Edges represent dependencies extracted from the text
+    using the stanford dependency parser (see the 'stanford_parser' module).
+
+@author: Kjetil Valle <kjetilva@stud.ntnu.no>
+"""
+
 from random import random as rand
 import numpy as np
 import networkx as nx
@@ -17,6 +39,7 @@ import data
 ######
 
 def create_graphs(documents, graph_type='co-occurrence', verbose=False):
+    """Crate text networks of given type, using their default paramters"""
     graphs = []
     for i, text in enumerate(documents):
         if verbose and i%100==0:

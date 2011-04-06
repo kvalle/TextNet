@@ -1,5 +1,10 @@
 """
-k-NN classifier and evaluation methods.
+Classification of feature-vectors using KNN classifier.
+
+The KNN class contains the classifier. It can classify() new datapoints
+as soon as it is properly trained using the train() method.
+The test() method provides a way to classify many vectors at once, and
+return the classifiers accuracy compared to a gold standard.
 
 @author: Kjetil Valle <kjetilva@stud.ntnu.no>
 """
