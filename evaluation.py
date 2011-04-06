@@ -10,9 +10,6 @@ import numpy
 import scipy.spatial.distance
 import random
 
-import data
-import freq_representation
-import plotter
 import classify
 
 def evaluate_retrieval(descriptions, solutions):
@@ -160,18 +157,17 @@ def pdump_results(data, file_path='output/results'):
 
 ### Tests
 
-def test_test_retrieval():
+def test_evaluate_retrieval():
     desc = numpy.array([[.5, .3],[.5, .3]])
     sol = numpy.array([[.3, .4],[.7, .6]])
-    sim = _test_retrieval(desc, sol)
+    sim = evaluate_retrieval(desc, sol)
     t = 0.00001
     gold = 0.983282004984
     assert(gold-t < sim < gold+t)
 
 def run_tests():
-    test_test_retrieval()
+    test_evaluate_retrieval()
     print "ok"
 
 if __name__ == "__main__":
-    solution_similarity_stats()
-    pass
+    run_tests()
