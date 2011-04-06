@@ -12,7 +12,7 @@ import scipy.spatial.distance
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
-def test_retrieval(orders=[1,2,3]):
+def test_retrieval(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
     print '> Reading cases..'
     descriptions_path = '../data/air/problem_descriptions_preprocessed'
     description_texts, labels = data.read_files(descriptions_path)
@@ -26,7 +26,7 @@ def test_retrieval(orders=[1,2,3]):
     rep = []
     for i, text in enumerate(description_texts):
         print '    '+str(i)+"/"+str(len(description_texts))
-        g = graph_representation.construct_cooccurrence_network(text, orders=orders, doc_id='output/higher_order/air/'+labels[i]+'/'+filenames[i])
+        g = graph_representation.construct_cooccurrence_network(text, orders=orders, order_weights=order_weights, doc_id='output/higher_order/air/'+labels[i]+'/'+filenames[i])
         d = graph_representation.graph_to_dict(g, graph.GraphMetrics.WEIGHTED_DEGREE)
         rep.append(d)
     rep = graph_representation.dicts_to_vectors(rep)
@@ -41,16 +41,16 @@ def test_retrieval(orders=[1,2,3]):
         f.write(str(s)+' '+str(score)+'\n')
     return score
 
-def test_classification(orders=[1,2,3]):
+def test_classification(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
     print '> Reading cases..'
-    path = '../data/tasa/TASA900_preprocessed'
+    path = '../data/tasa/TASA900_text'
     texts, labels = data.read_files(path)
     filenames = data.get_file_names(path)
     print '> Creating representations..'
     rep = []
     for i, text in enumerate(texts):
         print '    '+str(i)+"/"+str(len(texts))
-        g = graph_representation.construct_cooccurrence_network(text, context='sentence', orders=[], doc_id='output/higher_order/tasa/'+labels[i]+'/'+filenames[i])
+        g = graph_representation.construct_cooccurrence_network(text, context='sentence', orders=orders, order_weights=order_weights, doc_id='output/higher_order/tasa/'+labels[i]+'/'+filenames[i])
         d = graph_representation.graph_to_dict(g, graph.GraphMetrics.WEIGHTED_DEGREE)
         rep.append(d)
     rep = graph_representation.dicts_to_vectors(rep)
@@ -79,13 +79,14 @@ def test_vocabulary_size():
     print 'min', lengths.min()
 
 if __name__ == "__main__":
-    combinations = [[1],
-                    [2],
-                    [3],
+    combinations = [
+                    #~ [1],
+                    #~ [2],
+                    #~ [3],
                     [1,2],
                     [1,3],
                     [2,3],
                     [1,2,3]]
     for c in combinations:
-        test_classification(c)
-        #~ test_retrieval(c)
+        #~ test_classification(c)
+        test_retrieval(c)
