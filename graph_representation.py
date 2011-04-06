@@ -5,7 +5,6 @@ import pickle
 from scipy import sparse
 
 import graph
-import selector
 import preprocess
 import util
 import data
@@ -203,7 +202,7 @@ def similarity_matrix_to_graph(distM):
 ##
 ######
 
-def graphs_to_vectors(graphs, metric, feature_selection=False, verbose=False):
+def graphs_to_vectors(graphs, metric, verbose=False):
     """ Create centrality based feature-vector from graph representation """
     all_tokens = graph.node_set(graphs)
     features = np.zeros((len(all_tokens), len(graphs)))
@@ -212,10 +211,6 @@ def graphs_to_vectors(graphs, metric, feature_selection=False, verbose=False):
         #~ cents = graph.centralities(g, metric)
         #~ features[:,i] = [cents.get(token, 0.0) for token in all_tokens]
         features[:,i] = graph_to_vector(g, metric, all_tokens)
-    if feature_selection:
-        sel = selector.MaxSelector(features)
-        indices = sel.select_features(100)
-        features = features[indices,:]
     return features
 
 def graph_to_vector(g, metric, all_tokens):
