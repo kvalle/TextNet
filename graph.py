@@ -14,13 +14,16 @@ def normalize(A):
     A -= A.min()
     return A / A.max()
 
-def add_edges_from_matrix(graph, matrix, nodes):
+def add_edges_from_matrix(graph, matrix, nodes, rel_weight=1.0):
     if sparse.isspmatrix(matrix):
         matrix = matrix.todense()
     for i, node in enumerate(nodes):
         for j, other in enumerate(nodes):
             if matrix[i,j]>0:
-                graph.add_edge(node, other, weight=matrix[i,j])
+                w = 0.0
+                if graph.has_edge(node, other):
+                    w = graph.get_edge_data(node,other)['weight']
+                graph.add_edge(node, other, weight=w+matrix[i,j]*rel_weight)
 
 def equal(g1, g2):
     if sorted(g1.edges()) != sorted(g2.edges()):
