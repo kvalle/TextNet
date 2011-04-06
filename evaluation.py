@@ -140,15 +140,5 @@ def _classification_split(features, labels, train_size=0.6, random=False):
     accuracy = classifier.test(test_features, test_labels)
     return accuracy
 
-def dump_results(data, file_path='output/results'):
-    with open(file_path, 'a+') as f:
-        f.write(data)
-        f.write('\n\n')
-
-def pdump_results(data, file_path='output/results'):
-    with open(file_path, 'a+') as f:
-        pp.pprint(data,stream=f,width=50)
-        f.write('\n\n')
-
 if __name__ == "__main__":
     pass
