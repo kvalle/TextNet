@@ -4,9 +4,7 @@ import operator
 import numpy as np
 
 def fill_matrix_diagonal(matrix, value):
-    """
-    Implementation of fill_diagonal from numpy
-    """
+    """Implementation of fill_diagonal from numpy"""
     matrix.flat[::matrix.shape[1]+1] = value
     return matrix
 
@@ -76,9 +74,8 @@ def to_latex_table(data, write_file=True, prt=True, start=None, end=None):
         if write_file:
             f.write(end+'\n')
 
-def test_unique():
+def test_unique(path='../data/reuters1000/'):
     """Check if there are any documents with multiple categories."""
-    path = '../data/reuters1000/'
     d = {}
     for root, cats, docs in os.walk(path):
         category = root.split(os.sep)[-1]

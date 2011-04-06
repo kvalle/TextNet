@@ -89,14 +89,14 @@ def extract_dependencies(text):
     exhaustion of the java heap space. If this happens the sentence is
     skipped and its dependencies omitted.
     """
-    import stanford_parser_pype as spp
+    import stanford_parser as sp
     import jpype
 
     results = {}
     sentences = tokenize_sentences(text)
     for s in sentences:
         try:
-            pos, tree, dependencies = spp.parse(s)
+            pos, tree, dependencies = sp.parse(s)
         except jpype._jexception.JavaException as e:
             print '! Sentence too long, skipping it;\n!', e
             continue

@@ -8,7 +8,7 @@ import pprint as pp
 import plotter
 import numpy
 import scipy.spatial.distance
-import stanford_parser_pype
+import stanford_parser
 import preprocess
 import pickle
 import networkx as nx
@@ -257,7 +257,7 @@ def plot_exp1():
 
 def stanford_example():
     sentence = "Immediately after the second touchdown, the pilot decided to perform a go-around."
-    pos, tree, dependencies = stanford_parser_pype.parse(sentence)
+    pos, tree, dependencies = stanford_parser.parse(sentence)
     print '\nsentence:\n"'+sentence+'"'
     print '\ndependencies:\n',dependencies
     print '\ntree:\n',tree
