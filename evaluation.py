@@ -11,15 +11,10 @@ import scipy.spatial.distance
 import random
 
 import classify
+import retrieval
 
 def evaluate_retrieval(descriptions, solutions):
-    description_sim = 1.0 - scipy.spatial.distance.cdist(descriptions.T, descriptions.T, 'cosine')
-    solution_sim = 1.0 - scipy.spatial.distance.cdist(solutions.T, solutions.T, 'cosine')
-    # setting self-similarity to 0 to avoid retrieval of own solution:
-    description_sim -= numpy.diag([1.0]*len(description_sim),0)
-    matches = numpy.argmax(description_sim, axis=1)
-    scores = numpy.array([solution_sim[i,j] for i,j in enumerate(matches)])
-    return scores.mean()
+    return retrieval.evaluate_retrieval(descriptions, solutions)
 
 def evaluate_classification(data, labels, mode='split'):
     if mode=='split':
@@ -155,19 +150,5 @@ def pdump_results(data, file_path='output/results'):
         pp.pprint(data,stream=f,width=50)
         f.write('\n\n')
 
-### Tests
-
-def test_evaluate_retrieval():
-    desc = numpy.array([[.5, .3],[.5, .3]])
-    sol = numpy.array([[.3, .4],[.7, .6]])
-    sim = evaluate_retrieval(desc, sol)
-    t = 0.00001
-    gold = 0.983282004984
-    assert(gold-t < sim < gold+t)
-
-def run_tests():
-    test_evaluate_retrieval()
-    print "ok"
-
 if __name__ == "__main__":
-    run_tests()
+    pass
