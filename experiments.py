@@ -156,9 +156,27 @@ def dataset_stats(dataset):
     print 'document lengths (sorted):',sorted(lengths)
     plotter.histogram(lengths,'# tokens','# documents','',bins=80)
 
+def solution_similarity_stats(dataset='air/solutions_preprocessed'):
+    print '> Reading data..', dataset
+    corpus_path = '../data/'+dataset
+    (documents, labels) = data.read_files(corpus_path)
+
+    print '> Creating vector representations..'
+    vectors = freq_representation.text_to_vector(documents, freq_representation.FrequencyMetrics.TF_IDF)
+
+    print '> Calculating similarities..'
+    distances = scipy.spatial.distance.cdist(vectors.T, vectors.T, 'cosine')
+    diag = numpy.diag([2.0]*len(distances),0) # move similarities of "self" to -1
+    distances = distances + diag
+    similarities = 1.0 - distances
+    similarities = similarities.ravel()
+    similarities = [s for s in similarities if s >= 0]
+    print plotter.histogram(similarities,'similarity','# matches','',bins=150)
+
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
     #~ plot_sentence_lengths('output/tasa_sentence_lengths.pkl')
     #~ print_network_props()
-    dataset_stats('tasa/TASA900_text')
+    #~ dataset_stats('tasa/TASA900_text')
+    solution_similarity_stats()

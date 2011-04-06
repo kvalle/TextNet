@@ -9,10 +9,11 @@ import pprint as pp
 import numpy
 import scipy.spatial.distance
 import random
-import classify
+
 import data
 import freq_representation
 import plotter
+import classify
 
 def evaluate_retrieval(descriptions, solutions):
     description_sim = 1.0 - scipy.spatial.distance.cdist(descriptions.T, descriptions.T, 'cosine')
@@ -156,23 +157,6 @@ def pdump_results(data, file_path='output/results'):
     with open(file_path, 'a+') as f:
         pp.pprint(data,stream=f,width=50)
         f.write('\n\n')
-
-def solution_similarity_stats(dataset='air/preprocessed_solutions'):
-    print '> Reading data..', dataset
-    corpus_path = '../data/'+dataset
-    (documents, labels) = data.read_files(corpus_path)
-
-    print '> Creating vector representations..'
-    vectors = freq_representation.text_to_vector(documents, freq_representation.FrequencyMetrics.TF_IDF)
-
-    print '> Calculating similarities..'
-    distances = scipy.spatial.distance.cdist(vectors.T, vectors.T, 'cosine')
-    diag = numpy.diag([2.0]*len(distances),0) # move similarities of "self" to -1
-    distances = distances + diag
-    similarities = 1.0 - distances
-    similarities = similarities.ravel()
-    similarities = [s for s in similarities if s >= 0]
-    print plotter.histogram(similarities,'similarity','# matches','',bins=150)
 
 ### Tests
 
