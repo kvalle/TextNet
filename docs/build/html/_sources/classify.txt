@@ -1,0 +1,6 @@
+classify
+========
+
+.. automodule:: classify
+   :members:
+

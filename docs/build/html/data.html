@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>data &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="report_data" href="report_data.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="report_data.html" title="report_data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-data">
+<h1>data<a class="headerlink" href="#module-data" title="Permalink to this headline">¶</a></h1>
+<p>Module for reading and writing case files.</p>
+<p>The read_* methods provide reading of cases in various formats from dataset.
+For converting dataset between formats, use the appropriate create_dataset_* function.
+It is also possible to provide custom conversion functions to the <a title="data.create_dataset" class="reference internal" href="#data.create_dataset"><tt class="xref docutils literal"><span class="pre">create_dataset()</span></tt></a> function.</p>
+<p>The following formats are supported for dataset conversion:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">HTML:</th><td class="field-body">Expected formatted similarly to AIR dataset reports for conversion to cases.
+Conversion to text/dependencies should work regardless.</td>
+</tr>
+<tr class="field"><th class="field-name">Text:</th><td class="field-body">Raw text. Anything within p if extracted from HTML.</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Preprocessed text:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">Processed using the default parameters from preprocess.preprocess_text().</td>
+</tr>
+<tr class="field"><th class="field-name">Dependencies:</th><td class="field-body">As defined by the stanford dependency parser.</td>
+</tr>
+</tbody>
+</table>
+<p>The module expects to work with datasets structured so that each category
+is in a separate subfolder named after the category.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="data.create_dataset">
+<tt class="descclassname">data.</tt><tt class="descname">create_dataset</tt><big>(</big><em>base_path</em>, <em>target_path</em>, <em>processing_fn</em><big>)</big><a class="headerlink" href="#data.create_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crate a new dataset in target_path from data in base_path.
+Every file in base_path is processed using function processing_fn,
+and then stored under target_path.</p>
+<p><em>base_path</em> is the path to the data to be processed and turned into new dataset.
+<em>target_path</em> is the name/path of the new dataset.
+The <em>processing_fn</em> function is used for processing each document.
+<em>processing_fn</em> needs to have string as both input and output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="data.create_dataset_html_to_case">
+<tt class="descclassname">data.</tt><tt class="descname">create_dataset_html_to_case</tt><big>(</big><em>base_path</em>, <em>target_path</em><big>)</big><a class="headerlink" href="#data.create_dataset_html_to_case" title="Permalink to this definition">¶</a></dt>
+<dd>Convert dataset: HTML to CBR case</dd></dl>
+
+<dl class="function">
+<dt id="data.create_dataset_html_to_text">
+<tt class="descclassname">data.</tt><tt class="descname">create_dataset_html_to_text</tt><big>(</big><em>base_path</em>, <em>target_path</em><big>)</big><a class="headerlink" href="#data.create_dataset_html_to_text" title="Permalink to this definition">¶</a></dt>
+<dd>Convert dataset: HTML to text</dd></dl>
+
+<dl class="function">
+<dt id="data.create_dataset_text_to_dependencies">
+<tt class="descclassname">data.</tt><tt class="descname">create_dataset_text_to_dependencies</tt><big>(</big><em>base_path</em>, <em>target_path</em><big>)</big><a class="headerlink" href="#data.create_dataset_text_to_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd>Convert dataset: Text to stanford dependencies</dd></dl>
+
+<dl class="function">
+<dt id="data.create_dataset_text_to_preprocessed_text">
+<tt class="descclassname">data.</tt><tt class="descname">create_dataset_text_to_preprocessed_text</tt><big>(</big><em>base_path</em>, <em>target_path</em><big>)</big><a class="headerlink" href="#data.create_dataset_text_to_preprocessed_text" title="Permalink to this definition">¶</a></dt>
+<dd>Convert dataset: Text to preprocessed text</dd></dl>
+
+<dl class="function">
+<dt id="data.get_file_names">
+<tt class="descclassname">data.</tt><tt class="descname">get_file_names</tt><big>(</big><em>in_path</em><big>)</big><a class="headerlink" href="#data.get_file_names" title="Permalink to this definition">¶</a></dt>
+<dd>Retrieve list of file/case names matching dataset path.</dd></dl>
+
+<dl class="function">
+<dt id="data.pickle_from_file">
+<tt class="descclassname">data.</tt><tt class="descname">pickle_from_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#data.pickle_from_file" title="Permalink to this definition">¶</a></dt>
+<dd>Read file and unpickle contents</dd></dl>
+
+<dl class="function">
+<dt id="data.pickle_to_file">
+<tt class="descclassname">data.</tt><tt class="descname">pickle_to_file</tt><big>(</big><em>data</em>, <em>filename</em><big>)</big><a class="headerlink" href="#data.pickle_to_file" title="Permalink to this definition">¶</a></dt>
+<dd>Pickle contents and dump to file</dd></dl>
+
+<dl class="function">
+<dt id="data.read_file">
+<tt class="descclassname">data.</tt><tt class="descname">read_file</tt><big>(</big><em>file_path</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#data.read_file" title="Permalink to this definition">¶</a></dt>
+<dd>Fetch contents of a single file from <em>file_path</em>.</dd></dl>
+
+<dl class="function">
+<dt id="data.read_files">
+<tt class="descclassname">data.</tt><tt class="descname">read_files</tt><big>(</big><em>in_path</em>, <em>unpickle_content=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#data.read_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read dataset/cases from files.</p>
+<p>Files are read recursively from <em>in_path</em>, with subdirectory names
+used as labels.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="data.test_ascii">
+<tt class="descclassname">data.</tt><tt class="descname">test_ascii</tt><big>(</big><em>path='../data/air/reports_text'</em><big>)</big><a class="headerlink" href="#data.test_ascii" title="Permalink to this definition">¶</a></dt>
+<dd>Test whether documents in dataset are ascii encoded</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="modules.html"
+                                  title="previous chapter">Modules</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="report_data.html"
+                                  title="next chapter">report_data</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/data.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report_data.html" title="report_data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

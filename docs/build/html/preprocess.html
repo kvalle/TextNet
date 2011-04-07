@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>preprocess &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="stanford_parser" href="stanford_parser.html" />
+    <link rel="prev" title="report_data" href="report_data.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="stanford_parser.html" title="stanford_parser"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="report_data.html" title="report_data"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-preprocess">
+<h1>preprocess<a class="headerlink" href="#module-preprocess" title="Permalink to this headline">¶</a></h1>
+<p>Toolbox of functions for preprocessing text.</p>
+<p>The module contains methods for a variety of preprocessing tasks, such as
+filtering out words with special characters, stemming, stop-word removal,
+case folding and more, as well as functions for splitting text into lists
+of tokens or sentences. Use <a title="preprocess.preprocess_text" class="reference internal" href="#preprocess.preprocess_text"><tt class="xref docutils literal"><span class="pre">preprocess_text()</span></tt></a> and <a title="preprocess.preprocess_token" class="reference internal" href="#preprocess.preprocess_token"><tt class="xref docutils literal"><span class="pre">preprocess_token()</span></tt></a> for
+full preprocessing.</p>
+<p>Extraction of within-sentence word dependnecies is also available through
+the <a title="preprocess.extract_dependencies" class="reference internal" href="#preprocess.extract_dependencies"><tt class="xref docutils literal"><span class="pre">extract_dependencies()</span></tt></a> function, which works as an interface to the
+<a title="" class="reference external" href="modules.html#module-stanford_parser"><tt class="xref docutils literal"><span class="pre">stanford_parser</span></tt></a> module.</p>
+<p>The Natural Language Toolkit (NLTK) is used for most of the heavy lifting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="preprocess.extract_dependencies">
+<tt class="descclassname">preprocess.</tt><tt class="descname">extract_dependencies</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#preprocess.extract_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a dictionary with dependency information about the text.</p>
+<p>Some sentences may be too long for the parser to handle, leading to
+exhaustion of the java heap space. If this happens the sentence is
+skipped and its dependencies omitted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.filter_tokens">
+<tt class="descclassname">preprocess.</tt><tt class="descname">filter_tokens</tt><big>(</big><em>tokens</em>, <em>min_size=0</em>, <em>special_chars=False</em><big>)</big><a class="headerlink" href="#preprocess.filter_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter list of tokens.</p>
+<p>Any token with length below <em>min_size</em> is removed. If <em>special_chars</em>
+is <tt class="xref docutils literal"><span class="pre">True</span></tt>, all tokens containing special chars will also be removed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.fold_case">
+<tt class="descclassname">preprocess.</tt><tt class="descname">fold_case</tt><big>(</big><em>tokens</em><big>)</big><a class="headerlink" href="#preprocess.fold_case" title="Permalink to this definition">¶</a></dt>
+<dd>Fold tokens to lower case</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.is_stop_word">
+<tt class="descclassname">preprocess.</tt><tt class="descname">is_stop_word</tt><big>(</big><em>token</em><big>)</big><a class="headerlink" href="#preprocess.is_stop_word" title="Permalink to this definition">¶</a></dt>
+<dd>Check whether a particular token is a stop word</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.preprocess_text">
+<tt class="descclassname">preprocess.</tt><tt class="descname">preprocess_text</tt><big>(</big><em>text</em>, <em>do_stop_word_removal=True</em>, <em>do_stemming=True</em>, <em>fold=True</em>, <em>specials=True</em>, <em>min_size=3</em><big>)</big><a class="headerlink" href="#preprocess.preprocess_text" title="Permalink to this definition">¶</a></dt>
+<dd>Perform preprocessing steps on the input text.</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.preprocess_token">
+<tt class="descclassname">preprocess.</tt><tt class="descname">preprocess_token</tt><big>(</big><em>token</em>, <em>do_stop_word_removal=True</em>, <em>do_stemming=True</em>, <em>fold=True</em>, <em>specials=True</em>, <em>min_size=3</em><big>)</big><a class="headerlink" href="#preprocess.preprocess_token" title="Permalink to this definition">¶</a></dt>
+<dd>Perform preprocessing on a single token.</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.remove_stop_words">
+<tt class="descclassname">preprocess.</tt><tt class="descname">remove_stop_words</tt><big>(</big><em>tokens</em><big>)</big><a class="headerlink" href="#preprocess.remove_stop_words" title="Permalink to this definition">¶</a></dt>
+<dd>Remove all stop words from list of tokens</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.stem">
+<tt class="descclassname">preprocess.</tt><tt class="descname">stem</tt><big>(</big><em>tokens</em><big>)</big><a class="headerlink" href="#preprocess.stem" title="Permalink to this definition">¶</a></dt>
+<dd>Return list of stemmed tokens</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.tokenize_sentences">
+<tt class="descclassname">preprocess.</tt><tt class="descname">tokenize_sentences</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#preprocess.tokenize_sentences" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a list of sentences (as strings) from the input text</dd></dl>
+
+<dl class="function">
+<dt id="preprocess.tokenize_tokens">
+<tt class="descclassname">preprocess.</tt><tt class="descname">tokenize_tokens</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#preprocess.tokenize_tokens" title="Permalink to this definition">¶</a></dt>
+<dd>Return list of tokens for text string input</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="report_data.html"
+                                  title="previous chapter">report_data</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="stanford_parser.html"
+                                  title="next chapter">stanford_parser</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/preprocess.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stanford_parser.html" title="stanford_parser"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="report_data.html" title="report_data"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>graph_representation &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="graph" href="graph.html" />
+    <link rel="prev" title="freq_representation" href="freq_representation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="graph.html" title="graph"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="freq_representation.html" title="freq_representation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-graph_representation">
+<h1>graph_representation<a class="headerlink" href="#module-graph_representation" title="Permalink to this headline">¶</a></h1>
+<p>Construct graph representations from text.</p>
+<p>The module contains functions from creating networks based on text documents,
+and for converting the networks into feature-vectors.
+Feature vectors are created based on node centrality in the text networks.</p>
+<p>The following text representations are supported:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">random:</th><td class="field-body">Will create a network with all distinct terms in the provided document
+as nodes. Edges are created at random between the nodes, based on provided
+probabilities.</td>
+</tr>
+<tr class="field"><th class="field-name">co-occurrence:</th><td class="field-body">Distinct terms in the document are used as nodes. Edges are created
+between any terms that occurs closely together in the text.</td>
+</tr>
+<tr class="field"><th class="field-name">dependency:</th><td class="field-body">Words as nodes. Edges represent dependencies extracted from the text
+using the stanford dependency parser (see the &#8216;stanford_parser&#8217; module).</td>
+</tr>
+</tbody>
+</table>
+<p>The module makes heavy use of the <a title="" class="reference external" href="modules.html#module-graph"><tt class="xref docutils literal"><span class="pre">graph</span></tt></a> module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="graph_representation.construct_cooccurrence_network">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">construct_cooccurrence_network</tt><big>(</big><em>doc</em>, <em>window_size=2</em>, <em>direction='undirected'</em>, <em>context='window'</em>, <em>already_preprocessed=False</em>, <em>orders=</em><span class="optional">[</span><span class="optional">]</span>, <em>order_weights=</em><span class="optional">[</span>, <em>1.0</em>, <em>1.0</em>, <em>1.0</em><span class="optional">]</span>, <em>doc_id=None</em><big>)</big><a class="headerlink" href="#graph_representation.construct_cooccurrence_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct co-occurrence network from text.</p>
+<p>&#64;param direction: forward | backward | undirected
+&#64;param context: window | sentence</p>
+<p>A DiGraph is created regardless of direction parameter, but with &#8216;undirected&#8217;,
+edges are created in both directions.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.construct_random_network">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">construct_random_network</tt><big>(</big><em>doc</em>, <em>p=0.20000000000000001</em><big>)</big><a class="headerlink" href="#graph_representation.construct_random_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct random network for use as baseline.</p>
+<p>doc - document with words used for nodes
+p   - probability any given pair of nodes (a,b) are connected by edge a -&gt; b</p>
+<p>All edges will have weight = 1.0</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.create_graphs">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">create_graphs</tt><big>(</big><em>documents</em>, <em>graph_type='co-occurrence'</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#graph_representation.create_graphs" title="Permalink to this definition">¶</a></dt>
+<dd>Crate text networks of given type, using their default paramters</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.graphs_to_vectors">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">graphs_to_vectors</tt><big>(</big><em>graphs</em>, <em>metric</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#graph_representation.graphs_to_vectors" title="Permalink to this definition">¶</a></dt>
+<dd>Create centrality based feature-vector from graph representation</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.rand">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">rand</tt><big>(</big><big>)</big><a class="headerlink" href="#graph_representation.rand" title="Permalink to this definition">¶</a></dt>
+<dd>random() -&gt; x in the interval [0, 1).</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.similarity_matrix_to_graph">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">similarity_matrix_to_graph</tt><big>(</big><em>distM</em><big>)</big><a class="headerlink" href="#graph_representation.similarity_matrix_to_graph" title="Permalink to this definition">¶</a></dt>
+<dd>Converts similarity matrix to weighted graph.
+Written by Gleb.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="freq_representation.html"
+                                  title="previous chapter">freq_representation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="graph.html"
+                                  title="next chapter">graph</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/graph_representation.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph.html" title="graph"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="freq_representation.html" title="freq_representation"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

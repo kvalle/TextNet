@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>report_data &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="preprocess" href="preprocess.html" />
+    <link rel="prev" title="data" href="data.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="preprocess.html" title="preprocess"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="data"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-report_data">
+<h1>report_data<a class="headerlink" href="#module-report_data" title="Permalink to this headline">¶</a></h1>
+<p>Helper module for <a title="" class="reference external" href="modules.html#module-data"><tt class="xref docutils literal"><span class="pre">data</span></tt></a>, used to extract problem description and solution parts from cases.</p>
+<p>Parses reports formatted in HTML, structured as those in the AIR dataset,
+and split them into problem description part and solution part of textual
+CBR cases. Solutions are identified based on section titles in the reports.
+Titles matching words such as &#8216;finding&#8217; or &#8216;conclusion&#8217; are considered as
+part of the solution.</p>
+<p>The remaining parts of the report is by default the problem description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Gleb Sizov &lt;<a class="reference external" href="mailto:sizov&#37;&#52;&#48;idi&#46;ntnu&#46;no">sizov<span>&#64;</span>idi<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="report_data.ReportCase">
+<em class="property">class </em><tt class="descclassname">report_data.</tt><tt class="descname">ReportCase</tt><big>(</big><em>report</em><big>)</big><a class="headerlink" href="#report_data.ReportCase" title="Permalink to this definition">¶</a></dt>
+<dd>Splits report into description and solution parts based on the section titles.</dd></dl>
+
+<dl class="class">
+<dt id="report_data.ReportParser">
+<em class="property">class </em><tt class="descclassname">report_data.</tt><tt class="descname">ReportParser</tt><big>(</big><em>path</em>, <em>raw=None</em><big>)</big><a class="headerlink" href="#report_data.ReportParser" title="Permalink to this definition">¶</a></dt>
+<dd>Parser for canadian html reports. It&#8217;s quite a hack so be carefull messing with it.</dd></dl>
+
+<dl class="class">
+<dt id="report_data.Section">
+<em class="property">class </em><tt class="descclassname">report_data.</tt><tt class="descname">Section</tt><big>(</big><em>title=''</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#report_data.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Section brunch (tree structure) of a report.
+On the top level represents the report itself.</p>
+<p>Contains the following information:
+- report title: string
+- section level: number
+- contained (sub)sections: list of Section instances
+- section paragraphs: list of strings
+- meta information: list of strings</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="data.html"
+                                  title="previous chapter">data</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="preprocess.html"
+                                  title="next chapter">preprocess</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/report_data.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="preprocess.html" title="preprocess"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="data"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

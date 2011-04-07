@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modules &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="next" title="data" href="data.html" />
+    <link rel="prev" title="Overview" href="architecture.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<p>This is a brief overview of the different modules. For more details, see each module&#8217;s page.</p>
+<div class="section" id="module-data">
+<h2>data<a class="headerlink" href="#module-data" title="Permalink to this headline">¶</a></h2>
+<p>Module for reading and writing case files.</p>
+<p>The read_* methods provide reading of cases in various formats from dataset.
+For converting dataset between formats, use the appropriate create_dataset_* function.
+It is also possible to provide custom conversion functions to the <a title="data.create_dataset" class="reference external" href="data.html#data.create_dataset"><tt class="xref docutils literal"><span class="pre">create_dataset()</span></tt></a> function.</p>
+<p>The following formats are supported for dataset conversion:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">HTML:</th><td class="field-body">Expected formatted similarly to AIR dataset reports for conversion to cases.
+Conversion to text/dependencies should work regardless.</td>
+</tr>
+<tr class="field"><th class="field-name">Text:</th><td class="field-body">Raw text. Anything within p if extracted from HTML.</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Preprocessed text:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">Processed using the default parameters from preprocess.preprocess_text().</td>
+</tr>
+<tr class="field"><th class="field-name">Dependencies:</th><td class="field-body">As defined by the stanford dependency parser.</td>
+</tr>
+</tbody>
+</table>
+<p>The module expects to work with datasets structured so that each category
+is in a separate subfolder named after the category.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="data.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-report_data">
+<h2>report_data<a class="headerlink" href="#module-report_data" title="Permalink to this headline">¶</a></h2>
+<p>Helper module for <tt class="xref docutils literal"><span class="pre">data</span></tt>, used to extract problem description and solution parts from cases.</p>
+<p>Parses reports formatted in HTML, structured as those in the AIR dataset,
+and split them into problem description part and solution part of textual
+CBR cases. Solutions are identified based on section titles in the reports.
+Titles matching words such as &#8216;finding&#8217; or &#8216;conclusion&#8217; are considered as
+part of the solution.</p>
+<p>The remaining parts of the report is by default the problem description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Gleb Sizov &lt;<a class="reference external" href="mailto:sizov&#37;&#52;&#48;idi&#46;ntnu&#46;no">sizov<span>&#64;</span>idi<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="report_data.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-preprocess">
+<h2>preprocess<a class="headerlink" href="#module-preprocess" title="Permalink to this headline">¶</a></h2>
+<p>Toolbox of functions for preprocessing text.</p>
+<p>The module contains methods for a variety of preprocessing tasks, such as
+filtering out words with special characters, stemming, stop-word removal,
+case folding and more, as well as functions for splitting text into lists
+of tokens or sentences. Use <a title="preprocess.preprocess_text" class="reference external" href="preprocess.html#preprocess.preprocess_text"><tt class="xref docutils literal"><span class="pre">preprocess_text()</span></tt></a> and <a title="preprocess.preprocess_token" class="reference external" href="preprocess.html#preprocess.preprocess_token"><tt class="xref docutils literal"><span class="pre">preprocess_token()</span></tt></a> for
+full preprocessing.</p>
+<p>Extraction of within-sentence word dependnecies is also available through
+the <a title="preprocess.extract_dependencies" class="reference external" href="preprocess.html#preprocess.extract_dependencies"><tt class="xref docutils literal"><span class="pre">extract_dependencies()</span></tt></a> function, which works as an interface to the
+<tt class="xref docutils literal"><span class="pre">stanford_parser</span></tt> module.</p>
+<p>The Natural Language Toolkit (NLTK) is used for most of the heavy lifting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="preprocess.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-stanford_parser">
+<h2>stanford_parser<a class="headerlink" href="#module-stanford_parser" title="Permalink to this headline">¶</a></h2>
+<p>Python interface to the Stanford parser.</p>
+<p>The module wrapps the edu.stanford.npl Stanford Parser, which is
+implemented in Java, using the JPype library.</p>
+<p>The StanfordParser class wraps the actual parser, and the <tt class="xref docutils literal"><span class="pre">parse()</span></tt> function
+can be used to parse sentences.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Gleb Sizov &lt;<a class="reference external" href="mailto:sizov&#37;&#52;&#48;idi&#46;ntnu&#46;no">sizov<span>&#64;</span>idi<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="stanford_parser.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-freq_representation">
+<h2>freq_representation<a class="headerlink" href="#module-freq_representation" title="Permalink to this headline">¶</a></h2>
+<p>Functions for creating frequency based feature vector from text.</p>
+<p>The function of interest is <a title="freq_representation.text_to_vector" class="reference external" href="freq_representation.html#freq_representation.text_to_vector"><tt class="xref docutils literal"><span class="pre">text_to_vector()</span></tt></a>, which creates
+term frequency (TF) or term frequency-inverse document frequency (TF-IDF)
+vectors from lists of documents. Results are output in form of a
+term-document matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="freq_representation.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-graph_representation">
+<h2>graph_representation<a class="headerlink" href="#module-graph_representation" title="Permalink to this headline">¶</a></h2>
+<p>Construct graph representations from text.</p>
+<p>The module contains functions from creating networks based on text documents,
+and for converting the networks into feature-vectors.
+Feature vectors are created based on node centrality in the text networks.</p>
+<p>The following text representations are supported:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">random:</th><td class="field-body">Will create a network with all distinct terms in the provided document
+as nodes. Edges are created at random between the nodes, based on provided
+probabilities.</td>
+</tr>
+<tr class="field"><th class="field-name">co-occurrence:</th><td class="field-body">Distinct terms in the document are used as nodes. Edges are created
+between any terms that occurs closely together in the text.</td>
+</tr>
+<tr class="field"><th class="field-name">dependency:</th><td class="field-body">Words as nodes. Edges represent dependencies extracted from the text
+using the stanford dependency parser (see the &#8216;stanford_parser&#8217; module).</td>
+</tr>
+</tbody>
+</table>
+<p>The module makes heavy use of the <tt class="xref docutils literal"><span class="pre">graph</span></tt> module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="graph_representation.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-graph">
+<h2>graph<a class="headerlink" href="#module-graph" title="Permalink to this headline">¶</a></h2>
+<p>Toolbox module for working with networkx graphs.</p>
+<p>Module contains functions for calculating graph centrality, visualizing
+graphs and finding various network properties, in addition to various
+other useful functions.</p>
+<p>Graph centralities are accessed using the <tt class="xref docutils literal"><span class="pre">centralities()</span></tt> function, which
+takes as arguments a graph and the metric to use as a constant of the
+GraphMetrics class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="graph.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-classify">
+<h2>classify<a class="headerlink" href="#module-classify" title="Permalink to this headline">¶</a></h2>
+<p>Classification of feature-vectors using KNN classifier.</p>
+<p>The <a title="classify.KNN" class="reference external" href="classify.html#classify.KNN"><tt class="xref docutils literal"><span class="pre">KNN</span></tt></a> class contains the classifier. It can <a title="classify.KNN.classify" class="reference external" href="classify.html#classify.KNN.classify"><tt class="xref docutils literal"><span class="pre">classify()</span></tt></a> new datapoints
+as soon as it is properly trained using the <a title="classify.KNN.train" class="reference external" href="classify.html#classify.KNN.train"><tt class="xref docutils literal"><span class="pre">train()</span></tt></a> method.
+The <a title="classify.KNN.test" class="reference external" href="classify.html#classify.KNN.test"><tt class="xref docutils literal"><span class="pre">test()</span></tt></a> method provides a way to classify many vectors at once, and
+return the classifiers accuracy compared to a gold standard.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="classify.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-retrieval">
+<h2>retrieval<a class="headerlink" href="#module-retrieval" title="Permalink to this headline">¶</a></h2>
+<p>Evaluation method based on case retrieval.</p>
+<p>Evaluate lists of cases with <tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt>. For each problem
+description the remaining descriptions are assessed, and the solution
+corresponding to the best matching description is retrieved.
+Actual solution is compared to retrieved solution using cosine of solution
+vectors.</p>
+<p>The overall evaluation score is equal to the average solution-solution
+similarity over the case base.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="retrieval.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-evaluation">
+<h2>evaluation<a class="headerlink" href="#module-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>Module containing methods for evaluating representations.</p>
+<p>This module acts as an interface to evaluation against the <tt class="xref docutils literal"><span class="pre">classify</span></tt>
+and <tt class="xref docutils literal"><span class="pre">retrieval</span></tt> modules through the <tt class="xref docutils literal"><span class="pre">evaluate_classification()</span></tt> and
+<tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt> functions, respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="evaluation.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-plotter">
+<h2>plotter<a class="headerlink" href="#module-plotter" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions facititating easy plotting with matplotlib.</p>
+<p>Functions of note:</p>
+<ul class="simple">
+<li><tt class="xref docutils literal"><span class="pre">plot()</span></tt>: plot a regular plot, given input x,y-coordinates.</li>
+<li><tt class="xref docutils literal"><span class="pre">bar_graph()</span></tt>: plot a horizontal bar graph from x-coordinates and named
+groups of lists of y-corrdinates.</li>
+<li><tt class="xref docutils literal"><span class="pre">histogram()</span></tt>: plots a histogram from a set of samples and a given numbe of bins.</li>
+<li><tt class="xref docutils literal"><span class="pre">plot_degree_distribution()</span></tt>: plot the degree distribution provided a networkx graph.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="plotter.html">Read more</a></li>
+</ul>
+</div>
+<div class="section" id="module-util">
+<h2>util<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h2>
+<p>Module containing miscellaneous utility functions without a home anywhere else.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="util.html">Read more</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Modules</a><ul>
+<li><a class="reference external" href="#module-data">data</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-report_data">report_data</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-preprocess">preprocess</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-stanford_parser">stanford_parser</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-freq_representation">freq_representation</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-graph_representation">graph_representation</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-graph">graph</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-classify">classify</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-retrieval">retrieval</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-evaluation">evaluation</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-plotter">plotter</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#module-util">util</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="architecture.html"
+                                  title="previous chapter">Overview</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="data.html"
+                                  title="next chapter">data</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/modules.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Overview"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

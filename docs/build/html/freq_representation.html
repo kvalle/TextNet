@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>freq_representation &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="graph_representation" href="graph_representation.html" />
+    <link rel="prev" title="stanford_parser" href="stanford_parser.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="graph_representation.html" title="graph_representation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stanford_parser.html" title="stanford_parser"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-freq_representation">
+<h1>freq_representation<a class="headerlink" href="#module-freq_representation" title="Permalink to this headline">¶</a></h1>
+<p>Functions for creating frequency based feature vector from text.</p>
+<p>The function of interest is <a title="freq_representation.text_to_vector" class="reference internal" href="#freq_representation.text_to_vector"><tt class="xref docutils literal"><span class="pre">text_to_vector()</span></tt></a>, which creates
+term frequency (TF) or term frequency-inverse document frequency (TF-IDF)
+vectors from lists of documents. Results are output in form of a
+term-document matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="freq_representation.FrequencyMetrics">
+<em class="property">class </em><tt class="descclassname">freq_representation.</tt><tt class="descname">FrequencyMetrics</tt><a class="headerlink" href="#freq_representation.FrequencyMetrics" title="Permalink to this definition">¶</a></dt>
+<dd>Class holding constants for the different frequency metrics</dd></dl>
+
+<dl class="function">
+<dt id="freq_representation.get_metrics">
+<tt class="descclassname">freq_representation.</tt><tt class="descname">get_metrics</tt><big>(</big><big>)</big><a class="headerlink" href="#freq_representation.get_metrics" title="Permalink to this definition">¶</a></dt>
+<dd>Get list of available <a title="freq_representation.FrequencyMetrics" class="reference internal" href="#freq_representation.FrequencyMetrics"><tt class="xref docutils literal"><span class="pre">FrequencyMetrics</span></tt></a></dd></dl>
+
+<dl class="function">
+<dt id="freq_representation.text_to_vector">
+<tt class="descclassname">freq_representation.</tt><tt class="descname">text_to_vector</tt><big>(</big><em>docs</em>, <em>metric</em><big>)</big><a class="headerlink" href="#freq_representation.text_to_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create frequency based feature-vector from text</p>
+<p>Metric must be either <tt class="xref docutils literal"><span class="pre">FrequencyMetrics.TF</span></tt> or <tt class="xref docutils literal"><span class="pre">FrequencyMetrics.TF_IDF</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="stanford_parser.html"
+                                  title="previous chapter">stanford_parser</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="graph_representation.html"
+                                  title="next chapter">graph_representation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/freq_representation.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph_representation.html" title="graph_representation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stanford_parser.html" title="stanford_parser"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

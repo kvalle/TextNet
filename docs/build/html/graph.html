@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>graph &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="classify" href="classify.html" />
+    <link rel="prev" title="graph_representation" href="graph_representation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="classify.html" title="classify"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graph_representation.html" title="graph_representation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-graph">
+<h1>graph<a class="headerlink" href="#module-graph" title="Permalink to this headline">¶</a></h1>
+<p>Toolbox module for working with networkx graphs.</p>
+<p>Module contains functions for calculating graph centrality, visualizing
+graphs and finding various network properties, in addition to various
+other useful functions.</p>
+<p>Graph centralities are accessed using the <tt class="xref docutils literal"><span class="pre">centralities()</span></tt> function, which
+takes as arguments a graph and the metric to use as a constant of the
+GraphMetrics class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="graph.invert_edge_weights">
+<tt class="descclassname">graph.</tt><tt class="descname">invert_edge_weights</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.invert_edge_weights" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a graph with all edge weights inverted</dd></dl>
+
+<dl class="function">
+<dt id="graph.network_properties">
+<tt class="descclassname">graph.</tt><tt class="descname">network_properties</tt><big>(</big><em>graph</em>, <em>plot_distribution=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#graph.network_properties" title="Permalink to this definition">¶</a></dt>
+<dd>Returns information about the graph.</dd></dl>
+
+<dl class="function">
+<dt id="graph.node_set">
+<tt class="descclassname">graph.</tt><tt class="descname">node_set</tt><big>(</big><em>graphs</em><big>)</big><a class="headerlink" href="#graph.node_set" title="Permalink to this definition">¶</a></dt>
+<dd>Return list of unique nodes from list of graphs</dd></dl>
+
+<dl class="function">
+<dt id="graph.reduce_edge_set">
+<tt class="descclassname">graph.</tt><tt class="descname">reduce_edge_set</tt><big>(</big><em>graph</em>, <em>remove_label</em><big>)</big><a class="headerlink" href="#graph.reduce_edge_set" title="Permalink to this definition">¶</a></dt>
+<dd>Return new graph with edges removed.
+Those edges that have the remove_label, and no other labels, are removed.</dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_degree">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_degree</tt><big>(</big><em>G</em>, <em>normalize=True</em><big>)</big><a class="headerlink" href="#graph.weighted_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weighted degree centrality.</p>
+<p>Counts both incomming and outgoing links.
+This is the same as the sum of the weighted in-degree and weighted out-degree.
+Assumes digraph.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="graph_representation.html"
+                                  title="previous chapter">graph_representation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="classify.html"
+                                  title="next chapter">classify</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/graph.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="classify.html" title="classify"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graph_representation.html" title="graph_representation"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>
