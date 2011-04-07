@@ -11,6 +11,7 @@ can be used to parse sentences.
 import jpype
 
 class StanfordParser(object):
+    """Class wrapping the edu.stanford.npl java parser package."""
     def __init__(self):
         #~ jpype.startJVM('C:/Program Files (x86)/Java/jdk1.6.0_21/jre/bin/client/jvm.dll', '-Xmx800m')
         #~ jpype.startJVM(jpype.getDefaultJVMPath())
@@ -35,6 +36,7 @@ class StanfordParser(object):
 parser = None
 
 def parse(sentence):
+    """Parses *sentence* and return POS-tags, parse tree and dependencies."""
     global parser
     if not parser:
         parser = StanfordParser()

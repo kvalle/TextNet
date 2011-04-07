@@ -14,8 +14,7 @@ import scipy.spatial.distance
 from nltk.probability import FreqDist
 
 class KNN:
-    """
-    K-nearest neighbors classifier.
+    """K-nearest neighbors classifier.
 
     Classifier for labeled data in feature-vector format.
     Supports k-nearest classification against trained data samples, and
@@ -23,17 +22,13 @@ class KNN:
     """
 
     def __init__(self, use_centroids=False, k=5):
-        """
-        Creates a new untrained classifier.
+        """Creates a new untrained classifier.
 
-        @type use_centroids: boolean
-        @param use_centroids:
-        If true, the classifier will calculate and use the best
+        If *use_centroids*, the classifier will calculate and use the best
         matching centroid of each the samples from each class when
         classifying. Otherwise the class among the k nearest is used.
-        @type k: integer
-        @param k:
-        The number of neighbors to use when classifying. Ignored if
+
+        *k* is the number of neighbors to use when classifying. Ignored if
         centroids are used for classification.
         """
         self._use_centroids = use_centroids
@@ -49,13 +44,10 @@ class KNN:
     def train(self, features, labels):
         """Trains the KNN on a set of data.
 
-        @type features: numpy array
-        @param features:
-        NxM feature matrix with M samples, each of N features.
-        See output from L{data.read_from_files}.
-        @type labels: list
-        @param labels:
-        List of labels corresponding to each of the M samples.
+        Uses NxM feature matrix *features* with M samples, each of N features.
+        See output from :func:`data.read_files`.
+
+        The list of *labels* correspond to each of the M samples.
         """
         self.labels = labels
         self.features = features
@@ -69,8 +61,7 @@ class KNN:
             self.active_centroids = self.centroids
 
     def _calculate_centroids(self):
-        """
-        Calcualtes centroid vectors for each class in the list of labels.
+        """Calcualtes centroid vectors for each class in the list of labels.
 
         The centroids are calculated as the geometric mean of all document
         feature vectors belonging to that class.
@@ -88,27 +79,20 @@ class KNN:
         return fs
 
     def classify(self, qs, distance_metric='cosine'):
-        """
-        Classifies a list of query cases.
+        """Classifies a list of query cases.
 
-        When classifying only those features that are *active* are
+        When classifying only those features that are **active** are
         used, all other features are ignored. The set of active features
-        can be changed by L{set_active_features}.
+        can be changed by :func:`~KNN.set_active_features`.
 
-        @type qs: numpy array
-        @param qs:
-            Feature matrix similar to that used in L{train}, i.e a NxM
-            matrix where N is number of features and M documents.
-        @type distance_metric: string
-        @param distance_metric:
-            The distance metric to use when comparing feture vectors.
-            See U{scipy.spatial.distance.cdist
-            <http://docs.scipy.org/doc/scipy/reference/spatial.distance.html
-            #scipy.spatial.distance.cdist>}
+        Feature matrix *qs* is similar to that used in :func:`~KNN.train`, i.e a NxM
+        matrix where N is number of features and M documents.
+
+        The string *distance_metric* defines what metric to use when comparing feture vectors.
+            See http://docs.scipy.org/doc/scipy/reference/spatial.distance.html#scipy.spatial.distance.cdist
             for list of supported metrics.
-        @rtype: list
-        @return:
-            Classification of each of the input cases.
+
+        Returns classification of each of the input cases.
         """
         if len(qs[:,0]) != len(self.active_features[:,0]):
             got = len(qs[:,0])
@@ -144,15 +128,12 @@ class KNN:
         return results
 
     def set_active_features(self, list=None):
-        """
-        Changes the set of active feature.
+        """Changes the set of active feature.
 
-        @type list: list
-        @param list:
-            The list features to make active.
-            Could either be a list of feature indices, or boolean list
-            with length equal to number of features where true == active.
-            if None, all features are activated.
+        Takes a *list* of features to make active.
+        Could either be a list of feature indices, or boolean list
+        with length equal to number of features where `true` == active.
+        If `None`, all features are activated.
         """
         if list is None:
             # Use all features
@@ -166,23 +147,16 @@ class KNN:
                 self.active_centroids = self.centroids[list,:]
 
     def test(self, features, gold):
-        """
-        Tests this classifier against a set of labeled data.
+        """Tests this classifier against a set of labeled data.
 
         It is assumed that the classifier has been trained before
         this method is called.
 
-        @type features: numpy array
-        @param features:
-            NxM (features x documents) feature matrix.
-        @type gold: list
-        @param gold:
-            List of labels belonging to each of the documents in the
-            feature matrix.
+        *features* is a NxM (features x documents) feature matrix, and
+        *gold* a list of labels belonging to each of the documents in the
+        feature matrix.
 
-        @rtype: number
-        @return:
-            The accuracy of the classifier over the training data
+        Returns the accuracy of the classifier over the training data.
         """
         results = self.classify(features)
         accuracy = nltk.metrics.scores.accuracy(gold, results)

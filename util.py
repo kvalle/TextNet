@@ -13,6 +13,7 @@ def fill_matrix_diagonal(matrix, value):
     return matrix
 
 def flatten(list):
+    """Returen flattened version of *list*"""
     return [item for sublist in list for item in sublist]
 
 def _sorted_centralities(cents):
@@ -20,7 +21,7 @@ def _sorted_centralities(cents):
     return sorted(cents.iteritems(), key = operator.itemgetter(1), reverse = True)
 
 def load_words(path):
-    """ Return words from a file path"""
+    """Return document as list of words from a file *path*"""
     with open(path, 'r') as f:
         words = f.read().split()
     return words
@@ -79,7 +80,7 @@ def to_latex_table(data, write_file=True, prt=True, start=None, end=None):
             f.write(end+'\n')
 
 def test_unique(path='../data/reuters1000/'):
-    """Check if there are any documents with multiple categories."""
+    """Check if there are any documents with multiple categories in dataset on given *path*."""
     d = {}
     for root, cats, docs in os.walk(path):
         category = root.split(os.sep)[-1]

@@ -15,16 +15,17 @@ import re
 import os
 
 class Section(object):
-    """
-    Section brunch (tree structure) of a report.
+    """Section brunch (tree structure) of a report.
     On the top level represents the report itself.
 
     Contains the following information:
+
     - report title: string
     - section level: number
     - contained (sub)sections: list of Section instances
     - section paragraphs: list of strings
     - meta information: list of strings
+
     """
 
     def __init__(self, title = '', parent = None):
@@ -69,8 +70,9 @@ class Section(object):
                 s.accept(visitor)
 
 class ReportParser(HTMLParser):
-    """
-    Parser for canadian html reports. It's quite a hack so be carefull messing with it.
+    """Parser for canadian html reports.
+
+    It's quite a hack so be carefull messing with it.
     """
 
     def __init__(self, path, raw=None):
@@ -148,9 +150,7 @@ class Case(object):
         self.solution = solution
 
 class ReportCase(Case):
-    """
-    Splits report into description and solution parts based on the section titles.
-    """
+    """Splits report into description and solution parts based on the section titles."""
 
     #~ solution_titles = ["analysis", "finding", "causes", "contributing factors", "safety action", "conclusion"]
     solution_pattern = '.*(finding|conclusion|safety|analysis|causes).*'

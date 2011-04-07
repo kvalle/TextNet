@@ -16,6 +16,16 @@ import networkx as nx
 import numpy as np
 
 def plot(x_vals, y_vals, x_label, y_label, title, axis=None, legend_place='lower right'):
+    """Plot a 2D plot from provided x- and y-values.
+
+    Given lists of *x_vals* and *y_vals*, a plot is drawn. Axes are
+    labeled using *x_label* and *y_label*.
+
+    Plot can be cropped/scaled with *axis* as a 4-tuple of (x_min,x_max,y_min,y_max).
+
+    Place legend with *legend_place* as string argument matching
+    /(lower|middle|upper) (right|center|left)/.
+    """
     y_max = None
     y_min = None
 
@@ -39,6 +49,7 @@ def plot(x_vals, y_vals, x_label, y_label, title, axis=None, legend_place='lower
     plt.show()
 
 def plot_degree_distribution(g):
+    """Plot degree distribution for a graph *g*"""
     degree_sequence=sorted(nx.degree(g).values(),reverse=True) # degree sequence
     dmax=max(degree_sequence)
 
@@ -60,6 +71,13 @@ def plot_degree_distribution(g):
 
 
 def histogram(samples, x_label='', y_label='', title='', axis=None, bins=10, range=None):
+    """Create histogram from a set of *samples*.
+
+    Number of *bins* and *range* can be specified in the same manner as to
+    :func:`numpy.histogram`.
+
+    Crop/scale with *axis* as a 4-tuple of (x_min,x_max,y_min,y_max).
+    """
     fig = plt.figure()
     plt.xlabel(x_label)
     plt.ylabel(y_label)
@@ -75,6 +93,14 @@ def histogram(samples, x_label='', y_label='', title='', axis=None, bins=10, ran
 
 
 def bar_graph(data, bar_names, x_label='', y_label='', title='', axis=None, colors=None, legend_place='lower right'):
+    """Create horzontal bar chart with lists of data values.
+
+    Plots a bar chart given a dictionary of *data* with a type as key, and a sequence of
+    values corresponding to elements in *bar_names* as value.
+
+    Place legend with *legend_place* as string argument matching
+    /(lower|middle|upper) (right|center|left)/.
+    """
     from matplotlib import cm
     fig = plt.figure()
     plt.xlabel(x_label)

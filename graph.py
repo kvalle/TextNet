@@ -18,11 +18,16 @@ from scipy import sparse
 import plotter
 
 def normalize(A):
+    """Normalize a numpy nd-array"""
     A = numpy.array(A, float)
     A -= A.min()
     return A / A.max()
 
 def add_edges_from_matrix(graph, matrix, nodes, rel_weight=1.0):
+    """Add edges to *graph* based on adjacency *matrix*.
+
+    The *nodes* list corresponds to each row/column in *matrix*.
+    The *rel_weight* scales the edge weights."""
     if sparse.isspmatrix(matrix):
         matrix = matrix.todense()
     for i, node in enumerate(nodes):
@@ -34,6 +39,11 @@ def add_edges_from_matrix(graph, matrix, nodes, rel_weight=1.0):
                 graph.add_edge(node, other, weight=w+matrix[i,j]*rel_weight)
 
 def equal(g1, g2):
+    """Check if two graphs are identical.
+
+    The graphs are considered equal if they contain the same set of nodes
+    and edges. Edge weights are not considered.
+    """
     if sorted(g1.edges()) != sorted(g2.edges()):
         return False
     if sorted(g1.nodes()) != sorted(g2.nodes()):
@@ -41,9 +51,9 @@ def equal(g1, g2):
     return True
 
 def reduce_edge_set(graph, remove_label):
-    """
-    Return new graph with edges removed.
-    Those edges that have the remove_label, and no other labels, are removed.
+    """Return new graph with some edges removed.
+
+    Those edges that have the *remove_label*, and no other labels, are removed.
     """
     new_graph = nx.DiGraph()
     for u, v, data in graph.edges_iter(data=True):
@@ -59,6 +69,7 @@ def node_set(graphs):
     return list(nodes)
 
 def get_hubs(graph, n=10):
+    """Return the *n* most important hubs from the graph"""
     from operator import itemgetter
     degrees = nx.degree_centrality(graph)
     degrees = sorted(degrees.iteritems(), key=itemgetter(1))
@@ -123,8 +134,7 @@ def invert_edge_weights(G):
     return G
 
 def weighted_degree(G, normalize=True):
-    """
-    Weighted degree centrality.
+    """Weighted degree centralities.
 
     Counts both incomming and outgoing links.
     This is the same as the sum of the weighted in-degree and weighted out-degree.
@@ -138,6 +148,7 @@ def weighted_degree(G, normalize=True):
     return D
 
 def weighted_in_degree(G, normalize=True):
+    """Weighted in-degree centralities"""
     D = {}
     nodes = G.nodes()
     for node1 in nodes:
@@ -147,6 +158,7 @@ def weighted_in_degree(G, normalize=True):
     return D
 
 def weighted_out_degree(G, normalize=True):
+    """Weighted out-degree centralities"""
     D = {}
     nodes = G.nodes()
     for node1 in nodes:
@@ -156,12 +168,19 @@ def weighted_out_degree(G, normalize=True):
     return D
 
 def hits_hubs(G):
+    """The HITS hubs centralities"""
     return nx.hits_numpy(G)[0]
 
 def hits_authorities(G):
+    """The HITS authorities centralities"""
     return nx.hits_numpy(G)[1]
 
 def clustering_degree(G):
+    """Clustering degree ''centrality''
+
+    Measure of centrality based on the clustering coefficient of a node
+    multiplied with its weighted degree centrality.
+    """
     DC = {}
     D = weighted_degree(G)
     C = nx.clustering(G.to_undirected())
@@ -170,30 +189,37 @@ def clustering_degree(G):
     return DC
 
 def closeness(G):
+    """Closeness centrality"""
     G = invert_edge_weights(G)
     return nx.closeness_centrality(G)
 
 def weighted_closeness(G):
+    """Weighted version of the closeness centrality"""
     G = invert_edge_weights(G)
     return nx.closeness_centrality(G, weighted_edges=True)
 
 def betweenness(G):
+    """Betweenness centrality"""
     G = invert_edge_weights(G)
     return nx.betweenness_centrality(G)
 
 def weighted_betweenness(G):
+    """Weighted version of the betweenness centrality"""
     G = invert_edge_weights(G)
     return nx.betweenness_centrality(G, weighted_edges=True)
 
 def load(G):
+    """Load centrality"""
     G = invert_edge_weights(G)
     return nx.load_centrality(G)
 
 def weighted_load(G):
+    """Weighted version of the load centrality"""
     G = invert_edge_weights(G)
     return nx.load_centrality(G, weighted_edges=True)
 
 def current_flow_betweenness(G):
+    """Current-flow betweenness centrality"""
     G = G.to_undirected()
     G = invert_edge_weights(G)
     if nx.is_connected(G):
@@ -202,6 +228,7 @@ def current_flow_betweenness(G):
         return _aggregate_for_components(G, nx.current_flow_betweenness_centrality)
 
 def current_flow_closeness(G):
+    """Current-flow closeness centrality"""
     G = G.to_undirected()
     G = invert_edge_weights(G)
     if nx.is_connected(G):
@@ -210,10 +237,6 @@ def current_flow_closeness(G):
         return _aggregate_for_components(G, nx.current_flow_closeness_centrality)
 
 def _aggregate_for_components(G, aggr_fun):
-    """
-    G: graph
-    cent_function: function with Graph as input and dictionary as output
-    """
     aggr = {}
     for subgraph in nx.connected_component_subgraphs(G):
         if len(subgraph.nodes())==1: # only node in subgraph: centrality 0
@@ -224,10 +247,12 @@ def _aggregate_for_components(G, aggr_fun):
     return aggr
 
 def pagerank(G):
+    """PageRank values for nodes in graph *G*"""
     return nx.pagerank_numpy(G)
 
 # Enumeration with available centrality measures.
 class GraphMetrics:
+    """Class holding constants for the different graph centrality metrics"""
     DEGREE = 'Degree'
     WEIGHTED_DEGREE = 'Degree (weighted)'
     IN_DEGREE = 'In-degree'
@@ -278,8 +303,9 @@ mapping = {
 }
 
 # Obtains centrality vector.
-def centralities(g, method):
-    return mapping[method](g)
+def centralities(graph, method):
+    """Return centralities for nodes in *graph* using the given centrality *method*"""
+    return mapping[method](graph)
 
 ######
 ##
@@ -288,11 +314,12 @@ def centralities(g, method):
 ######
 
 def draw(graph):
+    """Draw the *graph*"""
     nx.draw(graph, pos = nx.pydot_layout(graph), node_size = 1, node_color = 'w', font_size = 8)
     plt.show()
 
-# Visualizes a graph preserving edge length and demonstrating centralities as node sizes.
 def draw_with_centrality(G, sizeV = None, min_size = 500, max_size = 4000, default_size = 500, layout=None):
+    """Visualizes a graph preserving edge length and demonstrating centralities as node sizes."""
     if sizeV is None:
         sizeV = default_size
     else:
@@ -313,8 +340,9 @@ def draw_with_centrality(G, sizeV = None, min_size = 500, max_size = 4000, defau
 ##
 ##  Demo functions
 ##
+##  (Functions intended to test/demonstrate various functionaliyt of the module)
+##
 ######
-
 
 def demo_centralities():
     print '> Hello, Dave.'
@@ -445,8 +473,6 @@ def closeness_example():
         print '  out:',g.successors(n)
         print '  in:',g.predecessors(n)
     draw_with_centrality(g, layout=pos)
-
-######
 
 def demo_network_properties():
     import pprint as pp

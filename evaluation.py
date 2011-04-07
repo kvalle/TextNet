@@ -16,9 +16,13 @@ import classify
 import retrieval
 
 def evaluate_retrieval(descriptions, solutions):
+    """Return retrieval performance using cases consisting of *descriptions* and *solutions*."""
     return retrieval.evaluate_retrieval(descriptions, solutions)
 
 def evaluate_classification(data, labels, mode='split'):
+    """Return classification performance using set of *data* and a list of *labels*.
+
+    Supported values for *mode* are 'split' or 'cross-validation'."""
     if mode=='split':
         return _classification_split(data, labels)
     elif mode=='cross-validation':
@@ -27,26 +31,18 @@ def evaluate_classification(data, labels, mode='split'):
         raise Exception('unrecognized classification evaluation mode: '+mode)
 
 def _classification_cross_validation(features, labels, k=15):
-    """
-    Performs k-fold cross-validation.
+    """Performs k-fold cross-validation.
 
     Does cross-validation over data with the KNN classifier.
     The data is split into k bins, the classifier trained
     on k-1 of them, and tested on the last, for all k combinations.
 
-    @type features: numpy array
-    @param features:
-        NxM feature matrix for N features and M documents.
-    @type labels: list
-    @param labels:
-        Label for each document.
-    @type k: number
-    @param k:
-        Number of bins to split the data into.
+    *features* are a NxM feature matrix for N features and M documents.
+    The list *labels* contain a label for each document.
 
-    @rtype: number
-    @return:
-        Average accuracy of the classifier over the k tests.
+    The data is split into *k* bins.
+
+    Returns average accuracy of the classifier over the *k* tests.
     """
     if type(labels) is list:
         # cast to numpy array if needed
@@ -84,26 +80,17 @@ def _classification_cross_validation(features, labels, k=15):
     return {'mean':numpy.mean(scores), 'stdev':numpy.std(scores)}
 
 def _classification_split(features, labels, train_size=0.6, random=False):
-    """
-    Trains and tests a classifier with a dataset.
+    """Trains and tests a classifier with a dataset.
 
     A KNN classifier is trained with part of the dataset, and tested
     against the remainder of the data.
 
-    @type features: numpy array
-    @param features:
-        NxM feature matrix for N features and M documents.
-    @type labels: list
-    @param labels:
-        Labels for each document in the feature matrix.
-    @type train_size: number
-    @param train_size:
-        Fraction of the dataset to use training the classifier.
-    TODO: describe 'random'
+    *features* is a NxM feature matrix for N features and M documents.
+    The list *labels* contain a label for each document.
 
-    @rtype: number
-    @return:
-        Accuracy of the trained classifier over the test set.
+    Fraction *train_size* of the dataset is used to use train the classifier.
+
+    Returns accuracy of the trained classifier over the test set.
     """
     if train_size >= 1 or train_size < 0 :
         raise ValueError, "Illegal value for 'train_size'."

@@ -9,14 +9,15 @@ term-document matrix.
 
 import numpy as np
 import math
+from nltk.probability import FreqDist
 
 import preprocess
 
-#~ from nltk.corpus.reader.plaintext import PlaintextCorpusReader
-from nltk.probability import FreqDist
-
 def text_to_vector(docs, metric):
-    """ Create frequency based feature-vector from text """
+    """ Create frequency based feature-vector from text
+
+    Metric must be either :attr:`FrequencyMetrics.TF` or :attr:`FrequencyMetrics.TF_IDF`.
+    """
     doc_freqs = FreqDist() # Distribution over how many documents each word appear in.
     tf_dists = [] # List of TF distributions per document
 
@@ -54,10 +55,12 @@ def text_to_vector(docs, metric):
 ######
 
 class FrequencyMetrics:
+    """Class holding constants for the different frequency metrics"""
     TF = 'tf'
     TF_IDF = 'tf-idf'
 
 def get_metrics():
+    """Get list of available :class:`FrequencyMetrics`"""
     return [FrequencyMetrics.TF,
             FrequencyMetrics.TF_IDF]
 

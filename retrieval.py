@@ -27,6 +27,12 @@ import numpy
 import scipy.spatial.distance
 
 def evaluate_retrieval(descriptions, solutions):
+    """Perform retrieval operations for each input case, returning overall performance.
+
+    Each description in *descriptions* is used to retrieve the solution
+    (from *solutions*) corresponding to the most similar other description.
+    The average similarity between query and retrieved solution is returned.
+    """
     description_sim = 1.0 - scipy.spatial.distance.cdist(descriptions.T, descriptions.T, 'cosine')
     solution_sim = 1.0 - scipy.spatial.distance.cdist(solutions.T, solutions.T, 'cosine')
     # setting self-similarity to 0 to avoid retrieval of own solution:

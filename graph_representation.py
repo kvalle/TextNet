@@ -59,9 +59,7 @@ def create_graphs(documents, graph_type='co-occurrence', verbose=False):
     return graphs
 
 def _cooccurrence_preprocessing(doc, context, already_preprocessed):
-    """
-    Preprocess document as needed for co-occurrence network creation
-    """
+    """Preprocess document as needed for co-occurrence network creation"""
     if context=='window':
         if already_preprocessed:
             doc = doc.split(' ')
@@ -75,6 +73,7 @@ def _cooccurrence_preprocessing(doc, context, already_preprocessed):
     return doc
 
 def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
+    """Create co-occurrence matrix for *doc* using context window"""
     term_list = np.array(list(set(doc)))
     A = sparse.lil_matrix( (len(term_list), len(term_list)) )
     for i, word in enumerate(doc):
@@ -89,6 +88,7 @@ def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
     return A, term_list
 
 def _sentence_cooccurrence_matrix(doc, direction='undirected'):
+    """Create co-occurrence matrix for *doc* using sentence contexts"""
     term_list = np.array(list(set(util.flatten(doc))))
     A = sparse.lil_matrix( (len(term_list), len(term_list)) )
     for sentence in doc:
@@ -103,11 +103,15 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
     return A, term_list
 
 def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None):
-    """
-    Construct co-occurrence network from text.
+    """Construct co-occurrence network from text.
 
-    @param direction: forward | backward | undirected
-    @param context: window | sentence
+    *direction* must be 'forward', 'backward' or 'undirected', while  *context*
+    can be 'window' or 'sentence'.
+
+    If *context* is 'window', *already_preprocessed* indicate whether *doc*
+    already have been processed. Sentence contexts require unpreocessed *doc*s.
+
+    Any value for *window_size* is ignored if *context* is 'sentence'.
 
     A DiGraph is created regardless of direction parameter, but with 'undirected',
     edges are created in both directions.
@@ -137,6 +141,9 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
     return g
 
 def _higher_order_matrix(matrix, do_clip=False):
+    """Construct higher order matrix from first order *matrix*.
+
+    Values of *matrix* are clipped to range [0,1] depending on *do_clip*"""
     dim = matrix.shape[0]
     if do_clip: matrix = np.clip(matrix, 0, 1)
     first_order = util.fill_matrix_diagonal(matrix, 0.0)
@@ -153,11 +160,10 @@ def _higher_order_matrix(matrix, do_clip=False):
     return first_order, second_order, third_order
 
 def construct_random_network(doc, p=0.2):
-    """
-    Construct random network for use as baseline.
+    """Construct random network for use as baseline.
 
-    doc - document with words used for nodes
-    p   - probability any given pair of nodes (a,b) are connected by edge a -> b
+    Create a random network based on *doc*, with words used for nodes.
+    Edges are created between any given pair of nodes (a,b)  with probability *p*.
 
     All edges will have weight = 1.0
     """
@@ -177,9 +183,15 @@ def construct_random_network(doc, p=0.2):
     return graph
 
 def construct_dependency_network(doc, weighted=False, direction='undirected',remove_stop_words=False, exclude=['agent', 'advcl','parataxis']):
-    # direction  = undirected | forward | backward
-    # forward == head-dependent
-    # backward = dependent-head
+    """Construct a dependency network from *doc*.
+
+    Creates a network form *doc* with distinct word used for nodes, and
+    all dependency types defined by the stanford parser, except those listed
+    in *exclude* used as edges.
+
+    *direction* must be 'undirected', 'forward' or 'backward.
+    Forward direction means head-dependent, while backward gives dependent-head relations.
+    """
     graph = nx.DiGraph()
     deps = pickle.loads(doc)
     for dep_type, dep in deps.iteritems():
@@ -200,6 +212,7 @@ def construct_dependency_network(doc, weighted=False, direction='undirected',rem
     return graph
 
 def _update_edge_weight(graph, node1, node2,labels=[],inc_weight=True):
+    """Update or create weighed edge between two nodes"""
     if graph.has_edge(node1, node2):
         graph[node1][node2]['label'] += labels
         if inc_weight:
@@ -208,9 +221,9 @@ def _update_edge_weight(graph, node1, node2,labels=[],inc_weight=True):
         graph.add_edge(node1, node2, weight=1.0,label=labels)
 
 def similarity_matrix_to_graph(distM):
-    """
-    Converts similarity matrix to weighted graph.
-    Written by Gleb.
+    """Converts similarity matrix to weighted graph.
+
+    :Author: Gleb Sizov <sizov@idi.ntnu.no>
     """
     lenM = distM
     weightM = 1 / lenM
@@ -229,25 +242,34 @@ def similarity_matrix_to_graph(distM):
 ######
 
 def graphs_to_vectors(graphs, metric, verbose=False):
-    """ Create centrality based feature-vector from graph representation """
+    """ Create centrality based feature-vectors from graph representations
+
+    Takes a list of graphs and returns a numpy nd-matix of feature vectors,
+    based on the provides *metric*.
+    """
     all_tokens = graph.node_set(graphs)
     features = np.zeros((len(all_tokens), len(graphs)))
     for i, g in enumerate(graphs):
         if verbose and i%50==0: print str(i)+'/'+str(len(graphs))
-        #~ cents = graph.centralities(g, metric)
-        #~ features[:,i] = [cents.get(token, 0.0) for token in all_tokens]
         features[:,i] = graph_to_vector(g, metric, all_tokens)
     return features
 
 def graph_to_vector(g, metric, all_tokens):
+    """Create feature vector from a single graph.
+
+    The list of *all_tokens* is used as basis for the feature vector, and
+    value for each word in graph *g* according to *metric* is calculated.
+    """
     cents = graph.centralities(g, metric)
     vector = [cents.get(token, 0.0) for token in all_tokens]
     return vector
 
 def graph_to_dict(g, metric):
+    """Return node values as dictionary"""
     return graph.centralities(g, metric)
 
 def dicts_to_vectors(dicts):
+    """Convert a list of dictionaries to feature-vectors"""
     node_set = set()
     for d in dicts:
         for node in d.keys():
@@ -267,6 +289,10 @@ def dicts_to_vectors(dicts):
 from graph import GraphMetrics
 
 def get_metrics(weighted=None):
+    """Return list of graph node evaluation metrics.
+
+    If *weighted* is not specified, or `None`, all metrics are returned.
+    Otherwise metrics suited for (un)*weighted* networks are returned."""
     if weighted is None:
         return graph.mapping.keys()
     elif weighted:
@@ -306,7 +332,9 @@ def test_graph_to_dict():
     g.add_edges_from(edge_list)
     pp.pprint(graph_to_dict(g,'PageRank'))
 
-### TESTS ###
+##
+#  TESTS
+##
 
 def test_co_occurrences():
     doc1 = data.read_file('../data/tasa/TASATest/Science/Agatha09.07.03.txt')
