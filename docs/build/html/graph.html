@@ -56,7 +56,7 @@
 <p>Module contains functions for calculating graph centrality, visualizing
 graphs and finding various network properties, in addition to various
 other useful functions.</p>
-<p>Graph centralities are accessed using the <tt class="xref docutils literal"><span class="pre">centralities()</span></tt> function, which
+<p>Graph centralities are accessed using the <a title="graph.centralities" class="reference internal" href="#graph.centralities"><tt class="xref docutils literal"><span class="pre">centralities()</span></tt></a> function, which
 takes as arguments a graph and the metric to use as a constant of the
 GraphMetrics class.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -67,10 +67,94 @@ GraphMetrics class.</p>
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="graph.GraphMetrics">
+<em class="property">class </em><tt class="descclassname">graph.</tt><tt class="descname">GraphMetrics</tt><a class="headerlink" href="#graph.GraphMetrics" title="Permalink to this definition">¶</a></dt>
+<dd>Class holding constants for the different graph centrality metrics</dd></dl>
+
+<dl class="function">
+<dt id="graph.add_edges_from_matrix">
+<tt class="descclassname">graph.</tt><tt class="descname">add_edges_from_matrix</tt><big>(</big><em>graph</em>, <em>matrix</em>, <em>nodes</em>, <em>rel_weight=1.0</em><big>)</big><a class="headerlink" href="#graph.add_edges_from_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add edges to <em>graph</em> based on adjacency <em>matrix</em>.</p>
+<p>The <em>nodes</em> list corresponds to each row/column in <em>matrix</em>.
+The <em>rel_weight</em> scales the edge weights.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph.betweenness">
+<tt class="descclassname">graph.</tt><tt class="descname">betweenness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.betweenness" title="Permalink to this definition">¶</a></dt>
+<dd>Betweenness centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.centralities">
+<tt class="descclassname">graph.</tt><tt class="descname">centralities</tt><big>(</big><em>graph</em>, <em>method</em><big>)</big><a class="headerlink" href="#graph.centralities" title="Permalink to this definition">¶</a></dt>
+<dd>Return centralities for nodes in <em>graph</em> using the given centrality <em>method</em></dd></dl>
+
+<dl class="function">
+<dt id="graph.closeness">
+<tt class="descclassname">graph.</tt><tt class="descname">closeness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.closeness" title="Permalink to this definition">¶</a></dt>
+<dd>Closeness centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.clustering_degree">
+<tt class="descclassname">graph.</tt><tt class="descname">clustering_degree</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.clustering_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clustering degree &#8216;&#8217;centrality&#8217;&#8216;</p>
+<p>Measure of centrality based on the clustering coefficient of a node
+multiplied with its weighted degree centrality.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph.current_flow_betweenness">
+<tt class="descclassname">graph.</tt><tt class="descname">current_flow_betweenness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.current_flow_betweenness" title="Permalink to this definition">¶</a></dt>
+<dd>Current-flow betweenness centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.current_flow_closeness">
+<tt class="descclassname">graph.</tt><tt class="descname">current_flow_closeness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.current_flow_closeness" title="Permalink to this definition">¶</a></dt>
+<dd>Current-flow closeness centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.draw">
+<tt class="descclassname">graph.</tt><tt class="descname">draw</tt><big>(</big><em>graph</em><big>)</big><a class="headerlink" href="#graph.draw" title="Permalink to this definition">¶</a></dt>
+<dd>Draw the <em>graph</em></dd></dl>
+
+<dl class="function">
+<dt id="graph.draw_with_centrality">
+<tt class="descclassname">graph.</tt><tt class="descname">draw_with_centrality</tt><big>(</big><em>G</em>, <em>sizeV=None</em>, <em>min_size=500</em>, <em>max_size=4000</em>, <em>default_size=500</em>, <em>layout=None</em><big>)</big><a class="headerlink" href="#graph.draw_with_centrality" title="Permalink to this definition">¶</a></dt>
+<dd>Visualizes a graph preserving edge length and demonstrating centralities as node sizes.</dd></dl>
+
+<dl class="function">
+<dt id="graph.equal">
+<tt class="descclassname">graph.</tt><tt class="descname">equal</tt><big>(</big><em>g1</em>, <em>g2</em><big>)</big><a class="headerlink" href="#graph.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if two graphs are identical.</p>
+<p>The graphs are considered equal if they contain the same set of nodes
+and edges. Edge weights are not considered.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph.get_hubs">
+<tt class="descclassname">graph.</tt><tt class="descname">get_hubs</tt><big>(</big><em>graph</em>, <em>n=10</em><big>)</big><a class="headerlink" href="#graph.get_hubs" title="Permalink to this definition">¶</a></dt>
+<dd>Return the <em>n</em> most important hubs from the graph</dd></dl>
+
+<dl class="function">
+<dt id="graph.hits_authorities">
+<tt class="descclassname">graph.</tt><tt class="descname">hits_authorities</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.hits_authorities" title="Permalink to this definition">¶</a></dt>
+<dd>The HITS authorities centralities</dd></dl>
+
+<dl class="function">
+<dt id="graph.hits_hubs">
+<tt class="descclassname">graph.</tt><tt class="descname">hits_hubs</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.hits_hubs" title="Permalink to this definition">¶</a></dt>
+<dd>The HITS hubs centralities</dd></dl>
+
 <dl class="function">
 <dt id="graph.invert_edge_weights">
 <tt class="descclassname">graph.</tt><tt class="descname">invert_edge_weights</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.invert_edge_weights" title="Permalink to this definition">¶</a></dt>
 <dd>Returns a graph with all edge weights inverted</dd></dl>
+
+<dl class="function">
+<dt id="graph.load">
+<tt class="descclassname">graph.</tt><tt class="descname">load</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.load" title="Permalink to this definition">¶</a></dt>
+<dd>Load centrality</dd></dl>
 
 <dl class="function">
 <dt id="graph.network_properties">
@@ -83,19 +167,55 @@ GraphMetrics class.</p>
 <dd>Return list of unique nodes from list of graphs</dd></dl>
 
 <dl class="function">
+<dt id="graph.normalize">
+<tt class="descclassname">graph.</tt><tt class="descname">normalize</tt><big>(</big><em>A</em><big>)</big><a class="headerlink" href="#graph.normalize" title="Permalink to this definition">¶</a></dt>
+<dd>Normalize a numpy nd-array</dd></dl>
+
+<dl class="function">
+<dt id="graph.pagerank">
+<tt class="descclassname">graph.</tt><tt class="descname">pagerank</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.pagerank" title="Permalink to this definition">¶</a></dt>
+<dd>PageRank values for nodes in graph <em>G</em></dd></dl>
+
+<dl class="function">
 <dt id="graph.reduce_edge_set">
 <tt class="descclassname">graph.</tt><tt class="descname">reduce_edge_set</tt><big>(</big><em>graph</em>, <em>remove_label</em><big>)</big><a class="headerlink" href="#graph.reduce_edge_set" title="Permalink to this definition">¶</a></dt>
-<dd>Return new graph with edges removed.
-Those edges that have the remove_label, and no other labels, are removed.</dd></dl>
+<dd><p>Return new graph with some edges removed.</p>
+<p>Those edges that have the <em>remove_label</em>, and no other labels, are removed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_betweenness">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_betweenness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.weighted_betweenness" title="Permalink to this definition">¶</a></dt>
+<dd>Weighted version of the betweenness centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_closeness">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_closeness</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.weighted_closeness" title="Permalink to this definition">¶</a></dt>
+<dd>Weighted version of the closeness centrality</dd></dl>
 
 <dl class="function">
 <dt id="graph.weighted_degree">
 <tt class="descclassname">graph.</tt><tt class="descname">weighted_degree</tt><big>(</big><em>G</em>, <em>normalize=True</em><big>)</big><a class="headerlink" href="#graph.weighted_degree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Weighted degree centrality.</p>
+<dd><p>Weighted degree centralities.</p>
 <p>Counts both incomming and outgoing links.
 This is the same as the sum of the weighted in-degree and weighted out-degree.
 Assumes digraph.</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_in_degree">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_in_degree</tt><big>(</big><em>G</em>, <em>normalize=True</em><big>)</big><a class="headerlink" href="#graph.weighted_in_degree" title="Permalink to this definition">¶</a></dt>
+<dd>Weighted in-degree centralities</dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_load">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_load</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#graph.weighted_load" title="Permalink to this definition">¶</a></dt>
+<dd>Weighted version of the load centrality</dd></dl>
+
+<dl class="function">
+<dt id="graph.weighted_out_degree">
+<tt class="descclassname">graph.</tt><tt class="descname">weighted_out_degree</tt><big>(</big><em>G</em>, <em>normalize=True</em><big>)</big><a class="headerlink" href="#graph.weighted_out_degree" title="Permalink to this definition">¶</a></dt>
+<dd>Weighted out-degree centralities</dd></dl>
 
 </div>
 

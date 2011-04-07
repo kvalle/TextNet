@@ -55,11 +55,11 @@
 <p>Utility functions facititating easy plotting with matplotlib.</p>
 <p>Functions of note:</p>
 <ul class="simple">
-<li><tt class="xref docutils literal"><span class="pre">plot()</span></tt>: plot a regular plot, given input x,y-coordinates.</li>
-<li><tt class="xref docutils literal"><span class="pre">bar_graph()</span></tt>: plot a horizontal bar graph from x-coordinates and named
+<li><a title="plotter.plot" class="reference internal" href="#plotter.plot"><tt class="xref docutils literal"><span class="pre">plot()</span></tt></a>: plot a regular plot, given input x,y-coordinates.</li>
+<li><a title="plotter.bar_graph" class="reference internal" href="#plotter.bar_graph"><tt class="xref docutils literal"><span class="pre">bar_graph()</span></tt></a>: plot a horizontal bar graph from x-coordinates and named
 groups of lists of y-corrdinates.</li>
-<li><tt class="xref docutils literal"><span class="pre">histogram()</span></tt>: plots a histogram from a set of samples and a given numbe of bins.</li>
-<li><tt class="xref docutils literal"><span class="pre">plot_degree_distribution()</span></tt>: plot the degree distribution provided a networkx graph.</li>
+<li><a title="plotter.histogram" class="reference internal" href="#plotter.histogram"><tt class="xref docutils literal"><span class="pre">histogram()</span></tt></a>: plots a histogram from a set of samples and a given numbe of bins.</li>
+<li><a title="plotter.plot_degree_distribution" class="reference internal" href="#plotter.plot_degree_distribution"><tt class="xref docutils literal"><span class="pre">plot_degree_distribution()</span></tt></a>: plot the degree distribution provided a networkx graph.</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -69,6 +69,41 @@ groups of lists of y-corrdinates.</li>
 </tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="plotter.bar_graph">
+<tt class="descclassname">plotter.</tt><tt class="descname">bar_graph</tt><big>(</big><em>data</em>, <em>bar_names</em>, <em>x_label=''</em>, <em>y_label=''</em>, <em>title=''</em>, <em>axis=None</em>, <em>colors=None</em>, <em>legend_place='lower right'</em><big>)</big><a class="headerlink" href="#plotter.bar_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create horzontal bar chart with lists of data values.</p>
+<p>Plots a bar chart given a dictionary of <em>data</em> with a type as key, and a sequence of
+values corresponding to elements in <em>bar_names</em> as value.</p>
+<p>Place legend with <em>legend_place</em> as string argument matching
+/(lower|middle|upper) (right|center|left)/.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotter.histogram">
+<tt class="descclassname">plotter.</tt><tt class="descname">histogram</tt><big>(</big><em>samples</em>, <em>x_label=''</em>, <em>y_label=''</em>, <em>title=''</em>, <em>axis=None</em>, <em>bins=10</em>, <em>range=None</em><big>)</big><a class="headerlink" href="#plotter.histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create histogram from a set of <em>samples</em>.</p>
+<p>Number of <em>bins</em> and <em>range</em> can be specified in the same manner as to
+<tt class="xref docutils literal"><span class="pre">numpy.histogram()</span></tt>.</p>
+<p>Crop/scale with <em>axis</em> as a 4-tuple of (x_min,x_max,y_min,y_max).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotter.plot">
+<tt class="descclassname">plotter.</tt><tt class="descname">plot</tt><big>(</big><em>x_vals</em>, <em>y_vals</em>, <em>x_label</em>, <em>y_label</em>, <em>title</em>, <em>axis=None</em>, <em>legend_place='lower right'</em><big>)</big><a class="headerlink" href="#plotter.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a 2D plot from provided x- and y-values.</p>
+<p>Given lists of <em>x_vals</em> and <em>y_vals</em>, a plot is drawn. Axes are
+labeled using <em>x_label</em> and <em>y_label</em>.</p>
+<p>Plot can be cropped/scaled with <em>axis</em> as a 4-tuple of (x_min,x_max,y_min,y_max).</p>
+<p>Place legend with <em>legend_place</em> as string argument matching
+/(lower|middle|upper) (right|center|left)/.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotter.plot_degree_distribution">
+<tt class="descclassname">plotter.</tt><tt class="descname">plot_degree_distribution</tt><big>(</big><em>g</em><big>)</big><a class="headerlink" href="#plotter.plot_degree_distribution" title="Permalink to this definition">¶</a></dt>
+<dd>Plot degree distribution for a graph <em>g</em></dd></dl>
+
 </div>
 
 

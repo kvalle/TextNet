@@ -53,7 +53,7 @@
   <div class="section" id="module-retrieval">
 <h1>retrieval<a class="headerlink" href="#module-retrieval" title="Permalink to this headline">¶</a></h1>
 <p>Evaluation method based on case retrieval.</p>
-<p>Evaluate lists of cases with <tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt>. For each problem
+<p>Evaluate lists of cases with <a title="retrieval.evaluate_retrieval" class="reference internal" href="#retrieval.evaluate_retrieval"><tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt></a>. For each problem
 description the remaining descriptions are assessed, and the solution
 corresponding to the best matching description is retrieved.
 Actual solution is compared to retrieved solution using cosine of solution
@@ -68,6 +68,15 @@ similarity over the case base.</p>
 </tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="retrieval.evaluate_retrieval">
+<tt class="descclassname">retrieval.</tt><tt class="descname">evaluate_retrieval</tt><big>(</big><em>descriptions</em>, <em>solutions</em><big>)</big><a class="headerlink" href="#retrieval.evaluate_retrieval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform retrieval operations for each input case, returning overall performance.</p>
+<p>Each description in <em>descriptions</em> is used to retrieve the solution
+(from <em>solutions</em>) corresponding to the most similar other description.
+The average similarity between query and retrieved solution is returned.</p>
+</dd></dl>
+
 </div>
 
 

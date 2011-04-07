@@ -76,39 +76,27 @@ Supports k-nearest classification against trained data samples, and
 <dt id="classify.KNN.classify">
 <tt class="descname">classify</tt><big>(</big><em>qs</em>, <em>distance_metric='cosine'</em><big>)</big><a class="headerlink" href="#classify.KNN.classify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classifies a list of query cases.</p>
-<p>When classifying only those features that are <em>active</em> are
+<p>When classifying only those features that are <strong>active</strong> are
 used, all other features are ignored. The set of active features
-can be changed by L{set_active_features}.</p>
-<p>&#64;type qs: numpy array
-&#64;param qs:</p>
-<blockquote>
-Feature matrix similar to that used in L{train}, i.e a NxM
-matrix where N is number of features and M documents.</blockquote>
-<p>&#64;type distance_metric: string
-&#64;param distance_metric:</p>
-<blockquote>
-The distance metric to use when comparing feture vectors.
-See U{scipy.spatial.distance.cdist
-&lt;<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/spatial.distance.html">http://docs.scipy.org/doc/scipy/reference/spatial.distance.html</a>
-#scipy.spatial.distance.cdist&gt;}
-for list of supported metrics.</blockquote>
-<p>&#64;rtype: list
-&#64;return:</p>
-<blockquote>
-Classification of each of the input cases.</blockquote>
+can be changed by <a title="classify.KNN.set_active_features" class="reference internal" href="#classify.KNN.set_active_features"><tt class="xref docutils literal"><span class="pre">set_active_features()</span></tt></a>.</p>
+<p>Feature matrix <em>qs</em> is similar to that used in <a title="classify.KNN.train" class="reference internal" href="#classify.KNN.train"><tt class="xref docutils literal"><span class="pre">train()</span></tt></a>, i.e a NxM
+matrix where N is number of features and M documents.</p>
+<dl class="docutils">
+<dt>The string <em>distance_metric</em> defines what metric to use when comparing feture vectors.</dt>
+<dd>See <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/spatial.distance.html#scipy.spatial.distance.cdist">http://docs.scipy.org/doc/scipy/reference/spatial.distance.html#scipy.spatial.distance.cdist</a>
+for list of supported metrics.</dd>
+</dl>
+<p>Returns classification of each of the input cases.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="classify.KNN.set_active_features">
 <tt class="descname">set_active_features</tt><big>(</big><em>list=None</em><big>)</big><a class="headerlink" href="#classify.KNN.set_active_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Changes the set of active feature.</p>
-<p>&#64;type list: list
-&#64;param list:</p>
-<blockquote>
-The list features to make active.
+<p>Takes a <em>list</em> of features to make active.
 Could either be a list of feature indices, or boolean list
-with length equal to number of features where true == active.
-if None, all features are activated.</blockquote>
+with length equal to number of features where <cite>true</cite> == active.
+If <cite>None</cite>, all features are activated.</p>
 </dd></dl>
 
 <dl class="method">
@@ -117,32 +105,19 @@ if None, all features are activated.</blockquote>
 <dd><p>Tests this classifier against a set of labeled data.</p>
 <p>It is assumed that the classifier has been trained before
 this method is called.</p>
-<p>&#64;type features: numpy array
-&#64;param features:</p>
-<blockquote>
-NxM (features x documents) feature matrix.</blockquote>
-<p>&#64;type gold: list
-&#64;param gold:</p>
-<blockquote>
-List of labels belonging to each of the documents in the
-feature matrix.</blockquote>
-<p>&#64;rtype: number
-&#64;return:</p>
-<blockquote>
-The accuracy of the classifier over the training data</blockquote>
+<p><em>features</em> is a NxM (features x documents) feature matrix, and
+<em>gold</em> a list of labels belonging to each of the documents in the
+feature matrix.</p>
+<p>Returns the accuracy of the classifier over the training data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="classify.KNN.train">
 <tt class="descname">train</tt><big>(</big><em>features</em>, <em>labels</em><big>)</big><a class="headerlink" href="#classify.KNN.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trains the KNN on a set of data.</p>
-<p>&#64;type features: numpy array
-&#64;param features:
-NxM feature matrix with M samples, each of N features.
-See output from L{data.read_from_files}.
-&#64;type labels: list
-&#64;param labels:
-List of labels corresponding to each of the M samples.</p>
+<p>Uses NxM feature matrix <em>features</em> with M samples, each of N features.
+See output from <a title="data.read_files" class="reference external" href="data.html#data.read_files"><tt class="xref docutils literal"><span class="pre">data.read_files()</span></tt></a>.</p>
+<p>The list of <em>labels</em> correspond to each of the M samples.</p>
 </dd></dl>
 
 </dd></dl>

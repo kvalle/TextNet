@@ -86,18 +86,32 @@ using the stanford dependency parser (see the &#8216;stanford_parser&#8217; modu
 <dt id="graph_representation.construct_cooccurrence_network">
 <tt class="descclassname">graph_representation.</tt><tt class="descname">construct_cooccurrence_network</tt><big>(</big><em>doc</em>, <em>window_size=2</em>, <em>direction='undirected'</em>, <em>context='window'</em>, <em>already_preprocessed=False</em>, <em>orders=</em><span class="optional">[</span><span class="optional">]</span>, <em>order_weights=</em><span class="optional">[</span>, <em>1.0</em>, <em>1.0</em>, <em>1.0</em><span class="optional">]</span>, <em>doc_id=None</em><big>)</big><a class="headerlink" href="#graph_representation.construct_cooccurrence_network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct co-occurrence network from text.</p>
-<p>&#64;param direction: forward | backward | undirected
-&#64;param context: window | sentence</p>
+<p><em>direction</em> must be &#8216;forward&#8217;, &#8216;backward&#8217; or &#8216;undirected&#8217;, while  <em>context</em>
+can be &#8216;window&#8217; or &#8216;sentence&#8217;.</p>
+<p>If <em>context</em> is &#8216;window&#8217;, <em>already_preprocessed</em> indicate whether <em>doc</em>
+already have been processed. Sentence contexts require unpreocessed <a href="#id1"><span class="problematic" id="id2">*</span></a>doc*s.</p>
+<p>Any value for <em>window_size</em> is ignored if <em>context</em> is &#8216;sentence&#8217;.</p>
 <p>A DiGraph is created regardless of direction parameter, but with &#8216;undirected&#8217;,
 edges are created in both directions.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.construct_dependency_network">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">construct_dependency_network</tt><big>(</big><em>doc</em>, <em>weighted=False</em>, <em>direction='undirected'</em>, <em>remove_stop_words=False</em>, <em>exclude=</em><span class="optional">[</span>, <em>'agent'</em>, <em>'advcl'</em>, <em>'parataxis'</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#graph_representation.construct_dependency_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a dependency network from <em>doc</em>.</p>
+<p>Creates a network form <em>doc</em> with distinct word used for nodes, and
+all dependency types defined by the stanford parser, except those listed
+in <em>exclude</em> used as edges.</p>
+<p><em>direction</em> must be &#8216;undirected&#8217;, &#8216;forward&#8217; or &#8216;backward.
+Forward direction means head-dependent, while backward gives dependent-head relations.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="graph_representation.construct_random_network">
 <tt class="descclassname">graph_representation.</tt><tt class="descname">construct_random_network</tt><big>(</big><em>doc</em>, <em>p=0.20000000000000001</em><big>)</big><a class="headerlink" href="#graph_representation.construct_random_network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct random network for use as baseline.</p>
-<p>doc - document with words used for nodes
-p   - probability any given pair of nodes (a,b) are connected by edge a -&gt; b</p>
+<p>Create a random network based on <em>doc</em>, with words used for nodes.
+Edges are created between any given pair of nodes (a,b)  with probability <em>p</em>.</p>
 <p>All edges will have weight = 1.0</p>
 </dd></dl>
 
@@ -107,9 +121,38 @@ p   - probability any given pair of nodes (a,b) are connected by edge a -&gt; b<
 <dd>Crate text networks of given type, using their default paramters</dd></dl>
 
 <dl class="function">
+<dt id="graph_representation.dicts_to_vectors">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">dicts_to_vectors</tt><big>(</big><em>dicts</em><big>)</big><a class="headerlink" href="#graph_representation.dicts_to_vectors" title="Permalink to this definition">¶</a></dt>
+<dd>Convert a list of dictionaries to feature-vectors</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.get_metrics">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">get_metrics</tt><big>(</big><em>weighted=None</em><big>)</big><a class="headerlink" href="#graph_representation.get_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of graph node evaluation metrics.</p>
+<p>If <em>weighted</em> is not specified, or <cite>None</cite>, all metrics are returned.
+Otherwise metrics suited for (un)*weighted* networks are returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.graph_to_dict">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">graph_to_dict</tt><big>(</big><em>g</em>, <em>metric</em><big>)</big><a class="headerlink" href="#graph_representation.graph_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd>Return node values as dictionary</dd></dl>
+
+<dl class="function">
+<dt id="graph_representation.graph_to_vector">
+<tt class="descclassname">graph_representation.</tt><tt class="descname">graph_to_vector</tt><big>(</big><em>g</em>, <em>metric</em>, <em>all_tokens</em><big>)</big><a class="headerlink" href="#graph_representation.graph_to_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create feature vector from a single graph.</p>
+<p>The list of <em>all_tokens</em> is used as basis for the feature vector, and
+value for each word in graph <em>g</em> according to <em>metric</em> is calculated.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="graph_representation.graphs_to_vectors">
 <tt class="descclassname">graph_representation.</tt><tt class="descname">graphs_to_vectors</tt><big>(</big><em>graphs</em>, <em>metric</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#graph_representation.graphs_to_vectors" title="Permalink to this definition">¶</a></dt>
-<dd>Create centrality based feature-vector from graph representation</dd></dl>
+<dd><p>Create centrality based feature-vectors from graph representations</p>
+<p>Takes a list of graphs and returns a numpy nd-matix of feature vectors,
+based on the provides <em>metric</em>.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="graph_representation.rand">
@@ -119,8 +162,16 @@ p   - probability any given pair of nodes (a,b) are connected by edge a -&gt; b<
 <dl class="function">
 <dt id="graph_representation.similarity_matrix_to_graph">
 <tt class="descclassname">graph_representation.</tt><tt class="descname">similarity_matrix_to_graph</tt><big>(</big><em>distM</em><big>)</big><a class="headerlink" href="#graph_representation.similarity_matrix_to_graph" title="Permalink to this definition">¶</a></dt>
-<dd>Converts similarity matrix to weighted graph.
-Written by Gleb.</dd></dl>
+<dd><p>Converts similarity matrix to weighted graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Gleb Sizov &lt;<a class="reference external" href="mailto:sizov&#37;&#52;&#48;idi&#46;ntnu&#46;no">sizov<span>&#64;</span>idi<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 

@@ -54,8 +54,8 @@
 <h1>evaluation<a class="headerlink" href="#module-evaluation" title="Permalink to this headline">¶</a></h1>
 <p>Module containing methods for evaluating representations.</p>
 <p>This module acts as an interface to evaluation against the <a title="" class="reference external" href="modules.html#module-classify"><tt class="xref docutils literal"><span class="pre">classify</span></tt></a>
-and <a title="" class="reference external" href="modules.html#module-retrieval"><tt class="xref docutils literal"><span class="pre">retrieval</span></tt></a> modules through the <tt class="xref docutils literal"><span class="pre">evaluate_classification()</span></tt> and
-<tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt> functions, respectively.</p>
+and <a title="" class="reference external" href="retrieval.html#module-retrieval"><tt class="xref docutils literal"><span class="pre">retrieval</span></tt></a> modules through the <a title="evaluation.evaluate_classification" class="reference internal" href="#evaluation.evaluate_classification"><tt class="xref docutils literal"><span class="pre">evaluate_classification()</span></tt></a> and
+<a title="evaluation.evaluate_retrieval" class="reference internal" href="#evaluation.evaluate_retrieval"><tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt></a> functions, respectively.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -64,6 +64,18 @@ and <a title="" class="reference external" href="modules.html#module-retrieval">
 </tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="evaluation.evaluate_classification">
+<tt class="descclassname">evaluation.</tt><tt class="descname">evaluate_classification</tt><big>(</big><em>data</em>, <em>labels</em>, <em>mode='split'</em><big>)</big><a class="headerlink" href="#evaluation.evaluate_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return classification performance using set of <em>data</em> and a list of <em>labels</em>.</p>
+<p>Supported values for <em>mode</em> are &#8216;split&#8217; or &#8216;cross-validation&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="evaluation.evaluate_retrieval">
+<tt class="descclassname">evaluation.</tt><tt class="descname">evaluate_retrieval</tt><big>(</big><em>descriptions</em>, <em>solutions</em><big>)</big><a class="headerlink" href="#evaluation.evaluate_retrieval" title="Permalink to this definition">¶</a></dt>
+<dd>Return retrieval performance using cases consisting of <em>descriptions</em> and <em>solutions</em>.</dd></dl>
+
 </div>
 
 

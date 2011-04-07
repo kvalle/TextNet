@@ -119,7 +119,7 @@ of tokens or sentences. Use <a title="preprocess.preprocess_text" class="referen
 full preprocessing.</p>
 <p>Extraction of within-sentence word dependnecies is also available through
 the <a title="preprocess.extract_dependencies" class="reference external" href="preprocess.html#preprocess.extract_dependencies"><tt class="xref docutils literal"><span class="pre">extract_dependencies()</span></tt></a> function, which works as an interface to the
-<tt class="xref docutils literal"><span class="pre">stanford_parser</span></tt> module.</p>
+<a title="" class="reference external" href="stanford_parser.html#module-stanford_parser"><tt class="xref docutils literal"><span class="pre">stanford_parser</span></tt></a> module.</p>
 <p>The Natural Language Toolkit (NLTK) is used for most of the heavy lifting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -138,7 +138,7 @@ the <a title="preprocess.extract_dependencies" class="reference external" href="
 <p>Python interface to the Stanford parser.</p>
 <p>The module wrapps the edu.stanford.npl Stanford Parser, which is
 implemented in Java, using the JPype library.</p>
-<p>The StanfordParser class wraps the actual parser, and the <tt class="xref docutils literal"><span class="pre">parse()</span></tt> function
+<p>The StanfordParser class wraps the actual parser, and the <a title="stanford_parser.parse" class="reference external" href="stanford_parser.html#stanford_parser.parse"><tt class="xref docutils literal"><span class="pre">parse()</span></tt></a> function
 can be used to parse sentences.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -213,7 +213,7 @@ using the stanford dependency parser (see the &#8216;stanford_parser&#8217; modu
 <p>Module contains functions for calculating graph centrality, visualizing
 graphs and finding various network properties, in addition to various
 other useful functions.</p>
-<p>Graph centralities are accessed using the <tt class="xref docutils literal"><span class="pre">centralities()</span></tt> function, which
+<p>Graph centralities are accessed using the <a title="graph.centralities" class="reference external" href="graph.html#graph.centralities"><tt class="xref docutils literal"><span class="pre">centralities()</span></tt></a> function, which
 takes as arguments a graph and the metric to use as a constant of the
 GraphMetrics class.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -250,7 +250,7 @@ return the classifiers accuracy compared to a gold standard.</p>
 <div class="section" id="module-retrieval">
 <h2>retrieval<a class="headerlink" href="#module-retrieval" title="Permalink to this headline">¶</a></h2>
 <p>Evaluation method based on case retrieval.</p>
-<p>Evaluate lists of cases with <tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt>. For each problem
+<p>Evaluate lists of cases with <a title="retrieval.evaluate_retrieval" class="reference external" href="retrieval.html#retrieval.evaluate_retrieval"><tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt></a>. For each problem
 description the remaining descriptions are assessed, and the solution
 corresponding to the best matching description is retrieved.
 Actual solution is compared to retrieved solution using cosine of solution
@@ -273,8 +273,8 @@ similarity over the case base.</p>
 <h2>evaluation<a class="headerlink" href="#module-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>Module containing methods for evaluating representations.</p>
 <p>This module acts as an interface to evaluation against the <tt class="xref docutils literal"><span class="pre">classify</span></tt>
-and <tt class="xref docutils literal"><span class="pre">retrieval</span></tt> modules through the <tt class="xref docutils literal"><span class="pre">evaluate_classification()</span></tt> and
-<tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt> functions, respectively.</p>
+and <tt class="xref docutils literal"><span class="pre">retrieval</span></tt> modules through the <a title="evaluation.evaluate_classification" class="reference external" href="evaluation.html#evaluation.evaluate_classification"><tt class="xref docutils literal"><span class="pre">evaluate_classification()</span></tt></a> and
+<a title="evaluation.evaluate_retrieval" class="reference external" href="evaluation.html#evaluation.evaluate_retrieval"><tt class="xref docutils literal"><span class="pre">evaluate_retrieval()</span></tt></a> functions, respectively.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -292,11 +292,11 @@ and <tt class="xref docutils literal"><span class="pre">retrieval</span></tt> mo
 <p>Utility functions facititating easy plotting with matplotlib.</p>
 <p>Functions of note:</p>
 <ul class="simple">
-<li><tt class="xref docutils literal"><span class="pre">plot()</span></tt>: plot a regular plot, given input x,y-coordinates.</li>
-<li><tt class="xref docutils literal"><span class="pre">bar_graph()</span></tt>: plot a horizontal bar graph from x-coordinates and named
+<li><a title="plotter.plot" class="reference external" href="plotter.html#plotter.plot"><tt class="xref docutils literal"><span class="pre">plot()</span></tt></a>: plot a regular plot, given input x,y-coordinates.</li>
+<li><a title="plotter.bar_graph" class="reference external" href="plotter.html#plotter.bar_graph"><tt class="xref docutils literal"><span class="pre">bar_graph()</span></tt></a>: plot a horizontal bar graph from x-coordinates and named
 groups of lists of y-corrdinates.</li>
-<li><tt class="xref docutils literal"><span class="pre">histogram()</span></tt>: plots a histogram from a set of samples and a given numbe of bins.</li>
-<li><tt class="xref docutils literal"><span class="pre">plot_degree_distribution()</span></tt>: plot the degree distribution provided a networkx graph.</li>
+<li><a title="plotter.histogram" class="reference external" href="plotter.html#plotter.histogram"><tt class="xref docutils literal"><span class="pre">histogram()</span></tt></a>: plots a histogram from a set of samples and a given numbe of bins.</li>
+<li><a title="plotter.plot_degree_distribution" class="reference external" href="plotter.html#plotter.plot_degree_distribution"><tt class="xref docutils literal"><span class="pre">plot_degree_distribution()</span></tt></a>: plot the degree distribution provided a networkx graph.</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
