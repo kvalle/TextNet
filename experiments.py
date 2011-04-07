@@ -1,7 +1,9 @@
 """
 Module containing methods for experimenting with the various graph representations.
+Experiments not particular to any single representation is put here,
+e.g. comparisons of the representations , or tests of properties of the datasets.
 
-This module probably contain a lot of redundant code and is a mess most of the time.
+Warning: This module probably contain a lot of redundant code and is a mess most of the time.
 This is because it contains experiments constructed for specific purposes that are hard
 to predict ahead of time. When done, the experiments are left as is, to be available for
 re-runs later if needed.

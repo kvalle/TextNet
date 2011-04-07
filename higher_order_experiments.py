@@ -1,14 +1,24 @@
+"""
+Module containing experiments with higher order co-occurrence relations, as part of the
+co-occurrence network representation.
+
+Warning: This module probably contain a lot of redundant code and is a mess most of the time.
+This is because it contains experiments constructed for specific purposes that are hard
+to predict ahead of time. When done, the experiments are left as is, to be available for
+re-runs later if needed.
+"""
+import pprint as pp
+import plotter
+import numpy
+import networkx as nx
+import scipy.spatial.distance
+
 import data
 import graph
 import freq_representation
 import graph_representation
 import classify
 import evaluation
-import pprint as pp
-import plotter
-import numpy
-import networkx as nx
-import scipy.spatial.distance
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 

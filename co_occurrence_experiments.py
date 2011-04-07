@@ -1,20 +1,32 @@
+"""
+Module containing experiments crated to evaluate and test various
+incarnations of the co-occurrence network representation.
+
+Warning: This module probably contain a lot of redundant code and is a mess most of the time.
+This is because it contains experiments constructed for specific purposes that are hard
+to predict ahead of time. When done, the experiments are left as is, to be available for
+re-runs later if needed.
+"""
+import pprint as pp
+import numpy
+import networkx as nx
+import scipy.spatial.distance
+
 import data
 import graph
 import freq_representation
 import graph_representation
 import classify
 import evaluation
-import pprint as pp
 import plotter
-import numpy
-import networkx as nx
-import scipy.spatial.distance
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
 def do_context_size_evaluation_retrieval():
-    """Experiment intended to evaluate the performance with different
-    context sizes for co-occurrence networks in retrieval."""
+    """
+    Experiment evaluating performance of different context sizes for
+    co-occurrence networks in the retrieval task.
+    """
     results = {}
     graph_metrics = graph_representation.get_metrics()
     for metric in graph_metrics:
