@@ -1,10 +1,5 @@
-.. TextNet documentation master file, created by
-   sphinx-quickstart on Thu Apr  7 13:42:45 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to TextNet's documentation!
-===================================
+TextNet Documentation
+=====================
 
 Contents:
 
@@ -12,10 +7,11 @@ Contents:
    :maxdepth: 1
    
    architecture
+   modules
    libraries
 
-Indices and tables
-==================
+API Docs
+========
 
 * :ref:`genindex`
 * :ref:`modindex`

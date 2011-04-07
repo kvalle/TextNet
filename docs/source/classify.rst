@@ -1,4 +1,4 @@
-Classify
+classify
 ========
 
 .. automodule:: classify

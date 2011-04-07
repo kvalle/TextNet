@@ -1,0 +1,8 @@
+Modules
+=======
+
+.. autosummary::
+
+   evaluation
+   classify
+
