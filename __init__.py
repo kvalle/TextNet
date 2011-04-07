@@ -1,9 +1,11 @@
+"""
+.. automodule:: classify
+.. automodule:: graph
+"""
 import data
 import graph
 import classify
-import representation
 import util
-import selector
 
 def main():
     pass
