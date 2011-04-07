@@ -1,7 +1,3 @@
-"""
-.. automodule:: classify
-.. automodule:: graph
-"""
 import data
 import graph
 import classify

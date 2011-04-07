@@ -1,13 +1,11 @@
-"""
-Classification of feature-vectors using KNN classifier.
+"""Classification of feature-vectors using KNN classifier.
 
-The KNN class contains the classifier. It can classify() new datapoints
-as soon as it is properly trained using the train() method.
-The test() method provides a way to classify many vectors at once, and
+The :class:`KNN` class contains the classifier. It can :meth:`~KNN.classify` new datapoints
+as soon as it is properly trained using the :meth:`~KNN.train` method.
+The :meth:`~KNN.test` method provides a way to classify many vectors at once, and
 return the classifiers accuracy compared to a gold standard.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import nltk
 import numpy
@@ -30,13 +28,13 @@ class KNN:
 
         @type use_centroids: boolean
         @param use_centroids:
-            If true, the classifier will calculate and use the best
-            matching centroid of each the samples from each class when
-            classifying. Otherwise the class among the k nearest is used.
+        If true, the classifier will calculate and use the best
+        matching centroid of each the samples from each class when
+        classifying. Otherwise the class among the k nearest is used.
         @type k: integer
         @param k:
-            The number of neighbors to use when classifying. Ignored if
-            centroids are used for classification.
+        The number of neighbors to use when classifying. Ignored if
+        centroids are used for classification.
         """
         self._use_centroids = use_centroids
         self._k = k
@@ -49,16 +47,15 @@ class KNN:
         self.active_centroids = None # centroid vectors using active features
 
     def train(self, features, labels):
-        """
-        Trains the KNN on a set of data.
+        """Trains the KNN on a set of data.
 
         @type features: numpy array
         @param features:
-            NxM feature matrix with M samples, each of N features.
-            See output from L{data.read_from_files}.
+        NxM feature matrix with M samples, each of N features.
+        See output from L{data.read_from_files}.
         @type labels: list
         @param labels:
-            List of labels corresponding to each of the M samples.
+        List of labels corresponding to each of the M samples.
         """
         self.labels = labels
         self.features = features

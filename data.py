@@ -1,22 +1,26 @@
-"""
-Module for reading and writing case files.
+"""Module for reading and writing case files.
 
 The read_* methods provide reading of cases in various formats from dataset.
 For converting dataset between formats, use the appropriate create_dataset_* function.
-It is also possible to provide custom conversion functions to the create_dataset function.
+It is also possible to provide custom conversion functions to the :func:`create_dataset` function.
+
+
+The following formats are supported for dataset conversion:
+
+:HTML:
+  Expected formatted similarly to AIR dataset reports for conversion to cases.
+  Conversion to text/dependencies should work regardless.
+:Text:
+  Raw text. Anything within p if extracted from HTML.
+:Preprocessed text:
+  Processed using the default parameters from preprocess.preprocess_text().
+:Dependencies:
+  As defined by the stanford dependency parser.
 
 The module expects to work with datasets structured so that each category
 is in a separate subfolder named after the category.
 
-The following formats are supported for dataset conversion:
-- HTML: Expected formatted similarly to AIR dataset reports for conversion to cases.
-        Conversion to text/dependencies should work regardless.
-- Text: Raw text. Anything within <p> if extracted from HTML.
-- Preprocessed text: Processed using the default parameters from preprocess.preprocess_text().
-- Dependencies: As defined by the stanford dependency parser.
-
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import os
 import os.path
@@ -38,9 +42,14 @@ import report_data
 file_names = {}
 
 def get_file_names(in_path):
+    """Retrieve list of file/case names matching dataset path."""
     return file_names[in_path]
 
 def read_files(in_path, unpickle_content=False, verbose=False):
+    """Read dataset/cases from files.
+
+    Files are read recursively from *in_path*, with subdirectory names
+    used as labels."""
     if in_path not in file_names:
         file_names[in_path] = []
     docs =  []
@@ -58,6 +67,7 @@ def read_files(in_path, unpickle_content=False, verbose=False):
     return (docs, labels)
 
 def read_file(file_path, verbose=False):
+    """Fetch contents of a single file from *file_path*."""
     if verbose: print '   ', file_path
     with open(file_path, 'r') as f:
         words = f.read()
@@ -97,42 +107,56 @@ def read_data(path, graph_types):
 ######
 
 def _html_to_text(raw_html):
+    """Convert HTML to text"""
     parser = report_data.ReportParser('', raw=raw_html)
     parser.close()
     return parser.report.str()
 
 def _text_to_preprocessed_text(text):
+    """Convert text to preprocessed text"""
     prep = preprocess.preprocess_text(text)
     return ' '.join(prep)
 
 def _text_to_dependencies(text):
+    """Covert text to set of stanford dependencies"""
     deps = preprocess.extract_dependencies(text)
     return pickle.dumps(deps)
 
 def _html_to_problem_description(raw_html):
+    """Convert HTML to problem description text.
+
+    Problem description parts of HTML report are extracted and returned
+    as raw text."""
     parser = report_data.ReportParser('', raw=raw_html)
     parser.close()
     case = report_data.ReportCase(parser.report)
     return case.description
 
 def _html_to_solution(raw_html):
+    """Convert HTML to problem solution text.
+
+    Problem solution parts of HTML report are extracted and returned
+    as raw text."""
     parser = report_data.ReportParser('', raw=raw_html)
     parser.close()
-    #~ report_data.test_case(parser.report)
     case = report_data.ReportCase(parser.report)
     return case.solution
 
 def create_dataset_html_to_text(base_path, target_path):
+    """Convert dataset: HTML to text"""
     create_dataset(base_path, target_path, _html_to_text)
 
 def create_dataset_html_to_case(base_path, target_path):
+    """Convert dataset: HTML to CBR case"""
     create_dataset(base_path, target_path+"_problem_descriptions", _html_to_problem_description)
     create_dataset(base_path, target_path+"_solutions", _html_to_solution)
 
 def create_dataset_text_to_preprocessed_text(base_path, target_path):
+    """Convert dataset: Text to preprocessed text"""
     create_dataset(base_path, target_path, _text_to_preprocessed_text)
 
 def create_dataset_text_to_dependencies(base_path, target_path):
+    """Convert dataset: Text to stanford dependencies"""
     create_dataset(base_path, target_path, _text_to_dependencies)
 
 def create_dataset(base_path, target_path, processing_fn):
@@ -141,10 +165,10 @@ def create_dataset(base_path, target_path, processing_fn):
     Every file in base_path is processed using function processing_fn,
     and then stored under target_path.
 
-    @param base_path: path to data to be processed and turned into new dataset
-    @param target_path: name of new dataset to be created
-    @param processing_fn: function for processing document file.
-    The processing_fn needs to have string as both input and output.
+    *base_path* is the path to the data to be processed and turned into new dataset.
+    *target_path* is the name/path of the new dataset.
+    The *processing_fn* function is used for processing each document.
+    *processing_fn* needs to have string as both input and output.
     """
     if base_path==target_path: # check that we are not trying to read and write from same folder
         raise Exception('base and target paths cannot be the same')
@@ -213,6 +237,7 @@ def create_dataset(base_path, target_path, processing_fn):
 ######
 
 def pickle_from_file(filename):
+    """Read file and unpickle contents"""
     try:
         pkl_file = open(filename, 'rb')
     except IOError as e:
@@ -223,6 +248,7 @@ def pickle_from_file(filename):
     return data
 
 def pickle_to_file(data, filename):
+    """Pickle contents and dump to file"""
     dir_path = os.path.dirname(filename)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
@@ -233,6 +259,7 @@ def pickle_to_file(data, filename):
 ###### Utility functions
 
 def test_ascii(path='../data/air/reports_text'):
+    """Test whether documents in dataset are ascii encoded"""
     (documents, labels) = read_files(path)
     names = get_file_names(path)
     for i, doc in enumerate(documents):

@@ -1,20 +1,18 @@
-"""
-Toolbox of functions for preprocessing text.
+"""Toolbox of functions for preprocessing text.
 
 The module contains methods for a variety of preprocessing tasks, such as
 filtering out words with special characters, stemming, stop-word removal,
 case folding and more, as well as functions for splitting text into lists
-of tokens or sentences. Use preprocess_text() and preprocess_token() for
+of tokens or sentences. Use :func:`preprocess_text` and :func:`preprocess_token` for
 full preprocessing.
 
 Extraction of within-sentence word dependnecies is also available through
-the extract_dependencies() function, which works as an interface to the
-'stanford_parser' module.
+the :func:`extract_dependencies` function, which works as an interface to the
+:mod:`stanford_parser` module.
 
 The Natural Language Toolkit (NLTK) is used for most of the heavy lifting.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import nltk
 import re
@@ -42,23 +40,28 @@ def tokenize_sentences(text):
 #####
 
 def fold_case(tokens):
+    """Fold tokens to lower case"""
     return [tok.lower() for tok in tokens]
 
 stopwords = nltk.corpus.stopwords.words('english')
 def remove_stop_words(tokens):
+    """Remove all stop words from list of tokens"""
     return [t for t in tokens if t.lower() not in stopwords]
 
 def is_stop_word(token):
+    """Check whether a particular token is a stop word"""
     return token.lower() in stopwords
 
 stemmer = nltk.PorterStemmer()
 def stem(tokens):
+    """Return list of stemmed tokens"""
     return [stemmer.stem(t) for t in tokens]
 
 def filter_tokens(tokens, min_size=0, special_chars=False):
-    """
-    @param min_size: remove any token with length below threshold
-    @param special_chars: remove tokens containing special chars
+    """Filter list of tokens.
+
+    Any token with length below *min_size* is removed. If *special_chars*
+    is ``True``, all tokens containing special chars will also be removed.
     """
     if min_size>0:
         tokens = [t for t in tokens if len(t) >= min_size]
@@ -94,8 +97,7 @@ def preprocess_text(text, do_stop_word_removal=True, do_stemming=True, fold=True
     return ts
 
 def extract_dependencies(text):
-    """
-    Creates a dictionary with dependency information about the text.
+    """Creates a dictionary with dependency information about the text.
 
     Some sentences may be too long for the parser to handle, leading to
     exhaustion of the java heap space. If this happens the sentence is
@@ -190,15 +192,5 @@ def run_tests():
 
 # -----
 
-def tmp_stop_words(word):
-    print word in stopwords
-    print is_stop_word(word)
-
-def tmp_stem(word):
-    print stem([word])[0]
-
 if __name__ == "__main__":
-    #~ run_tests()
-    word = 'the'
-    tmp_stop_words(word)
-    tmp_stem(word)
+    run_tests()

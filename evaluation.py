@@ -1,12 +1,10 @@
-"""
-Module containing methods for evaluating representations.
+"""Module containing methods for evaluating representations.
 
-This module acts as an interface to evaluation against the 'classify'
-and 'retrieval' modules through the evaluate_classification() and
-evaluate_retrieval() functions, respectively.
+This module acts as an interface to evaluation against the :mod:`classify`
+and :mod:`retrieval` modules through the :func:`evaluate_classification` and
+:func:`evaluate_retrieval` functions, respectively.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 from nltk.probability import FreqDist
 import pprint as pp

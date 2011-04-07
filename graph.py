@@ -1,16 +1,14 @@
-"""
-Toolbox module for working with networkx graphs.
+"""Toolbox module for working with networkx graphs.
 
 Module contains functions for calculating graph centrality, visualizing
 graphs and finding various network properties, in addition to various
 other useful functions.
 
-Graph centralities are accessed using the centralities() function, which
+Graph centralities are accessed using the :func:`centralities` function, which
 takes as arguments a graph and the metric to use as a constant of the
 GraphMetrics class.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import matplotlib.pyplot as plt
 import networkx as nx

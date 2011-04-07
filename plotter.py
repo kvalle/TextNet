@@ -1,17 +1,14 @@
-"""
-Utility functions facititating easy plotting with matplotlib.
+"""Utility functions facititating easy plotting with matplotlib.
 
 Functions of note:
-- plot: plot a regular plot, given input x,y-coordinates.
-- bar_graph: plot a horizontal bar graph from x-coordinates and named
-        groups of lists of y-corrdinates.
-- histogram: plots a histogram from a set of samples and a given number
-        of bins.
-- plot_degree_distribution: plot the degree distribution provided a
-        networkx graph.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+- :func:`plot`: plot a regular plot, given input x,y-coordinates.
+- :func:`bar_graph`: plot a horizontal bar graph from x-coordinates and named
+  groups of lists of y-corrdinates.
+- :func:`histogram`: plots a histogram from a set of samples and a given numbe of bins.
+- :func:`plot_degree_distribution`: plot the degree distribution provided a networkx graph.
+
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import matplotlib.pyplot as plt
 from nltk.probability import FreqDist

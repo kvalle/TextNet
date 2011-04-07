@@ -1,14 +1,12 @@
-"""
-Python interface to the Stanford parser.
+"""Python interface to the Stanford parser.
 
 The module wrapps the edu.stanford.npl Stanford Parser, which is
 implemented in Java, using the JPype library.
 
-The StanfordParser class wraps the actual parser, and the parse() function
+The StanfordParser class wraps the actual parser, and the :func:`parse` function
 can be used to parse sentences.
 
-@author: Gleb Sizov <sizov@idi.ntnu.no>
-"""
+:Author: Gleb Sizov <sizov@idi.ntnu.no>"""
 
 import jpype
 

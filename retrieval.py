@@ -1,26 +1,27 @@
-"""
-Evaluation method based on case retrieval.
+"""Evaluation method based on case retrieval.
 
-Evaluate lists of cases with evaluate_retrieval(). For each problem
+Evaluate lists of cases with :func:`evaluate_retrieval`. For each problem
 description the remaining descriptions are assessed, and the solution
 corresponding to the best matching description is retrieved.
 Actual solution is compared to retrieved solution using cosine of solution
 vectors.
+
 The overall evaluation score is equal to the average solution-solution
 similarity over the case base.
 
-For every case:                                     __________
- __________                                  _|________  |
-|          |    retrieve similar case       |          | |
-| problem  | ------------------------->     | problem  | |
-|          |                                |          | |
-|----------|     assess similarity of       |----------| |
-|          |     retrieved solution         |          | |
-| solution |  <---------------------------  | solution |_|
-|__________|                                |__________|
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+..  For every case:
+                                                   __________
+     __________                                  _|________  |
+    |          |    retrieve similar case       |          | |
+    | problem  | ------------------------->     | problem  | |
+    |          |                                |          | |
+    |----------|     assess similarity of       |----------| |
+    |          |     retrieved solution         |          | |
+    | solution |  <---------------------------  | solution |_|
+    |__________|                                |__________|
+
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import numpy
 import scipy.spatial.distance

@@ -1,4 +1,4 @@
-Overview of the Architecture
+Overview
 ============================
 
 This section expands upon Section 4.3, explaining in more details what is done, and how everything
@@ -9,6 +9,9 @@ Figure A.1 presents the architecture, the modules and how they interact. This fi
 Figure 4.6. Differences are that a few additional modules are included, and that the directed ar-
 rows represent not the flow of data, as in Figure 4.6, but the interconnections between modules, i.e.
 references between modules.
+
+.. image:: imgs/architecture.png
+   :scale: 70
 
 The experiments module is not quite like the others. First, it is not a functional module, but rather
 the glue that keeps everything together. This is the module that utilize the other modules in order

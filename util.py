@@ -1,8 +1,7 @@
 """
 Module containing miscellaneous utility functions without a home anywhere else.
 
-@author: Kjetil Valle <kjetilva@stud.ntnu.no>
-"""
+:Author: Kjetil Valle <kjetilva@stud.ntnu.no>"""
 
 import time
 import operator
