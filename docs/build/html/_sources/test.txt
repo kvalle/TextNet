@@ -1,0 +1,7 @@
+Test
+====
+
+.. automodule:: TextNet
+   :members:
+
+foo bar?

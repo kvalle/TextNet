@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Used Libraries &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" />
+    <link rel="prev" title="Overview of the Architecture" href="architecture.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Overview of the Architecture"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="used-libraries">
+<h1>Used Libraries<a class="headerlink" href="#used-libraries" title="Permalink to this headline">¶</a></h1>
+<p>The implementation relies heavily on a few central third party libraries. These are briefly described
+in this section.</p>
+<div class="section" id="numpy-and-scipy">
+<h2>NumPy and SciPy<a class="headerlink" href="#numpy-and-scipy" title="Permalink to this headline">¶</a></h2>
+<p>SciPy is an open-source library for mathematics, science, and engineering. SciPy
+depends on NumPy, a library which provides convenient and fast N-dimensional array and
+matrix manipulation, as well as many tools for numerical computation. The libraries are easy
+to use, but powerful for manipulating numbers in many ways.</p>
+<p>The most useful aspects in this project were the nd-arrays and matrices from NumPy, and the
+sparse matrix representations from SciPy. The scipy.spatial.distance.cdist function also
+proved valuable for efficient computation of vector similarities.</p>
+<p>NumPy and SciPy are available at <a class="reference external" href="http://scipy.org">http://scipy.org</a> and <a class="reference external" href="http://numpy.scipy.org">http://numpy.scipy.org</a>, respectively.</p>
+</div>
+<div class="section" id="networkx">
+<h2>NetworkX<a class="headerlink" href="#networkx" title="Permalink to this headline">¶</a></h2>
+<p>NetworkX is a Python package for the creation and manipulation of graphs and complex
+networks. It enables study of structure and dynamics of networks, and comes with many useful
+functions.</p>
+<p>We have used NetworkX’s DiGraphs as our basic datastructure for the network representations.
+Among the more useful features of the library were some of the graph centrality algorithms and
+functions for extracting global and local properties from the graphs.</p>
+<p>NetworkX is available from <a class="reference external" href="http://networkx.lanl.gov">http://networkx.lanl.gov</a>.</p>
+</div>
+<div class="section" id="nltk">
+<h2>NLTK<a class="headerlink" href="#nltk" title="Permalink to this headline">¶</a></h2>
+<p>Python’s Natural Language Toolkit (NLTK) is a powerful tool for working with natural lan-
+guage processing (NLP). It provide functionality for a wide variety of NLP tasks.
+Only a small, but useful part of the library is used in this project. Of most use were the stem-
+mers, stop-word lists, tokenizers for tokens and sentences, and probability distributions for
+calculating the frequency-based measures.</p>
+<p>NLTK is available from <a class="reference external" href="http://nltk.org">http://nltk.org</a>.</p>
+</div>
+<div class="section" id="matplotlib">
+<h2>Matplotlib<a class="headerlink" href="#matplotlib" title="Permalink to this headline">¶</a></h2>
+<p>Matplotlib is a 2D plotting library able to produce high quality graphics of many types.
+We have utilized it to create plots, histograms and bar charts, many of which are used in this
+report. The library has a relatively easy interface, able to produce figures with a few lines of
+code.</p>
+<p>Matplotlib is available at <a class="reference external" href="http://matplotlib.sourceforge.net">http://matplotlib.sourceforge.net</a>.</p>
+</div>
+<div class="section" id="jpype">
+<h2>JPype<a class="headerlink" href="#jpype" title="Permalink to this headline">¶</a></h2>
+<p>JPype is a Java-to-Python integration library, allowing python programs full access to java
+class libraries. This is not done through re-implementing python on the Java Virtual Machine,
+like the JPython project, but rather through interfacing at the native level in both virtual ma-
+chines.</p>
+<p>Using JPype, we were able to use the Stanford dependency parser directly, even though it was
+implemented in Java.</p>
+<p>Available from <a class="reference external" href="http://jpype.sourceforge.net">http://jpype.sourceforge.net</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Used Libraries</a><ul>
+<li><a class="reference external" href="#numpy-and-scipy">NumPy and SciPy</a></li>
+<li><a class="reference external" href="#networkx">NetworkX</a></li>
+<li><a class="reference external" href="#nltk">NLTK</a></li>
+<li><a class="reference external" href="#matplotlib">Matplotlib</a></li>
+<li><a class="reference external" href="#jpype">JPype</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="architecture.html"
+                                  title="previous chapter">Overview of the Architecture</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/libraries.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Overview of the Architecture"
+             >previous</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

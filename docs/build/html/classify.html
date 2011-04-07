@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Classify &mdash; TextNet v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TextNet v0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-classify">
+<h1>Classify<a class="headerlink" href="#module-classify" title="Permalink to this headline">¶</a></h1>
+<p>Classification of feature-vectors using KNN classifier.</p>
+<p>The KNN class contains the classifier. It can classify() new datapoints
+as soon as it is properly trained using the train() method.
+The test() method provides a way to classify many vectors at once, and
+return the classifiers accuracy compared to a gold standard.</p>
+<p>&#64;author: Kjetil Valle &lt;<a class="reference external" href="mailto:kjetilva&#37;&#52;&#48;stud&#46;ntnu&#46;no">kjetilva<span>&#64;</span>stud<span>&#46;</span>ntnu<span>&#46;</span>no</a>&gt;</p>
+<dl class="class">
+<dt id="classify.KNN">
+<em class="property">class </em><tt class="descclassname">classify.</tt><tt class="descname">KNN</tt><big>(</big><em>use_centroids=False</em>, <em>k=5</em><big>)</big><a class="headerlink" href="#classify.KNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>K-nearest neighbors classifier.</p>
+<p>Classifier for labeled data in feature-vector format.
+Supports k-nearest classification against trained data samples, and
+1-nearest classification against class centroids.</p>
+<dl class="method">
+<dt id="classify.KNN.classify">
+<tt class="descname">classify</tt><big>(</big><em>qs</em>, <em>distance_metric='cosine'</em><big>)</big><a class="headerlink" href="#classify.KNN.classify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classifies a list of query cases.</p>
+<p>When classifying only those features that are <em>active</em> are
+used, all other features are ignored. The set of active features
+can be changed by L{set_active_features}.</p>
+<p>&#64;type qs: numpy array
+&#64;param qs:</p>
+<blockquote>
+Feature matrix similar to that used in L{train}, i.e a NxM
+matrix where N is number of features and M documents.</blockquote>
+<p>&#64;type distance_metric: string
+&#64;param distance_metric:</p>
+<blockquote>
+The distance metric to use when comparing feture vectors.
+See U{scipy.spatial.distance.cdist
+&lt;<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/spatial.distance.html">http://docs.scipy.org/doc/scipy/reference/spatial.distance.html</a>
+#scipy.spatial.distance.cdist&gt;}
+for list of supported metrics.</blockquote>
+<p>&#64;rtype: list
+&#64;return:</p>
+<blockquote>
+Classification of each of the input cases.</blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="classify.KNN.set_active_features">
+<tt class="descname">set_active_features</tt><big>(</big><em>list=None</em><big>)</big><a class="headerlink" href="#classify.KNN.set_active_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the set of active feature.</p>
+<p>&#64;type list: list
+&#64;param list:</p>
+<blockquote>
+The list features to make active.
+Could either be a list of feature indices, or boolean list
+with length equal to number of features where true == active.
+if None, all features are activated.</blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="classify.KNN.test">
+<tt class="descname">test</tt><big>(</big><em>features</em>, <em>gold</em><big>)</big><a class="headerlink" href="#classify.KNN.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests this classifier against a set of labeled data.</p>
+<p>It is assumed that the classifier has been trained before
+this method is called.</p>
+<p>&#64;type features: numpy array
+&#64;param features:</p>
+<blockquote>
+NxM (features x documents) feature matrix.</blockquote>
+<p>&#64;type gold: list
+&#64;param gold:</p>
+<blockquote>
+List of labels belonging to each of the documents in the
+feature matrix.</blockquote>
+<p>&#64;rtype: number
+&#64;return:</p>
+<blockquote>
+The accuracy of the classifier over the training data</blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="classify.KNN.train">
+<tt class="descname">train</tt><big>(</big><em>features</em>, <em>labels</em><big>)</big><a class="headerlink" href="#classify.KNN.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trains the KNN on a set of data.</p>
+<p>&#64;type features: numpy array
+&#64;param features:</p>
+<blockquote>
+NxM feature matrix with M samples, each of N features.
+See output from L{data.read_from_files}.</blockquote>
+<p>&#64;type labels: list
+&#64;param labels:</p>
+<blockquote>
+List of labels corresponding to each of the M samples.</blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/classify.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">TextNet v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2011, Kjetil Valle.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>
