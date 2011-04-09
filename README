@@ -1,5 +1,8 @@
 Implementation of various representations of networks/graphs created from text, and functionality for working with and evaluating these. Networks can be converted to feature-vectors, based on the graph centrality of their nodes.
 
-Work motivated by creating better methods for document similarity, particularly for use in textual Case-Based Reasoning.
+The work is motivated by creating better methods for document similarity, particularly for use in textual Case-Based Reasoning.
 
 Project part of the work on my Master's thesis at NTNU.
+
+For an introduction to the code, see the documentation under /docs.
+
