@@ -1,10 +1,5 @@
 """
 Experiments with various aspects of the dependency network representation.
-
-Warning: This module probably contain a lot of redundant code and is a mess most of the time.
-This is because it contains experiments constructed for specific purposes that are hard
-to predict ahead of time. When done, the experiments are left as is, to be available for
-re-runs later if needed.
 """
 import pprint as pp
 import numpy
@@ -26,6 +21,11 @@ import preprocess
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
 def edge_direction_evaluation(direction):
+    """
+    Evaluate impact of using different edge directions on dependency networks.
+
+    Values for *direction*: ``forward``, ``backward``, and ``undirected``.
+    """
     results = {'_edge-direction':direction}
 
     print '------ CLASSIFICATION EVALUATION --------'
@@ -80,6 +80,10 @@ def edge_direction_evaluation(direction):
     return results
 
 def stop_word_evaluation(rem_stop_words):
+    """
+    Experiment for determining what effect removing stop words have on
+    dependency networks.
+    """
     results = {'_removing stop-words':rem_stop_words}
 
     print '------ CLASSIFICATION EVALUATION --------'
@@ -144,7 +148,10 @@ def stop_word_evaluation(rem_stop_words):
     return results
 
 def centrality_weights_retrieval(weighted=True):
-    """Experiment 1."""
+    """
+    Evaluate whether edge weights are beneficial to the depdendency
+    network represenation for the retrieval task.
+    """
     results = {'_is_weighted':weighted, '_evaluation':'retrieval'}
     graph_metrics = graph_representation.get_metrics(weighted)
 
@@ -196,7 +203,10 @@ def centrality_weights_retrieval(weighted=True):
     return results
 
 def centrality_weights_classification(weighted=True):
-    """Experiment 1."""
+    """
+    Evaluate whether edge weights are beneficial to the depdendency
+    network represenation for the classification task.
+    """
     results = {'_is_weighted':weighted, '_evaluation':'classification'}
     graph_metrics = graph_representation.get_metrics(weighted)
 
@@ -244,6 +254,9 @@ def centrality_weights_classification(weighted=True):
     return results
 
 def plot_exp1():
+    """
+    Plotting the results of the weight evaluation experiment.
+    """
     colors = ['#3C54FF','#EF4C32','#27A713']
 
     # classification
@@ -265,6 +278,9 @@ def plot_exp1():
     plotter.bar_graph(data, bar_names, x_label='retrieval accuracy',colors=colors,legend_place=None)
 
 def stanford_example():
+    """
+    Example/test of the stanford parser.
+    """
     sentence = "Immediately after the second touchdown, the pilot decided to perform a go-around."
     pos, tree, dependencies = stanford_parser.parse(sentence)
     print '\nsentence:\n"'+sentence+'"'
@@ -303,9 +319,12 @@ def _create_dep_network(deps, filter_tokens=False):
                 graph.add_edge(g, d, weight=1.0, label=dep) # add label
     return graph
 
-def corpus_dependency_properties():
-    dataset = 'air/problem_descriptions'
-    #~ dataset = 'tasa/TASA900'
+def corpus_dependency_properties(dataset = 'air/problem_descriptions'):
+    """
+    Identify and pickle to file various properties of the given dataset.
+    These can alter be converted to pretty tables using
+    :func:`~experiments.print_network_props`.
+    """
     print '> Reading data..', dataset
     corpus_path = '../data/'+dataset+'_dependencies'
     (documents, labels) = data.read_files(corpus_path)
@@ -334,6 +353,9 @@ def corpus_dependency_properties():
     data.pickle_to_file(props_total, 'output/properties/dependency/docs_air_all_no_stop_words_total')
 
 def evaluate_dep_types():
+    """
+    Leave-one-out evaluation of the various dependency types from the stanford parser.
+    """
     exclude_list = ['dep', 'aux', 'auxpass', 'cop', 'agent', 'acomp',
                     'attr', 'ccomp', 'xcomp', 'complm', 'dobj', 'iobj',
                     'pobj', 'mark', 'rel', 'nsubj', 'nsubjpass', 'csubj',
@@ -409,6 +431,13 @@ def evaluate_dep_types():
     return results
 
 def evaluate_dep_type_sets():
+    """
+    Evaluation of various sets of dependency relations.
+
+    Each set is excluded from the representation, and the performance recorded.
+    The best strategy is to exclude those dependencies which removal lead to the
+    greatest imporovement for the representation.
+    """
     strategies = {
             'defensive': ['agent', 'advcl', 'parataxis'],
             'aggressive': ['agent', 'advcl', 'parataxis', 'dep', 'aux', 'ccomp', 'xcomp', 'dobj', 'pobj', 'nsubj', 'nsubjpass', 'cc', 'abbrev', 'purpcl', 'predet', 'preconj', 'advmod', 'neg', 'rcmod', 'tmod', 'poss', 'prepc'],
@@ -479,6 +508,9 @@ def evaluate_dep_type_sets():
     return results
 
 def plot_type_sets_evaluation():
+    """
+    Plot results from the :func:`evaluate_dep_type_sets` experiment.
+    """
     strategies = ['defensive', 'aggressive', 'compromise 1', 'compromise 2', 'all types']
     #~ results = data.pickle_from_file('output/dependencies/types_set_eval')
     results = { 'retrieval': {
@@ -507,6 +539,9 @@ def plot_type_sets_evaluation():
 
 
 def plot_type_evaluation():
+    """
+    Plot results from the :func:`evaluate_dep_types` experiment.
+    """
     l = ['dep', 'aux', 'auxpass', 'cop', 'agent', 'acomp',
         'attr', 'ccomp', 'xcomp', 'complm', 'dobj', 'iobj',
         'pobj', 'mark', 'rel', 'nsubj', 'nsubjpass', 'csubj',
@@ -535,6 +570,13 @@ def plot_type_evaluation():
         print "\t\t\t"+dep_type+"  &  "+'%1.4f'%val+"  &  "+'%1.4f'%diff +"\\\\"
 
 def print_common_hub_words(rem_stop_words):
+    """
+    Print a list of the most common hub words in the created networks.
+    Purpose of experiment was to show that hub words typically are stop words.
+
+    The *rem_stop_words* determine whether stop words are removed before creating
+    the networks.
+    """
     results = {'_removing stop-words':rem_stop_words}
 
     print '------ CLASSIFICATION EVALUATION --------'
@@ -581,6 +623,9 @@ def print_common_hub_words(rem_stop_words):
     return results
 
 def print_hubs():
+    """
+    Print results from :func:`print_common_hub_words` as latex table.
+    """
     w = data.pickle_from_file('output/dependencies/common_hubs_withstop_words')
     wo = data.pickle_from_file('output/dependencies/common_hubs_withoutstop_words')
 

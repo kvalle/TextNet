@@ -1,11 +1,6 @@
 """
 Module containing experiments crated to evaluate and test various
 incarnations of the co-occurrence network representation.
-
-Warning: This module probably contain a lot of redundant code and is a mess most of the time.
-This is because it contains experiments constructed for specific purposes that are hard
-to predict ahead of time. When done, the experiments are left as is, to be available for
-re-runs later if needed.
 """
 import pprint as pp
 import numpy
@@ -74,6 +69,10 @@ def do_context_size_evaluation_retrieval():
     return results
 
 def do_context_size_evaluation_classification():
+    """
+    Experiment evaluating performance of different context sizes for
+    co-occurrence networks in the classification task.
+    """
     results = {}
     graph_metrics = graph_representation.get_metrics()
     for metric in graph_metrics:
@@ -116,6 +115,10 @@ def do_context_size_evaluation_classification():
     return results
 
 def do_context_sentence_evaluation_retrieval():
+    """
+    Experiment evaluating performance of sentences as contexts for
+    co-occurrence networks in the retrieval task.
+    """
     results = {}
     graph_metrics = graph_representation.get_metrics()
     for metric in graph_metrics:
@@ -160,6 +163,10 @@ def do_context_sentence_evaluation_retrieval():
     return results
 
 def do_context_sentence_evaluation_classification():
+    """
+    Experiment evaluating performance of sentences as contexts for
+    co-occurrence networks in the classification task.
+    """
     print '> Reading cases..'
     path = '../data/tasa/TASA900_text'
     texts, labels = data.read_files(path)
@@ -181,9 +188,12 @@ def do_context_sentence_evaluation_classification():
     pp.pprint(results)
     return results
 
-def complete_network():
+def complete_network(path='../data/air/problem_descriptions_text'):
+    """
+    Create and pickle to file a giant co-occurrence network for all documents
+    in the dataset pointed to by *path*.
+    """
     print '> Reading cases..'
-    path = '../data/air/problem_descriptions_text'
     texts, labels = data.read_files(path)
 
     print '> Creating graph..'
@@ -256,9 +266,12 @@ def plot_results():
     #~ pp.pprint(class_results)
     #~ plotter.plot(range(1,11),class_results,'classification score','n, context size','',[1,10,.515,.58], legend_place=None)
 
-def corpus_cooccurrence_properties():
-    dataset = 'air/problem_descriptions'
-    #~ dataset = 'tasa/TASA900'
+def corpus_cooccurrence_properties(dataset = 'air/problem_descriptions'):
+    """
+    Identify and pickle to file various properties of the given dataset.
+    These can alter be converted to pretty tables using
+    :func:`~experiments.print_network_props`.
+    """
     print '> Reading data..', dataset
     corpus_path = '../data/'+dataset+'_text'
     (documents, labels) = data.read_files(corpus_path)

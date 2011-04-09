@@ -68,14 +68,20 @@
 <dl>
 
 <dt><a href="graph.html#graph.centralities">centralities() (in module graph)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.centrality_weights_classification">centrality_weights_classification() (in module dependency_experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.centrality_weights_retrieval">centrality_weights_retrieval() (in module dependency_experiments)</a></dt>
 <dt><a href="modules.html#module-classify">classify (module)</a>, <a href="classify.html#module-classify">[1]</a></dt>
 <dt><a href="classify.html#classify.KNN.classify">classify() (classify.KNN method)</a></dt>
 <dt><a href="graph.html#graph.closeness">closeness() (in module graph)</a></dt>
 <dt><a href="graph.html#graph.clustering_degree">clustering_degree() (in module graph)</a></dt>
+<dt><a href="experiments.html#module-co_occurrence_experiments">co_occurrence_experiments (module)</a></dt>
+<dt><a href="experiments.html#co_occurrence_experiments.complete_network">complete_network() (in module co_occurrence_experiments)</a></dt>
 <dt><a href="graph_representation.html#graph_representation.construct_cooccurrence_network">construct_cooccurrence_network() (in module graph_representation)</a></dt>
 <dt><a href="graph_representation.html#graph_representation.construct_dependency_network">construct_dependency_network() (in module graph_representation)</a></dt>
-<dt><a href="graph_representation.html#graph_representation.construct_random_network">construct_random_network() (in module graph_representation)</a></dt>
-<dt><a href="data.html#data.create_dataset">create_dataset() (in module data)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="graph_representation.html#graph_representation.construct_random_network">construct_random_network() (in module graph_representation)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="experiments.html#co_occurrence_experiments.corpus_cooccurrence_properties">corpus_cooccurrence_properties() (in module co_occurrence_experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.corpus_dependency_properties">corpus_dependency_properties() (in module dependency_experiments)</a></dt>
+<dt><a href="data.html#data.create_dataset">create_dataset() (in module data)</a></dt>
 <dt><a href="data.html#data.create_dataset_html_to_case">create_dataset_html_to_case() (in module data)</a></dt>
 <dt><a href="data.html#data.create_dataset_html_to_text">create_dataset_html_to_text() (in module data)</a></dt>
 <dt><a href="data.html#data.create_dataset_text_to_dependencies">create_dataset_text_to_dependencies() (in module data)</a></dt>
@@ -90,8 +96,16 @@
 <dl>
 
 <dt><a href="modules.html#module-data">data (module)</a>, <a href="data.html#module-data">[1]</a></dt>
+<dt><a href="experiments.html#experiments.dataset_stats">dataset_stats() (in module experiments)</a></dt>
+<dt><a href="experiments.html#module-dependency_experiments">dependency_experiments (module)</a></dt>
 <dt><a href="graph_representation.html#graph_representation.dicts_to_vectors">dicts_to_vectors() (in module graph_representation)</a></dt>
-<dt><a href="graph.html#graph.draw">draw() (in module graph)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="experiments.html#experiments.do_classification_experiments">do_classification_experiments() (in module experiments)</a></dt>
+<dt><a href="experiments.html#co_occurrence_experiments.do_context_sentence_evaluation_classification">do_context_sentence_evaluation_classification() (in module co_occurrence_experiments)</a></dt>
+<dt><a href="experiments.html#co_occurrence_experiments.do_context_sentence_evaluation_retrieval">do_context_sentence_evaluation_retrieval() (in module co_occurrence_experiments)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="experiments.html#co_occurrence_experiments.do_context_size_evaluation_classification">do_context_size_evaluation_classification() (in module co_occurrence_experiments)</a></dt>
+<dt><a href="experiments.html#co_occurrence_experiments.do_context_size_evaluation_retrieval">do_context_size_evaluation_retrieval() (in module co_occurrence_experiments)</a></dt>
+<dt><a href="experiments.html#experiments.do_retrieval_experiments">do_retrieval_experiments() (in module experiments)</a></dt>
+<dt><a href="graph.html#graph.draw">draw() (in module graph)</a></dt>
 <dt><a href="graph.html#graph.draw_with_centrality">draw_with_centrality() (in module graph)</a></dt>
 </dl></td></tr></table>
 
@@ -99,13 +113,17 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
+<dt><a href="experiments.html#dependency_experiments.edge_direction_evaluation">edge_direction_evaluation() (in module dependency_experiments)</a></dt>
 <dt><a href="graph.html#graph.equal">equal() (in module graph)</a></dt>
 <dt><a href="evaluation.html#evaluation.evaluate_classification">evaluate_classification() (in module evaluation)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.evaluate_dep_type_sets">evaluate_dep_type_sets() (in module dependency_experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.evaluate_dep_types">evaluate_dep_types() (in module dependency_experiments)</a></dt>
 <dt><a href="evaluation.html#evaluation.evaluate_retrieval">evaluate_retrieval() (in module evaluation)</a></dt>
   <dd><dl>
     <dt><a href="retrieval.html#retrieval.evaluate_retrieval">(in module retrieval)</a></dt>
   </dl></dd></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="modules.html#module-evaluation">evaluation (module)</a>, <a href="evaluation.html#module-evaluation">[1]</a></dt>
+<dt><a href="experiments.html#module-experiments">experiments (module)</a></dt>
 <dt><a href="preprocess.html#preprocess.extract_dependencies">extract_dependencies() (in module preprocess)</a></dt>
 </dl></td></tr></table>
 
@@ -143,6 +161,7 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
+<dt><a href="experiments.html#module-higher_order_experiments">higher_order_experiments (module)</a></dt>
 <dt><a href="plotter.html#plotter.histogram">histogram() (in module plotter)</a></dt>
 <dt><a href="graph.html#graph.hits_authorities">hits_authorities() (in module graph)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="graph.html#graph.hits_hubs">hits_hubs() (in module graph)</a></dt>
@@ -190,11 +209,18 @@
 <dt><a href="data.html#data.pickle_from_file">pickle_from_file() (in module data)</a></dt>
 <dt><a href="data.html#data.pickle_to_file">pickle_to_file() (in module data)</a></dt>
 <dt><a href="plotter.html#plotter.plot">plot() (in module plotter)</a></dt>
-<dt><a href="plotter.html#plotter.plot_degree_distribution">plot_degree_distribution() (in module plotter)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="plotter.html#plotter.plot_degree_distribution">plot_degree_distribution() (in module plotter)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.plot_exp1">plot_exp1() (in module dependency_experiments)</a></dt>
+<dt><a href="experiments.html#experiments.plot_sentence_lengths">plot_sentence_lengths() (in module experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.plot_type_evaluation">plot_type_evaluation() (in module dependency_experiments)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="experiments.html#dependency_experiments.plot_type_sets_evaluation">plot_type_sets_evaluation() (in module dependency_experiments)</a></dt>
 <dt><a href="modules.html#module-plotter">plotter (module)</a>, <a href="plotter.html#module-plotter">[1]</a></dt>
 <dt><a href="modules.html#module-preprocess">preprocess (module)</a>, <a href="preprocess.html#module-preprocess">[1]</a></dt>
 <dt><a href="preprocess.html#preprocess.preprocess_text">preprocess_text() (in module preprocess)</a></dt>
 <dt><a href="preprocess.html#preprocess.preprocess_token">preprocess_token() (in module preprocess)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.print_common_hub_words">print_common_hub_words() (in module dependency_experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.print_hubs">print_hubs() (in module dependency_experiments)</a></dt>
+<dt><a href="experiments.html#experiments.print_network_props">print_network_props() (in module experiments)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="R">R</h2>
@@ -219,9 +245,12 @@
 <dt><a href="report_data.html#report_data.Section">Section (class in report_data)</a></dt>
 <dt><a href="classify.html#classify.KNN.set_active_features">set_active_features() (classify.KNN method)</a></dt>
 <dt><a href="graph_representation.html#graph_representation.similarity_matrix_to_graph">similarity_matrix_to_graph() (in module graph_representation)</a></dt>
-<dt><a href="stanford_parser.html#module-stanford_parser">stanford_parser (module)</a>, <a href="modules.html#module-stanford_parser">[1]</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="experiments.html#experiments.solution_similarity_stats">solution_similarity_stats() (in module experiments)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.stanford_example">stanford_example() (in module dependency_experiments)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="stanford_parser.html#module-stanford_parser">stanford_parser (module)</a>, <a href="modules.html#module-stanford_parser">[1]</a></dt>
 <dt><a href="stanford_parser.html#stanford_parser.StanfordParser">StanfordParser (class in stanford_parser)</a></dt>
 <dt><a href="preprocess.html#preprocess.stem">stem() (in module preprocess)</a></dt>
+<dt><a href="experiments.html#dependency_experiments.stop_word_evaluation">stop_word_evaluation() (in module dependency_experiments)</a></dt>
 </dl></td></tr></table>
 
 <h2 id="T">T</h2>
@@ -230,9 +259,13 @@
 
 <dt><a href="classify.html#classify.KNN.test">test() (classify.KNN method)</a></dt>
 <dt><a href="data.html#data.test_ascii">test_ascii() (in module data)</a></dt>
+<dt><a href="experiments.html#higher_order_experiments.test_classification">test_classification() (in module higher_order_experiments)</a></dt>
+<dt><a href="experiments.html#higher_order_experiments.test_combinations">test_combinations() (in module higher_order_experiments)</a></dt>
+<dt><a href="experiments.html#higher_order_experiments.test_retrieval">test_retrieval() (in module higher_order_experiments)</a></dt>
 <dt><a href="util.html#util.test_unique">test_unique() (in module util)</a></dt>
+<dt><a href="experiments.html#higher_order_experiments.test_vocabulary_size">test_vocabulary_size() (in module higher_order_experiments)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="freq_representation.html#freq_representation.text_to_vector">text_to_vector() (in module freq_representation)</a></dt>
-<dt><a href="util.html#util.timed">timed() (in module util)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="util.html#util.timed">timed() (in module util)</a></dt>
 <dt><a href="preprocess.html#preprocess.tokenize_sentences">tokenize_sentences() (in module preprocess)</a></dt>
 <dt><a href="preprocess.html#preprocess.tokenize_tokens">tokenize_tokens() (in module preprocess)</a></dt>
 <dt><a href="classify.html#classify.KNN.train">train() (classify.KNN method)</a></dt>

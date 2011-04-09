@@ -2,11 +2,6 @@
 Module containing methods for experimenting with the various graph representations.
 Experiments not particular to any single representation is put here,
 e.g. comparisons of the representations , or tests of properties of the datasets.
-
-Warning: This module probably contain a lot of redundant code and is a mess most of the time.
-This is because it contains experiments constructed for specific purposes that are hard
-to predict ahead of time. When done, the experiments are left as is, to be available for
-re-runs later if needed.
 """
 import pprint as pp
 import numpy
@@ -25,6 +20,12 @@ numpy.set_printoptions(linewidth = 1000, precision = 3)
 def do_classification_experiments(dataset='tasa/TASA900',
                                     graph_types = ['co-occurrence','dependency','random'],
                                     use_frequency = True):
+    """
+    Experiment used for comparative evaluation of different network
+    representations on classification.
+
+    Toggle comparison with frequency-based methods using *use_frequency*.
+    """
     results = {'_dataset':dataset,
                 '_evaluation':'classification'}
     print '> Evaluation type: classification'
@@ -59,7 +60,12 @@ def do_retrieval_experiments(descriptions='air/problem_descriptions',
                                 solutions='air/solutions',
                                 graph_types=['co-occurrence','dependency','random'],
                                 use_frequency=True):
+    """
+    Experiment used for comparative evaluation of different network
+    representations on the retrieval task.
 
+    Toggle comparison with frequency-based methods using *use_frequency*.
+    """
     results = {'_solutions':solutions,
                 '_descriptions':descriptions,
                 '_evaluation':'retrieval'}
@@ -97,6 +103,9 @@ def do_retrieval_experiments(descriptions='air/problem_descriptions',
     return results
 
 def plot_sentence_lengths(datafile=None):
+    """
+    Function for plotting histogram of sentence lengths within a given dataset.
+    """
     if datafile is None:
         import preprocess
         print '> reading data..'
@@ -115,6 +124,10 @@ def plot_sentence_lengths(datafile=None):
     plotter.histogram(sentence_lengths, 'sentence length (tokens)', '# sentences', bins=70)
 
 def print_network_props():
+    """
+    Prints latex table with various properties for networks created from
+    texts in the datasets.
+    """
     print '-- Co-occurrence'
     tasa = data.pickle_from_file('output/properties/cooccurrence/docs_tasa_sentence_total')
     air = data.pickle_from_file('output/properties/cooccurrence/docs_air_2_total')
@@ -136,6 +149,10 @@ def print_network_props():
             print '%2.3f'%air[prop+sep+'mean'],' & ','%2.3f'%air[prop+sep+'std'],'\\\\'
 
 def dataset_stats(dataset):
+    """
+    Print and plot statistics for a given dataset.
+    A histogram is plotted with the document length distribution of the data.
+    """
     print '> Reading data..', dataset
     corpus_path = '../data/'+dataset
     (documents, labels) = data.read_files(corpus_path)
@@ -159,6 +176,9 @@ def dataset_stats(dataset):
     plotter.histogram(lengths,'# tokens','# documents','',bins=80)
 
 def solution_similarity_stats(dataset='air/solutions_preprocessed'):
+    """
+    Plots histogram of solution-solution similarity distribution of a dataset.
+    """
     print '> Reading data..', dataset
     corpus_path = '../data/'+dataset
     (documents, labels) = data.read_files(corpus_path)

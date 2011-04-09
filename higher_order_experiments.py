@@ -1,11 +1,6 @@
 """
 Module containing experiments with higher order co-occurrence relations, as part of the
 co-occurrence network representation.
-
-Warning: This module probably contain a lot of redundant code and is a mess most of the time.
-This is because it contains experiments constructed for specific purposes that are hard
-to predict ahead of time. When done, the experiments are left as is, to be available for
-re-runs later if needed.
 """
 import pprint as pp
 import plotter
@@ -23,6 +18,12 @@ import evaluation
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
 def test_retrieval(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
+    """
+    Test retrieval using different combinations of higher orders and weightings of these.
+
+    The list *orders* define which higher order relations to include.
+    The relative importance of the orders are defined by *order_weights*.
+    """
     print '> Reading cases..'
     descriptions_path = '../data/air/problem_descriptions_preprocessed'
     description_texts, labels = data.read_files(descriptions_path)
@@ -52,6 +53,12 @@ def test_retrieval(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
     return score
 
 def test_classification(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
+    """
+    Test classification using different combinations of higher orders and weightings of these.
+
+    The list *orders* define which higher order relations to include.
+    The relative importance of the orders are defined by *order_weights*.
+    """
     print '> Reading cases..'
     path = '../data/tasa/TASA900_text'
     texts, labels = data.read_files(path)
@@ -74,8 +81,10 @@ def test_classification(orders=[1,2,3],order_weights=[1.0,1.53,1.51]):
         f.write(str(s)+' '+str(score)+'\n')
     return score
 
-def test_vocabulary_size():
-    path = '../data/air/problem_descriptions_preprocessed'
+def test_vocabulary_size(path = '../data/air/problem_descriptions_preprocessed'):
+    """
+    Print vocabulary sizes for documents in dataset.
+    """
     texts, labels = data.read_files(path)
     lengths = []
     for text in texts:
@@ -88,15 +97,14 @@ def test_vocabulary_size():
     print 'max', lengths.max()
     print 'min', lengths.min()
 
-if __name__ == "__main__":
-    combinations = [
-                    #~ [1],
-                    #~ [2],
-                    #~ [3],
-                    [1,2],
-                    [1,3],
-                    [2,3],
-                    [1,2,3]]
+def test_combinations():
+    """
+    Test all combinations of higher orders with classification and retrieval.
+    """
+    combinations = [[1],[2],[3],[1,2],[1,3],[2,3],[1,2,3]]
     for c in combinations:
-        #~ test_classification(c)
+        test_classification(c)
         test_retrieval(c)
+
+if __name__ == "__main__":
+    test_combinations()

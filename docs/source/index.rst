@@ -8,6 +8,7 @@ Contents:
    
    architecture
    modules
+   experiments
    libraries
 
 API Docs
