@@ -637,6 +637,50 @@ def print_hubs():
     for i in range(10):
         print tasa_w[i],' & ',air_w[i],' & ',tasa_wo[i],' & ',air_wo[i],'\\\\'
 
+def corpus_properties(dataset):
+    """
+    Identify and pickle to file various properties of the given dataset.
+    These can alter be converted to pretty tables using
+    :func:`~experiments.print_network_props`.
+    """
+    print '> Reading data..', dataset
+    corpus_path = '../data/'+dataset+'_dependencies'
+    (documents, labels) = data.read_files(corpus_path)
+
+    props = {}
+    #~ giant = nx.DiGraph()
+    print '> Building networks..'
+    for i, deps in enumerate(documents):
+        if i%10==0: print '   ',str(i)+'/'+str(len(documents))
+        g = graph_representation.construct_cooccurrence_network(deps)
+        #~ giant.add_edges_from(g.edges())
+        p = graph.network_properties(g)
+        for k,v in p.iteritems():
+            if i==0: props[k] = []
+            props[k].append(v)
+        g = None # just to make sure..
+
+    print '> Calculating means and deviations..'
+    props_total = {}
+    for key in props:
+        print '   ',key
+        props_total[key+'_mean'] = numpy.mean(props[key])
+        props_total[key+'_std'] = numpy.std(props[key])
+
+    data_name = dataset.replace('/','.')
+    #~ data.pickle_to_file(giant, 'output/properties/cooccurrence/giant_'+data_name)
+    data.pickle_to_file(props, 'output/properties/dependency/stats_'+data_name)
+    data.pickle_to_file(props_total, 'output/properties/dependency/stats_tot_'+data_name)
+
+def compare_stats_to_random(dataset):
+    dataset = dataset.replace('/','.')
+    stats = data.pickle_from_file('output/properties/dependency/stats_tot_'+dataset)
+    n = stats['# nodes_mean']
+    p = stats['mean degree_mean']/(2*n)
+    g = nx.directed_gnp_random_graph(int(n), p)
+    props = graph.network_properties(g)
+    pp.pprint(props)
+
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)
     #~ centrality_weights_classification(False)
@@ -656,4 +700,9 @@ if __name__ == "__main__":
     #~ print_common_hub_words(False)
     #~ evaluate_dep_type_sets()
     #~ plot_type_sets_evaluation()
-    centrality_weights_retrieval(False)
+    #~ centrality_weights_retrieval(False)
+
+    #~ corpus_properties('tasa/TASA900')
+    #~ corpus_properties('air/problem_descriptions')
+    compare_stats_to_random('tasa/TASA900')
+    compare_stats_to_random('air/problem_descriptions')

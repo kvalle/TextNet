@@ -252,7 +252,7 @@ def pickle_to_file(data, filename):
     dir_path = os.path.dirname(filename)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    output = open(filename, 'wb')
+    output = open(filename, 'a+')
     pickle.dump(data, output)
     output.close()
 

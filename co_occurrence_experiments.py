@@ -266,7 +266,7 @@ def plot_results():
     #~ pp.pprint(class_results)
     #~ plotter.plot(range(1,11),class_results,'classification score','n, context size','',[1,10,.515,.58], legend_place=None)
 
-def corpus_cooccurrence_properties(dataset = 'air/problem_descriptions'):
+def corpus_properties(dataset, context):
     """
     Identify and pickle to file various properties of the given dataset.
     These can alter be converted to pretty tables using
@@ -277,12 +277,12 @@ def corpus_cooccurrence_properties(dataset = 'air/problem_descriptions'):
     (documents, labels) = data.read_files(corpus_path)
 
     props = {}
-    giant = nx.DiGraph()
+    #~ giant = nx.DiGraph()
     print '> Building networks..'
     for i, text in enumerate(documents):
         if i%10==0: print '   ',str(i)+'/'+str(len(documents))
-        g = graph_representation.construct_cooccurrence_network(text,context='sentence')
-        giant.add_edges_from(g.edges())
+        g = graph_representation.construct_cooccurrence_network(text,context=context)
+        #~ giant.add_edges_from(g.edges())
         p = graph.network_properties(g)
         for k,v in p.iteritems():
             if i==0: props[k] = []
@@ -292,12 +292,23 @@ def corpus_cooccurrence_properties(dataset = 'air/problem_descriptions'):
     print '> Calculating means and deviations..'
     props_total = {}
     for key in props:
+        print '   ',key
         props_total[key+'_mean'] = numpy.mean(props[key])
         props_total[key+'_std'] = numpy.std(props[key])
 
-    data.pickle_to_file(giant, 'output/properties/cooccurrence/corpus_network_air_sentence')
-    data.pickle_to_file(props, 'output/properties/cooccurrence/docs_air_sentence')
-    data.pickle_to_file(props_total, 'output/properties/cooccurrence/docs_air_sentence_total')
+    data_name = dataset.replace('/','.')
+    #~ data.pickle_to_file(giant, 'output/properties/cooccurrence/giant_'+data_name)
+    data.pickle_to_file(props, 'output/properties/cooccurrence/stats_'+data_name)
+    data.pickle_to_file(props_total, 'output/properties/cooccurrence/stats_tot_'+data_name)
+
+def compare_stats_to_random(dataset):
+    dataset = dataset.replace('/','.')
+    stats = data.pickle_from_file('output/properties/cooccurrence/stats_tot_'+dataset)
+    n = stats['# nodes_mean']
+    p = stats['mean degree_mean']/(2*n)
+    g = nx.directed_gnp_random_graph(int(n), p)
+    props = graph.network_properties(g)
+    pp.pprint(props)
 
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))
@@ -313,4 +324,7 @@ if __name__ == "__main__":
     #~ print "------------------------------------- RETRIEVAL - context sentence"
     #~ do_context_sentence_evaluation_retrieval()
 
-    corpus_cooccurrence_properties()
+    #~ corpus_properties('air/problem_descriptions', context='window')
+    #~ corpus_properties('tasa/TASA900', context='sentence')
+    compare_stats_to_random('tasa/TASA900')
+    compare_stats_to_random('air/problem_descriptions')

@@ -79,6 +79,7 @@ def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
     for i, word in enumerate(doc):
         context = doc[i+1:i+1+window_size]
         for context_word in context:
+            if word == context_word: continue
             x = np.where(term_list==word)[0][0]
             y = np.where(term_list==context_word)[0][0]
             if direction == 'forward' or direction == 'undirected':

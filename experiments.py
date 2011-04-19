@@ -129,8 +129,8 @@ def print_network_props():
     texts in the datasets.
     """
     print '-- Co-occurrence'
-    tasa = data.pickle_from_file('output/properties/cooccurrence/docs_tasa_sentence_total')
-    air = data.pickle_from_file('output/properties/cooccurrence/docs_air_2_total')
+    tasa = data.pickle_from_file('output/properties/cooccurrence/stats_tot_tasa.TASA900')
+    air = data.pickle_from_file('output/properties/cooccurrence/stats_tot_air.problem_descriptions')
     for key in air.keys():
         prop, sep, mod = key.partition('_')
         if mod!='std':
@@ -139,8 +139,8 @@ def print_network_props():
             print '%2.3f'%air[prop+sep+'mean'],' & ','%2.3f'%air[prop+sep+'std'],'\\\\'
     print
     print '-- Dependency, all types'
-    air = data.pickle_from_file('output/properties/dependency/docs_air_all_total')
-    tasa = data.pickle_from_file('output/properties/dependency/docs_tasa_all_total')
+    air = data.pickle_from_file('output/properties/dependency/stats_tot_air.problem_descriptions')
+    tasa = data.pickle_from_file('output/properties/dependency/stats_tot_tasa.TASA900')
     for key in air.keys():
         prop, sep, mod = key.partition('_')
         if mod!='std':
@@ -199,6 +199,6 @@ if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
     #~ plot_sentence_lengths('output/tasa_sentence_lengths.pkl')
-    #~ print_network_props()
+    print_network_props()
     #~ dataset_stats('tasa/TASA900_text')
-    solution_similarity_stats()
+    #~ solution_similarity_stats()
