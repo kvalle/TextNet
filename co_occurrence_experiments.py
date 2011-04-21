@@ -301,6 +301,36 @@ def corpus_properties(dataset, context):
     data.pickle_to_file(props, 'output/properties/cooccurrence/stats_'+data_name)
     data.pickle_to_file(props_total, 'output/properties/cooccurrence/stats_tot_'+data_name)
 
+def print_degree_distributions(dataset, context):
+    """
+    Extracts degree distribution values from networks, and print them to
+    cvs-file.
+
+    **warning** overwrites if file exists.
+    """
+    print '> Reading data..', dataset
+    corpus_path = '../data/'+dataset+'_text'
+    (documents, labels) = data.read_files(corpus_path)
+
+    degsfile = open('output/properties/cooccurrence/degrees_docs_'+dataset.replace('/','.'), 'w')
+
+    giant = nx.DiGraph()
+    print '> Building networks..'
+    for i, text in enumerate(documents):
+        if i%10==0: print '   ',str(i)+'/'+str(len(documents))
+        g = graph_representation.construct_cooccurrence_network(text,context=context)
+        giant.add_edges_from(g.edges())
+        degs = nx.degree(g).values()
+        degs = [str(d) for d in degs]
+        degsfile.write(','.join(degs)+'\n')
+    degsfile.close()
+
+    print '> Writing giant\'s distribution'
+    with open('output/properties/cooccurrence/degrees_giant_'+dataset.replace('/','.'), 'w') as f:
+        ds = nx.degree(giant).values()
+        ds = [str(d) for d in ds]
+        f.write(','.join(ds))
+
 def compare_stats_to_random(dataset):
     dataset = dataset.replace('/','.')
     stats = data.pickle_from_file('output/properties/cooccurrence/stats_tot_'+dataset)
@@ -326,5 +356,8 @@ if __name__ == "__main__":
 
     #~ corpus_properties('air/problem_descriptions', context='window')
     #~ corpus_properties('tasa/TASA900', context='sentence')
-    compare_stats_to_random('tasa/TASA900')
-    compare_stats_to_random('air/problem_descriptions')
+    #~ compare_stats_to_random('tasa/TASA900')
+    #~ compare_stats_to_random('air/problem_descriptions')
+
+    print_degree_distributions('tasa/TASA900', context='sentence')
+    print_degree_distributions('air/problem_descriptions', context='window')

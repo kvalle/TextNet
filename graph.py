@@ -492,6 +492,38 @@ def test_reduce_edge_set():
     for a,b,data in f.edges_iter(data=True):
         print a,b,data
 
+def test_scale_free():
+    import random
+    import data
+    import graph_representation
+    import plfit
+    import numpy
+    corpus_path = '../data/air/problem_descriptions_text'
+    (documents, labels) = data.read_files(corpus_path)
+    g = graph_representation.construct_cooccurrence_network(documents[0],context='sentence')
+    degree_sequence=sorted(nx.degree(g).values(),reverse=True) # degree sequence
+    dmax=max(degree_sequence)
+
+    degree_sequence = numpy.array(degree_sequence)
+    print degree_sequence
+    pl = plfit.plfit(degree_sequence)
+    p,ksv = pl.test_pl()
+    print
+    print
+    print
+    print
+
+    seq = [random.randrange(0,100) for i in range(len(degree_sequence))]
+    degree_sequence = numpy.array(seq)
+    print degree_sequence
+    pl = plfit.plfit(degree_sequence)
+    p,ksv = pl.test_pl()
+    print
+    print
+    print
+    print
+
+
 if __name__ == "__main__":
     #~ demo_centralities()
     #~ demo_graph_generators()
@@ -500,5 +532,5 @@ if __name__ == "__main__":
     #~ hits_example()
     #~ demo_network_properties()
     #~ closeness_example()
-    test_reduce_edge_set()
-    pass
+    #~ test_reduce_edge_set()
+    test_scale_free()
