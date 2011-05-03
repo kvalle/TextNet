@@ -256,7 +256,7 @@ def pickle_to_file(data, filename):
     pickle.dump(data, output)
     output.close()
 
-###### Utility functions
+###### encoding utility functions
 
 def test_ascii(path='../data/air/reports_text'):
     """Test whether documents in dataset are ascii encoded"""
@@ -269,6 +269,19 @@ def test_ascii(path='../data/air/reports_text'):
             print names[i]
     print "done"
 
+def fix_ascii(path):
+    """Test whether documents in dataset are ascii encoded"""
+    for class_name in os.listdir(path):
+        class_path = os.path.join(path, class_name)
+        for doc_name in os.listdir(class_path):
+            doc_path = os.path.join(class_path, doc_name)
+            with open(doc_path, 'r') as f:
+                doc = f.read()
+            doc = unicode(doc, encoding='ascii', errors='ignore')
+            with open(doc_path, 'w') as f:
+                f.write(doc)
+    print "done"
+
 if __name__ == "__main__":
     #~ test_ascii()
     #~ create_dataset_html_to_text('../data/air/html', '../data/air/text')
@@ -279,4 +292,9 @@ if __name__ == "__main__":
 
     #~ print pickle_from_file('../data/air/problem_descriptions_dependencies/1999/a99o0244.html')
     #~ create_dataset_text_to_preprocessed_text('../data/tasa/TASATest2/test_text', '../data/tasa/TASATest2/test_preprocessed')
-    pass
+
+    #~ create_dataset_html_to_case('../data/mir/html', '../data/mir/text')
+    #~ test_ascii('../data/mir/solutions_text')
+    test_ascii('../data/mir/problem_descriptions_text')
+    fix_ascii('../data/mir/problem_descriptions_text')
+    test_ascii('../data/mir/problem_descriptions_text')
