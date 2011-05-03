@@ -90,7 +90,7 @@ switch f_dattype,
         end
 
         fig = figure;
-        h(1) = loglog(c(:,1),c(:,2),'bo','MarkerSize',8,'MarkerFaceColor',[1 1 1]); 
+        h(1) = loglog(c(:,1),c(:,2),'bo','MarkerSize',18,'MarkerFaceColor',[1 1 1]); 
         if plotline,
             hold on;
             h(2) = loglog(cf(:,1),cf(:,2),'k--','LineWidth',2); 
