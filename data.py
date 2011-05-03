@@ -277,5 +277,6 @@ if __name__ == "__main__":
     #~ create_dataset_text_to_dependencies('../data/tasa/TASA900_text', '../data/tasa/TASA900_dependencies_2')
     #~ create_dataset_text_to_dependencies('../data/air/problem_descriptions_text', '../data/air/problem_descriptions_dependencies_2')
 
-    print pickle_from_file('../data/air/problem_descriptions_dependencies/1999/a99o0244.html')
-
+    #~ print pickle_from_file('../data/air/problem_descriptions_dependencies/1999/a99o0244.html')
+    #~ create_dataset_text_to_preprocessed_text('../data/tasa/TASATest2/test_text', '../data/tasa/TASATest2/test_preprocessed')
+    pass

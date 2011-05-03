@@ -19,12 +19,14 @@ def evaluate_retrieval(descriptions, solutions):
     """Return retrieval performance using cases consisting of *descriptions* and *solutions*."""
     return retrieval.evaluate_retrieval(descriptions, solutions)
 
-def evaluate_classification(data, labels, mode='split'):
+def evaluate_classification(data, labels, mode='random-split'):
     """Return classification performance using set of *data* and a list of *labels*.
 
     Supported values for *mode* are 'split' or 'cross-validation'."""
     if mode=='split':
-        return _classification_split(data, labels)
+        return _classification_split(data['training'], labels['training'], data['test'], labels['test'])
+    elif mode=='random-split':
+        return _classification_random_split(data, labels)
     elif mode=='cross-validation':
         return _classification_cross_validation(data, labels)
     else:
@@ -79,7 +81,14 @@ def _classification_cross_validation(features, labels, k=15):
     scores = numpy.array(scores)
     return {'mean':numpy.mean(scores), 'stdev':numpy.std(scores)}
 
-def _classification_split(features, labels, train_size=0.6, random=False):
+def _classification_split(training_features, training_labels, test_features, test_labels):
+    # Train
+    classifier = classify.KNN()
+    classifier.train(training_features, training_labels)
+    accuracy = classifier.test(test_features, test_labels)
+    return accuracy
+
+def _classification_random_split(features, labels, train_size=0.6, random=False):
     """Trains and tests a classifier with a dataset.
 
     A KNN classifier is trained with part of the dataset, and tested
@@ -116,18 +125,12 @@ def _classification_split(features, labels, train_size=0.6, random=False):
             training_indices += indices[:k]
             test_indices += indices[k:]
 
-    # Train
-    classifier = classify.KNN()
     training_features = features[:,training_indices]
     training_labels = labels[training_indices]
-    classifier.train(training_features, training_labels)
-
-    # Test
     test_features = features[:,test_indices]
     test_labels = labels[test_indices]
 
-    accuracy = classifier.test(test_features, test_labels)
-    return accuracy
+    return _classification_split(training_features, training_labels, test_features, test_labels)
 
 if __name__ == "__main__":
     pass

@@ -17,6 +17,68 @@ import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
+def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence'):
+    """
+    Experiment used for comparative evaluation of different network
+    representations on classification.
+
+    graph_type = 'co-occurrence' | 'dependency'
+
+    Toggle comparison with frequency-based methods using *use_frequency*.
+    """
+    def make_rep(docs):
+        rep = []
+        for i, doc in enumerate(docs):
+            if i%100==0: print '    graph',str(i)+'/'+str(len(docs))
+            g = gfuns[graph_type](doc)
+            d = graph_representation.graph_to_dict(g, metrics[graph_type])
+            rep.append(d)
+        print '    dicst -> vectors'
+        return graph_representation.dicts_to_vectors(rep)
+
+    postfix = {'co-occurrence':'_text', 'dependency':'_dependencies'}
+    gfuns = {'co-occurrence':graph_representation.construct_cooccurrence_network,
+                'dependency':graph_representation.construct_dependency_network}
+    metrics = {'co-occurrence':graph.GraphMetrics.WEIGHTED_DEGREE,
+                'dependency':graph.GraphMetrics.CLOSENESS}
+
+    print '> Reading data..', dataset
+    training_path = '../data/'+dataset+'/training'+postfix[graph_type]
+    training_docs, training_labels = data.read_files(training_path)
+    test_path = '../data/'+dataset+'/training'+postfix[graph_type]
+    test_docs, test_labels = data.read_files(test_path)
+
+    print '> Creating representations..'
+    training_rep = make_rep(training_docs)
+    test_rep = make_rep(test_docs)
+
+    print '> Evaluating..'
+    reps = {'training':training_rep, 'test':test_rep}
+    labels = {'training':training_labels, 'test':test_labels}
+    results = evaluation.evaluate_classification(reps, labels, mode='split')
+    print results
+    return results
+
+def classification_comparison_freq(dataset='reuters'):
+    print '> Reading data..', dataset
+    training_path = '../data/'+dataset+'/training_preprocessed'
+    training_docs, training_labels = data.read_files(training_path)
+    test_path = '../data/'+dataset+'/training_preprocessed'
+    test_docs, test_labels = data.read_files(test_path)
+
+    results = {}
+    for metric in freq_representation.get_metrics():
+        print '   ', metric,
+        training_rep = freq_representation.text_to_vector(training_docs, metric)
+        test_rep = freq_representation.text_to_vector(test_docs, metric)
+        reps = {'training':training_rep, 'test':test_rep}
+        labels = {'training':training_labels, 'test':test_labels}
+        score = evaluation.evaluate_classification(reps, labels, mode='split')
+        results[metric] = score
+        print score
+    pp.pprint(results)
+    return results
+
 def do_classification_experiments(dataset='tasa/TASA900',
                                     graph_types = ['co-occurrence','dependency','random'],
                                     use_frequency = True):
@@ -199,6 +261,10 @@ if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
     #~ plot_sentence_lengths('output/tasa_sentence_lengths.pkl')
-    print_network_props()
+    #~ print_network_props()
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
+
+    #~ classification_comparison_graph(dataset='reuters', graph_type='co-occurrence')
+    #~ classification_comparison_graph(dataset='reuters', graph_type='dependency')
+    classification_comparison_freq()
