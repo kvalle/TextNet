@@ -42,6 +42,7 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     metrics = {'co-occurrence':graph.GraphMetrics.WEIGHTED_DEGREE,
                 'dependency':graph.GraphMetrics.CLOSENESS}
 
+    print '--', graph_type
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training'+postfix[graph_type]
     training_docs, training_labels = data.read_files(training_path)
@@ -57,13 +58,15 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     labels = {'training':training_labels, 'test':test_labels}
     results = evaluation.evaluate_classification(reps, labels, mode='split')
     print results
+    s = 'classification comparison \nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/classification')
     return results
 
-def classification_comparison_freq(dataset='reuters'):
+def classification_comparison_freq(dataset='ctest'):
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training_preprocessed'
     training_docs, training_labels = data.read_files(training_path)
-    test_path = '../data/'+dataset+'/training_preprocessed'
+    test_path = '../data/'+dataset+'/test_preprocessed'
     test_docs, test_labels = data.read_files(test_path)
 
     results = {}
@@ -77,6 +80,8 @@ def classification_comparison_freq(dataset='reuters'):
         results[metric] = score
         print score
     pp.pprint(results)
+    s = 'classification comparison \nrepresentation: frequency\nresult:\n'+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/classification')
     return results
 
 def do_classification_experiments(dataset='tasa/TASA900',
@@ -265,6 +270,6 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    #~ classification_comparison_graph(dataset='reuters', graph_type='co-occurrence')
-    #~ classification_comparison_graph(dataset='reuters', graph_type='dependency')
+    #~ classification_comparison_graph(graph_type='co-occurrence')
+    #~ classification_comparison_graph(graph_type='dependency')
     classification_comparison_freq()
