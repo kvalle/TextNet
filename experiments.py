@@ -41,6 +41,7 @@ def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occ
     metrics = {'co-occurrence':graph.GraphMetrics.WEIGHTED_DEGREE,
                 'dependency':graph.GraphMetrics.CLOSENESS}
 
+    print '--', graph_type
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training'+postfix[graph_type]
     training_docs, training_labels = data.read_files(training_path)
@@ -64,6 +65,8 @@ def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occ
     labels = {'training':training_labels, 'test':test_labels}
     results = evaluation.evaluate_classification(reps, labels, mode='split')
     print results
+    s = 'classification comparison \nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/classification')
     return results
 
 def classification_comparison_freq(dataset='tasa/TASATest2'):
@@ -90,6 +93,8 @@ def classification_comparison_freq(dataset='tasa/TASATest2'):
         results[metric] = score
         print score
     pp.pprint(results)
+    s = 'classification comparison \nrepresentation: frequency\nresult:\n'+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/classification')
     return results
 
 def do_classification_experiments(dataset='tasa/TASA900',
