@@ -295,6 +295,4 @@ if __name__ == "__main__":
 
     #~ create_dataset_html_to_case('../data/mir/html', '../data/mir/text')
     #~ test_ascii('../data/mir/solutions_text')
-    test_ascii('../data/mir/problem_descriptions_text')
     fix_ascii('../data/mir/problem_descriptions_text')
-    test_ascii('../data/mir/problem_descriptions_text')

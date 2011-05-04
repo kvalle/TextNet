@@ -17,7 +17,7 @@ import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
-def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence'):
+def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occurrence'):
     """
     Experiment used for comparative evaluation of different network
     representations on classification.
@@ -26,15 +26,14 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
 
     Toggle comparison with frequency-based methods using *use_frequency*.
     """
-    def make_rep(docs):
+    def make_dicts(docs):
         rep = []
         for i, doc in enumerate(docs):
             if i%100==0: print '    graph',str(i)+'/'+str(len(docs))
             g = gfuns[graph_type](doc)
             d = graph_representation.graph_to_dict(g, metrics[graph_type])
             rep.append(d)
-        print '    dicst -> vectors'
-        return graph_representation.dicts_to_vectors(rep)
+        return rep
 
     postfix = {'co-occurrence':'_text', 'dependency':'_dependencies'}
     gfuns = {'co-occurrence':graph_representation.construct_cooccurrence_network,
@@ -45,12 +44,20 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training'+postfix[graph_type]
     training_docs, training_labels = data.read_files(training_path)
-    test_path = '../data/'+dataset+'/training'+postfix[graph_type]
+    test_path = '../data/'+dataset+'/test'+postfix[graph_type]
     test_docs, test_labels = data.read_files(test_path)
 
     print '> Creating representations..'
-    training_rep = make_rep(training_docs)
-    test_rep = make_rep(test_docs)
+    training_dicts = make_dicts(training_docs)
+    test_dicts = make_dicts(test_docs)
+
+    print '    dicts -> vectors'
+    keys = set()
+    for d in training_dicts + test_dicts:
+        keys = keys.union(d.keys())
+
+    training_rep = graph_representation.dicts_to_vectors(training_dicts, keys)
+    test_rep = graph_representation.dicts_to_vectors(test_dicts, keys)
 
     print '> Evaluating..'
     reps = {'training':training_rep, 'test':test_rep}
@@ -59,18 +66,24 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     print results
     return results
 
-def classification_comparison_freq(dataset='reuters'):
+def classification_comparison_freq(dataset='tasa/TASATest2'):
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training_preprocessed'
     training_docs, training_labels = data.read_files(training_path)
-    test_path = '../data/'+dataset+'/training_preprocessed'
+    test_path = '../data/'+dataset+'/test_preprocessed'
     test_docs, test_labels = data.read_files(test_path)
 
     results = {}
     for metric in freq_representation.get_metrics():
         print '   ', metric,
-        training_rep = freq_representation.text_to_vector(training_docs, metric)
-        test_rep = freq_representation.text_to_vector(test_docs, metric)
+        training_dicts = freq_representation.text_to_dict(training_docs, metric)
+        test_dicts = freq_representation.text_to_dict(test_docs, metric)
+        print '    dicst -> vectors'
+        keys = set()
+        for d in training_dicts + test_dicts:
+            keys = keys.union(d.keys())
+        training_rep = graph_representation.dicts_to_vectors(training_dicts, keys)
+        test_rep = graph_representation.dicts_to_vectors(test_dicts, keys)
         reps = {'training':training_rep, 'test':test_rep}
         labels = {'training':training_labels, 'test':test_labels}
         score = evaluation.evaluate_classification(reps, labels, mode='split')
@@ -265,6 +278,6 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    #~ classification_comparison_graph(dataset='reuters', graph_type='co-occurrence')
-    #~ classification_comparison_graph(dataset='reuters', graph_type='dependency')
+    #~ classification_comparison_graph(graph_type='co-occurrence')
+    #~ classification_comparison_graph(graph_type='dependency')
     classification_comparison_freq()

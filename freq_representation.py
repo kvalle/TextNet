@@ -48,6 +48,39 @@ def text_to_vector(docs, metric):
 
     return matrix
 
+def text_to_dict(docs, metric):
+    """ Create dictionaries of term frequencies based on documents
+
+    Metric must be either :attr:`FrequencyMetrics.TF` or :attr:`FrequencyMetrics.TF_IDF`.
+    """
+    doc_freqs = FreqDist() # Distribution over how many documents each word appear in.
+    tf_dists = [] # List of TF distributions per document
+
+    # Create freq_dist for each document
+    for doc in docs:
+        doc = preprocess.preprocess_text(doc)
+        fd = FreqDist()
+        for word in doc: fd.inc(word)
+        doc_freqs.update(fd.samples())
+        tf_dists.append(fd)
+
+
+    num_docs = len(docs)
+    # Build dictionaries
+    dicts = []
+    for i, fd in enumerate(tf_dists):
+        d = {}
+        if metric == FrequencyMetrics.TF:
+            for word in fd.samples():
+                d[word] = fd.freq(word)
+        elif metric == FrequencyMetrics.TF_IDF:
+            for word in fd.samples():
+                d[word] = fd.freq(word) * math.log(float(num_docs)/doc_freqs[word])
+        else:
+            raise ValueError("No such feature type: %s" % feature_type);
+        dicts.append(d)
+    return dicts
+
 ######
 ##
 ##  Term weighting metrics

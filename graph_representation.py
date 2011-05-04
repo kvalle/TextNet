@@ -269,13 +269,16 @@ def graph_to_dict(g, metric):
     """Return node values as dictionary"""
     return graph.centralities(g, metric)
 
-def dicts_to_vectors(dicts):
+def dicts_to_vectors(dicts, explicit_keys=None):
     """Convert a list of dictionaries to feature-vectors"""
-    node_set = set()
-    for d in dicts:
-        for node in d.keys():
-            node_set.add(node)
-    all_tokens = list(node_set)
+    if not explicit_keys:
+        node_set = set()
+        for d in dicts:
+            for node in d.keys():
+                node_set.add(node)
+        all_tokens = list(node_set)
+    else:
+        all_tokens = explicit_keys
     features = np.zeros((len(all_tokens), len(dicts)))
     for i, d in enumerate(dicts):
         features[:,i] = [d.get(token, 0.0) for token in all_tokens]
