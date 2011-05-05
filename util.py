@@ -81,15 +81,20 @@ def to_latex_table(data, write_file=True, prt=True, start=None, end=None):
 
 def test_unique(path='../data/reuters1000/'):
     """Check if there are any documents with multiple categories in dataset on given *path*."""
+    import os
     d = {}
     for root, cats, docs in os.walk(path):
         category = root.split(os.sep)[-1]
         if not category: continue
         d[category] = set(docs)
     for cat in d.keys():
-        print
-        print cat
         for other in d.keys():
-            if cat!=other:
-                print cat+' vs '+other
-                print list(d[cat].intersection(other))
+            in_both = list(d[cat].intersection(other))
+            if in_both and cat!=other:
+                print cat+' and '+other
+                print in_both
+    print 'done'
+
+if __name__=='__main__':
+    #~ test_unique('../data/reuters90')
+
