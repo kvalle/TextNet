@@ -300,6 +300,7 @@ if __name__ == "__main__":
     #~ print pickle_from_file('../data/air/problem_descriptions_dependencies/1999/a99o0244.html')
     #~ create_dataset_text_to_preprocessed_text('../data/tasa/TASATest2/test_text', '../data/tasa/TASATest2/test_preprocessed')
 
-    #~ create_dataset_html_to_case('../data/mir/html', '../data/mir/text')
-    #~ test_ascii('../data/mir/solutions_text')
-    fix_ascii('../data/mir/problem_descriptions_text')
+    #~ create_dataset_text_to_preprocessed_text('../data/mir/problem_descriptions_text', '../data/mir/problem_descriptions_preprocessed')
+    #~ create_dataset_text_to_preprocessed_text('../data/mir/solutions_text', '../data/mir/solutions_preprocessed')
+    #~ create_dataset_text_to_dependencies('../data/mir/problem_descriptions_text', '../data/mir/problem_descriptions_dependencies')
+    create_dataset_text_to_dependencies('../data/mir/solutions_text', '../data/mir/solutions_dependencies')

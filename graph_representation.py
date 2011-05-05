@@ -281,6 +281,7 @@ def dicts_to_vectors(dicts, explicit_keys=None):
         all_tokens = explicit_keys
     features = np.zeros((len(all_tokens), len(dicts)))
     for i, d in enumerate(dicts):
+        if i%100==0: print '    vector',str(i)+'/'+str(len(dicts))
         features[:,i] = [d.get(token, 0.0) for token in all_tokens]
     return features
 

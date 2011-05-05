@@ -69,6 +69,7 @@ def text_to_dict(docs, metric):
     # Build dictionaries
     dicts = []
     for i, fd in enumerate(tf_dists):
+        if i%100==0: print '    dict',str(i)+'/'+str(len(tf_dists))
         d = {}
         if metric == FrequencyMetrics.TF:
             for word in fd.samples():

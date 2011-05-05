@@ -17,7 +17,7 @@ import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
-def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occurrence'):
+def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence'):
     """
     Experiment used for comparative evaluation of different network
     representations on classification.
@@ -56,6 +56,8 @@ def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occ
     keys = set()
     for d in training_dicts + test_dicts:
         keys = keys.union(d.keys())
+    keys = list(keys)
+    print '    vocabulary size:', len(keys)
 
     training_rep = graph_representation.dicts_to_vectors(training_dicts, keys)
     test_rep = graph_representation.dicts_to_vectors(test_dicts, keys)
@@ -69,7 +71,7 @@ def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occ
     data.write_to_file(s, 'output/comparison/classification')
     return results
 
-def classification_comparison_freq(dataset='tasa/TASATest2'):
+def classification_comparison_freq(dataset='reuters'):
     print '> Reading data..', dataset
     training_path = '../data/'+dataset+'/training_preprocessed'
     training_docs, training_labels = data.read_files(training_path)
@@ -85,6 +87,7 @@ def classification_comparison_freq(dataset='tasa/TASATest2'):
         keys = set()
         for d in training_dicts + test_dicts:
             keys = keys.union(d.keys())
+        print '    vocabulary size:', len(keys)
         training_rep = graph_representation.dicts_to_vectors(training_dicts, keys)
         test_rep = graph_representation.dicts_to_vectors(test_dicts, keys)
         reps = {'training':training_rep, 'test':test_rep}
