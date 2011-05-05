@@ -97,4 +97,5 @@ def test_unique(path='../data/reuters1000/'):
 
 if __name__=='__main__':
     #~ test_unique('../data/reuters90')
+    pass
 

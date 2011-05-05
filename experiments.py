@@ -17,21 +17,23 @@ import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
-def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occurrence'):
+def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occurrence', icc=None):
     """
     Experiment used for comparative evaluation of different network
     representations on classification.
 
     graph_type = 'co-occurrence' | 'dependency'
 
+    `icc` determines whether to use _inverse corpus centrality_ in the vector representations.
+
     Toggle comparison with frequency-based methods using *use_frequency*.
     """
-    def make_dicts(docs):
+    def make_dicts(docs, icc):
         rep = []
         for i, doc in enumerate(docs):
             if i%100==0: print '    graph',str(i)+'/'+str(len(docs))
             g = gfuns[graph_type](doc)
-            d = graph_representation.graph_to_dict(g, metrics[graph_type])
+            d = graph_representation.graph_to_dict(g, metrics[graph_type], icc)
             rep.append(d)
         return rep
 
@@ -48,9 +50,20 @@ def classification_comparison_graph(dataset='tasa/TASATest2', graph_type='co-occ
     test_path = '../data/'+dataset+'/test'+postfix[graph_type]
     test_docs, test_labels = data.read_files(test_path)
 
+    icc_training = None
+    icc_test = None
+    if icc:
+        print '> Constructing giant and calculating ICC..'
+        gdoc_training = ' '.join(training_docs)
+        giant_training = gfuns[graph_type](gdoc_training)
+        icc_training = graph_representation.calculate_icc_dict(giant_training, metrics[graph_type])
+        gdoc_test = ' '.join(test_docs)
+        giant_test = gfuns[graph_type](gdoc_test)
+        icc_test = graph_representation.calculate_icc_dict(giant_test, metrics[graph_type])
+
     print '> Creating representations..'
-    training_dicts = make_dicts(training_docs)
-    test_dicts = make_dicts(test_docs)
+    training_dicts = make_dicts(training_docs, icc_training)
+    test_dicts = make_dicts(test_docs, icc_test)
 
     print '    dicts -> vectors'
     keys = set()
@@ -283,6 +296,6 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    #~ classification_comparison_graph(graph_type='co-occurrence')
-    #~ classification_comparison_graph(graph_type='dependency')
-    classification_comparison_freq()
+    classification_comparison_graph(graph_type='co-occurrence', icc=True)
+    #~ classification_comparison_graph(graph_type='dependency', icc=True)
+    #~ classification_comparison_freq()
