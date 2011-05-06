@@ -29,6 +29,7 @@ import networkx as nx
 import pickle
 from scipy import sparse
 import os.path
+import math
 
 import graph
 import preprocess
@@ -265,9 +266,16 @@ def graph_to_vector(g, metric, all_tokens):
     vector = [cents.get(token, 0.0) for token in all_tokens]
     return vector
 
-def graph_to_dict(g, metric):
-    """Return node values as dictionary"""
-    return graph.centralities(g, metric)
+def graph_to_dict(g, metric, icc=None):
+    """Return node values as dictionary
+
+    If `icc` is provided, values are TC-ICC, otherwise TC is calculated.
+    """
+    centralities = graph.centralities(g, metric)
+    if icc:
+        for term in centralities:
+            centralities[term] = centralities[term] * icc[term]
+    return centralities
 
 def dicts_to_vectors(dicts, explicit_keys=None):
     """Convert a list of dictionaries to feature-vectors"""
@@ -284,6 +292,12 @@ def dicts_to_vectors(dicts, explicit_keys=None):
         if i%100==0: print '    vector',str(i)+'/'+str(len(dicts))
         features[:,i] = [d.get(token, 0.0) for token in all_tokens]
     return features
+
+def calculate_icc_dict(g, metric):
+    icc = graph.centralities(g, metric)
+    for term in icc:
+        icc[term] = math.log(1.0/icc[term])
+    return icc
 
 ######
 ##

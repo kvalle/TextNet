@@ -289,6 +289,44 @@ def fix_ascii(path):
                 f.write(doc)
     print "done"
 
+###### dataset stats functions
+
+def store_document_lengths(dataset):
+    path = '../data/'+dataset
+    docs, labels = read_files(path)
+    lengths = []
+    for doc in docs:
+        doc = preprocess.tokenize_tokens(doc)
+        lengths.append(len(doc))
+    print lengths
+    pickle_to_file(lengths, 'output/document-lengths/'+dataset)
+
+def store_sentence_lengths(dataset):
+    path = '../data/'+dataset
+    docs, labels = read_files(path)
+    lengths = []
+    for doc in docs:
+        sentences = preprocess.tokenize_sentences(doc)
+        for s in sentences:
+            tokens = preprocess.tokenize_tokens(s)
+            lengths.append(len(tokens))
+    print lengths
+    pickle_to_file(lengths, 'output/sentence-lengths/'+dataset)
+
+def plot_lengths(dataset, plot_type, **plargs):
+    import plotter
+    import numpy as np
+    lengths = pickle_from_file('output/'+plot_type+'-lengths/'+dataset)
+    plotter.histogram(lengths, **plargs)
+    print 'tot', len(lengths)
+    print 'max', max(lengths)
+    lengths = np.array(lengths)
+    num = len([x for x in lengths if x > 1000])
+    print '# > 1000:', num
+    num = len([x for x in lengths if x > 150])
+    print '# > 150:', num
+
+
 if __name__ == "__main__":
     #~ test_ascii()
     #~ create_dataset_html_to_text('../data/air/html', '../data/air/text')
@@ -300,7 +338,25 @@ if __name__ == "__main__":
     #~ print pickle_from_file('../data/air/problem_descriptions_dependencies/1999/a99o0244.html')
     #~ create_dataset_text_to_preprocessed_text('../data/tasa/TASATest2/test_text', '../data/tasa/TASATest2/test_preprocessed')
 
-    #~ create_dataset_text_to_preprocessed_text('../data/mir/problem_descriptions_text', '../data/mir/problem_descriptions_preprocessed')
-    #~ create_dataset_text_to_preprocessed_text('../data/mir/solutions_text', '../data/mir/solutions_preprocessed')
-    #~ create_dataset_text_to_dependencies('../data/mir/problem_descriptions_text', '../data/mir/problem_descriptions_dependencies')
-    create_dataset_text_to_dependencies('../data/mir/solutions_text', '../data/mir/solutions_dependencies')
+    #~ create_dataset_html_to_case('../data/mir/html', '../data/mir/text')
+    #~ test_ascii('../data/mir/solutions_text')
+    #~ fix_ascii('../data/mir/problem_descriptions_text')
+
+    #~ store_document_lengths('mir/solutions_text')
+    #~ store_document_lengths('mir/problem_descriptions_text')
+    #~ store_document_lengths('reuters90/training')
+    #~ store_document_lengths('reuters90/test')
+    #~ store_sentence_lengths('mir/solutions_text')
+    #~ store_sentence_lengths('mir/problem_descriptions_text')
+    #~ store_sentence_lengths('reuters90/training')
+    #~ store_sentence_lengths('reuters90/test')
+
+    #~ plot_lengths('reuters90/training', plot_type='sentence', bins=50, range=(0,150), y_label='# sentences', x_label='# tokens')
+    #~ plot_lengths('reuters90/test', plot_type='sentence', bins=50, range=(0,150), y_label='# sentences', x_label='# tokens')
+    #~ plot_lengths('reuters90/training', plot_type='document', bins=50, range=(0,1000), y_label='# documents', x_label='# tokens')
+    #~ plot_lengths('reuters90/test', plot_type='document', bins=50, range=(0,1000), y_label='# documents', x_label='# tokens')
+
+    #~ plot_lengths('mir/problem_descriptions_text', plot_type='sentence', bins=50, range=(0,150), y_label='# sentences', x_label='# tokens')
+    #~ plot_lengths('mir/solutions_text', plot_type='sentence', bins=50, range=(0,150), y_label='# sentences', x_label='# tokens')
+    plot_lengths('mir/problem_descriptions_text', plot_type='document', bins=50, y_label='# documents', x_label='# tokens')
+    #~ plot_lengths('mir/solutions_text', plot_type='document', bins=50, y_label='# documents', x_label='# tokens')
