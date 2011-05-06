@@ -104,7 +104,7 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='window', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None):
+def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='sentence', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None):
     """Construct co-occurrence network from text.
 
     *direction* must be 'forward', 'backward' or 'undirected', while  *context*
@@ -295,8 +295,15 @@ def dicts_to_vectors(dicts, explicit_keys=None):
 
 def calculate_icc_dict(g, metric):
     icc = graph.centralities(g, metric)
+    print max(icc.values())
+    print min(icc.values())
+    return icc
     for term in icc:
-        icc[term] = math.log(1.0/icc[term])
+        #~ print term, icc[term]
+        if icc[term] > 0:
+            icc[term] = math.log(1.0/icc[term])
+        else:
+            print '.',
     return icc
 
 ######

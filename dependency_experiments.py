@@ -711,6 +711,51 @@ def compare_stats_to_random(dataset):
     props = graph.network_properties(g)
     pp.pprint(props)
 
+def evaluate_tc_icc_classification():
+    graph_metrics = graph_representation.get_metrics(False)
+
+    print '> Reading cases..'
+    #~ descriptions_path = '../data/tasa/TASA900_dependencies'
+    descriptions_path = '../data/tasa/TASATest_dependencies'
+    texts, labels = data.read_files(descriptions_path)
+
+    print '> Building corpus graph..'
+    giant = graph_representation.construct_dependency_network(' '.join(texts))
+
+    rep = {}
+    icc = {}
+    print '> Calculating ICCs..'
+    for metric in graph_metrics:
+        print
+        print metric
+        rep[metric] = []
+        icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
+
+    print '> Creating graph representations..'
+    for i, text in enumerate(texts):
+        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+        g = graph_representation.construct_dependency_network(text)
+        for metric in graph_metrics:
+            d = graph_representation.graph_to_dict(g, metric, icc[metric])
+            rep[metric].append(d)
+        g = None # just to make sure..
+
+    print '> Creating vector representations..'
+    for metric in graph_metrics:
+        rep[metric] = graph_representation.dicts_to_vectors(rep[metric])
+
+    print '> Evaluating..'
+    results = {}
+    for metric in graph_metrics:
+        vectors = rep[metric]
+        score = evaluation.evaluate_classification(vectors, labels)
+        print '   ', metric, score
+        results[metric] = score
+
+    pp.pprint(results)
+    data.pickle_to_file(results, 'output/dependencies_tc_icc/classification')
+    return results
+
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)
     #~ centrality_weights_classification(False)
@@ -737,5 +782,7 @@ if __name__ == "__main__":
     #~ compare_stats_to_random('tasa/TASA900')
     #~ compare_stats_to_random('air/problem_descriptions')
 
-    print_degree_distributions('tasa/TASA900')
-    print_degree_distributions('air/problem_descriptions')
+    #~ print_degree_distributions('tasa/TASA900')
+    #~ print_degree_distributions('air/problem_descriptions')
+
+    evaluate_tc_icc_classification()

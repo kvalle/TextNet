@@ -25,8 +25,6 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     graph_type = 'co-occurrence' | 'dependency'
 
     `icc` determines whether to use _inverse corpus centrality_ in the vector representations.
-
-    Toggle comparison with frequency-based methods using *use_frequency*.
     """
     def make_dicts(docs, icc):
         rep = []
@@ -115,6 +113,80 @@ def classification_comparison_freq(dataset='reuters'):
     pp.pprint(results)
     s = 'classification comparison \nrepresentation: frequency\nresult:\n'+str(results)+'\n\n\n'
     data.write_to_file(s, 'output/comparison/classification')
+    return results
+
+def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=None):
+    """
+    Experiment used for comparative evaluation of different network
+    representations on retrieval.
+
+    graph_type = 'co-occurrence' | 'dependency'
+
+    `icc` determines whether to use _inverse corpus centrality_ in the vector representations.
+    """
+    def make_dicts(docs):
+        rep = []
+        for i, doc in enumerate(docs):
+            if i%100==0: print '    graph',str(i)+'/'+str(len(docs))
+            g = gfuns[graph_type](doc)
+            d = graph_representation.graph_to_dict(g, metrics[graph_type], icc)
+            rep.append(d)
+        return rep
+
+    postfix = {'co-occurrence':'_text', 'dependency':'_dependencies'}
+    gfuns = {'co-occurrence':graph_representation.construct_cooccurrence_network,
+                'dependency':graph_representation.construct_dependency_network}
+    metrics = {'co-occurrence':graph.GraphMetrics.WEIGHTED_DEGREE,
+                'dependency':graph.GraphMetrics.EIGENVECTOR}
+
+    print '--', graph_type
+    print '> Reading data..', dataset
+    path = '../data/'+dataset+'/problem_descriptions'+postfix[graph_type]
+    docs, labels = data.read_files(path)
+
+    print '> Creating solution representations..'
+    solutions_path = '../data/'+dataset+'/solutions_preprocessed'
+    solutions_texts, labels = data.read_files(solutions_path)
+    solutions_rep = freq_representation.text_to_vector(solutions_texts, freq_representation.FrequencyMetrics.TF_IDF)
+
+    if icc:
+        print '> Constructing giant and calculating ICC..'
+        gdoc = ' '.join(docs)
+        giant = gfuns[graph_type](gdoc)
+        icc = graph_representation.calculate_icc_dict(giant_training, metrics[graph_type])
+
+    print '> Creating problem description representations..'
+    dicts = make_dicts(docs)
+    descriptions_rep = graph_representation.dicts_to_vectors(dicts)
+
+    print '> Evaluating..'
+    results = evaluation.evaluate_retrieval(descriptions_rep, solutions_rep)
+    print results
+    s = 'retrieval comparison \nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/retrieval')
+    return results
+
+def retrieval_comparison_freq(dataset='air'):
+    print '> Reading data..', dataset
+    path = '../data/'+dataset+'/problem_descriptions_preprocessed'
+    docs, _ = data.read_files(path)
+
+    print '> Creating solution representations..'
+    solutions_path = '../data/'+dataset+'/solutions_preprocessed'
+    solutions_docs, _ = data.read_files(solutions_path)
+    solutions_rep = freq_representation.text_to_vector(solutions_docs, freq_representation.FrequencyMetrics.TF_IDF)
+
+    print '> Evaluating..'
+    results = {}
+    for metric in freq_representation.get_metrics():
+        print '   ', metric,
+        descriptions_rep = freq_representation.text_to_vector(docs, metric)
+        score = evaluation.evaluate_retrieval(descriptions_rep, solutions_rep)
+        results[metric] = score
+        print score
+    pp.pprint(results)
+    s = 'retrieval comparison \nrepresentation: frequency\nresult:\n'+str(results)+'\n\n\n'
+    data.write_to_file(s, 'output/comparison/retrieval')
     return results
 
 def do_classification_experiments(dataset='tasa/TASA900',
@@ -303,6 +375,10 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    classification_comparison_graph(graph_type='co-occurrence', icc=True)
+    #~ classification_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
+
+    #~ retrieval_comparison_graph(graph_type='co-occurrence', icc=False)
+    #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
+    retrieval_comparison_freq()
