@@ -110,6 +110,7 @@ class KNN:
         # classify queries
         results = []
         for q in range(len(qs[0])):
+            if q%100==0: print '    query',str(q)+'/'+str(len(qs[0]))
             if self._k==1:
                 # No need to vote; dictator decides..
                 i = numpy.argsort(dm[:,q])[0]
