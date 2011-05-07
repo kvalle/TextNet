@@ -365,7 +365,13 @@ def solution_similarity_stats(dataset='air/solutions_preprocessed'):
     similarities = 1.0 - distances
     similarities = similarities.ravel()
     similarities = [s for s in similarities if s >= 0]
-    print plotter.histogram(similarities,'similarity','# matches','',bins=150)
+    #~ print plotter.histogram(similarities,'similarity','# matches','',bins=150)
+    print
+    print max(similarities)
+    print min(similarities)
+    print float(sum(similarities))/len(similarities)
+    num = len([sim for sim in similarities if sim < 0.23])
+    print 'fraction sims < .23:', float(num)/len(similarities)
 
 def test_document_lengths(dataset='mir'):
     print '> Reading data..', dataset
@@ -400,4 +406,5 @@ if __name__ == "__main__":
     #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
     #~ retrieval_comparison_freq()
 
-    test_document_lengths()
+    #~ test_document_lengths()
+    solution_similarity_stats(dataset='mir/solutions_preprocessed')
