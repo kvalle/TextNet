@@ -12,11 +12,12 @@ def fetch(url):
 
 def fetch_extended_report(report_url):
     alt_url = report_url.replace('.asp','_index.asp')
+    doc = ''
     try:
         doc = fetch(alt_url).strip()
-    except urllib2.HTTPError as e:
-        # not a problem, just no alternate for this report
-        return False
+    except urllib2.HTTPError:
+        # not a problem, just no alternate index for this report
+        pass
     sec_num = 1
     while True:
         alt_url = report_url.replace('.asp','_sec'+str(sec_num)+'.asp')
@@ -24,8 +25,11 @@ def fetch_extended_report(report_url):
             sec = fetch(alt_url).strip()
             doc += '\n\n'+sec
         except urllib2.HTTPError as e:
-            # 404, no more sections
-            break
+            # 404, no section found
+            if sec_num > 2:
+                # reason for not breaking on first 404 is that sometimes
+                # _sec2 follows the standard report page
+                break
         sec_num += 1
     return doc
 
