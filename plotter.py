@@ -149,7 +149,7 @@ def test_plot_degree_distribution():
     g = nx.barabasi_albert_graph(100,2,)
     plot_degree_distribution(g)
 
-def test_historgram():
+def test_histogram():
     #~ histogram([1,2,3,4,3,2,3,4,3,3,1,3,4],'x-axis','y-axis','histogram test')
     bar_names = ['PageRank','Degree','Closeness','Betweenness','Current-flow Closeness','PageRank','Degree','Closeness','Betweenness','Current-flow Closeness','Betweenness','Current-flow Closeness']
     data = {'weighted':np.array([3,4,1,5,2,3,4,1,5,2,1,4]),
@@ -160,5 +160,5 @@ def test_historgram():
 
 if  __name__=='__main__':
     #~ plot_context_sizes()
-    test_historgram()
+    test_histogram()
     #~ test_plot_degree_distribution()
