@@ -402,9 +402,9 @@ if __name__ == "__main__":
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
 
-    #~ retrieval_comparison_graph(graph_type='co-occurrence', icc=False)
+    retrieval_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
     #~ retrieval_comparison_freq()
 
     #~ test_document_lengths()
-    solution_similarity_stats(dataset='mir/solutions_preprocessed')
+    #~ solution_similarity_stats(dataset='mir/solutions_preprocessed')

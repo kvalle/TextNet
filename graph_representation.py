@@ -295,15 +295,8 @@ def dicts_to_vectors(dicts, explicit_keys=None):
 
 def calculate_icc_dict(g, metric):
     icc = graph.centralities(g, metric)
-    print max(icc.values())
-    print min(icc.values())
-    return icc
     for term in icc:
-        #~ print term, icc[term]
-        if icc[term] > 0:
-            icc[term] = math.log(1.0/icc[term])
-        else:
-            print '.',
+        icc[term] = 1.0/(1.0 + icc[term])
     return icc
 
 ######
