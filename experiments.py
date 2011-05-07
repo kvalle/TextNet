@@ -166,7 +166,7 @@ def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=No
     data.write_to_file(s, 'output/comparison/retrieval')
     return results
 
-def retrieval_comparison_freq(dataset='air'):
+def retrieval_comparison_freq(dataset='mir'):
     print '> Reading data..', dataset
     path = '../data/'+dataset+'/problem_descriptions_preprocessed'
     docs, _ = data.read_files(path)
@@ -367,6 +367,23 @@ def solution_similarity_stats(dataset='air/solutions_preprocessed'):
     similarities = [s for s in similarities if s >= 0]
     print plotter.histogram(similarities,'similarity','# matches','',bins=150)
 
+def test_document_lengths(dataset='mir'):
+    print '> Reading data..', dataset
+    path = '../data/'+dataset+'/problem_descriptions_preprocessed'
+    docs, _ = data.read_files(path)
+    names = data.get_file_names(path)
+    print "PROBLEM DESCRIPTIONS"
+    for i, d in enumerate(docs):
+        if not d:
+            print names[i], "is empty"
+    path = '../data/'+dataset+'/solutions_preprocessed'
+    docs, _ = data.read_files(path)
+    names = data.get_file_names(path)
+    print "SOLUTIONS"
+    for i, d in enumerate(docs):
+        if not d:
+            print names[i], "is empty"
+
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
@@ -381,4 +398,6 @@ if __name__ == "__main__":
 
     #~ retrieval_comparison_graph(graph_type='co-occurrence', icc=False)
     #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
-    retrieval_comparison_freq()
+    #~ retrieval_comparison_freq()
+
+    test_document_lengths()
