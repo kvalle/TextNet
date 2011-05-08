@@ -340,6 +340,65 @@ def compare_stats_to_random(dataset):
     props = graph.network_properties(g)
     pp.pprint(props)
 
+def evaluate_tc_icc_classification():
+    graph_metrics = graph_representation.get_metrics(False)
+
+    print '> Reading cases..'
+    path = '../data/tasa/TASA900_text'
+    #~ path = '../data/tasa/TASATest_text'
+    texts, labels = data.read_files(path)
+
+    print '> Building corpus graph..'
+    gdoc = ' '.join(texts)
+    print gdoc[0:100]
+    print len(gdoc)
+    giant = graph_representation.construct_cooccurrence_network(gdoc, context='sentence', verbose=True)
+    data.pickle_to_file(giant, 'output/giants/cooccurrence/classification.net')
+
+    rep = {}
+    icc = {}
+    print '> Calculating ICCs..'
+    for metric in graph_metrics:
+        print
+        print metric
+        rep[metric] = []
+        try:
+            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
+            data.pickle_to_file(giant, 'output/output/tc_icc/cooccurrence/classification.icc')
+        except:
+            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+            icc[metric] = None
+
+    print '> Creating graph representations..'
+    for i, text in enumerate(texts):
+        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+        g = graph_representation.construct_cooccurrence_network(text, context='sentence')
+        for metric in graph_metrics:
+            if not icc[metric]: continue
+            d = graph_representation.graph_to_dict(g, metric, icc[metric])
+            rep[metric].append(d)
+        g = None # just to make sure..
+
+    print '> Creating vector representations..'
+    for metric in graph_metrics:
+        if not icc[metric]: continue
+        rep[metric] = graph_representation.dicts_to_vectors(rep[metric])
+
+    print '> Evaluating..'
+    results = {}
+    for metric in graph_metrics:
+        if not icc[metric]:
+            results[metric] = None
+            continue
+        vectors = rep[metric]
+        score = evaluation.evaluate_classification(vectors, labels)
+        print '   ', metric, score
+        results[metric] = score
+
+    pp.pprint(results)
+    data.pickle_to_file(results, 'output/tc_icc/cooccurrence/classification.res')
+    return results
+
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))
     #~ plot_results()
@@ -359,5 +418,7 @@ if __name__ == "__main__":
     #~ compare_stats_to_random('tasa/TASA900')
     #~ compare_stats_to_random('air/problem_descriptions')
 
-    print_degree_distributions('tasa/TASA900', context='sentence')
-    print_degree_distributions('air/problem_descriptions', context='window')
+    #~ print_degree_distributions('tasa/TASA900', context='sentence')
+    #~ print_degree_distributions('air/problem_descriptions', context='window')
+
+    evaluate_tc_icc_classification()
