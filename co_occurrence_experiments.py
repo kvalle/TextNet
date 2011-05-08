@@ -340,6 +340,25 @@ def compare_stats_to_random(dataset):
     props = graph.network_properties(g)
     pp.pprint(props)
 
+def test_best_classification():
+    print '> Reading cases..'
+    path = '../data/tasa/TASA900_text'
+    texts, labels = data.read_files(path)
+
+    rep = []
+    print '> Creating representations..'
+    for i, text in enumerate(texts):
+        if i%100==0: print '   ',i
+        g = graph_representation.construct_cooccurrence_network(text, context='sentence')
+        d = graph_representation.graph_to_dict(g, graph.GraphMetrics.WEIGHTED_DEGREE)
+        rep.append(d)
+        g = None # just to make sure..
+    rep = graph_representation.dicts_to_vectors(rep)
+
+    print '> Evaluating..'
+    score = evaluation.evaluate_classification(rep, labels)
+    print '   ', score
+
 def evaluate_tc_icc_classification():
     graph_metrics = graph_representation.get_metrics(False)
 
@@ -423,4 +442,6 @@ if __name__ == "__main__":
     #~ print_degree_distributions('tasa/TASA900', context='sentence')
     #~ print_degree_distributions('air/problem_descriptions', context='window')
 
+    #~ test_best_classification()
     evaluate_tc_icc_classification()
+
