@@ -349,11 +349,13 @@ def evaluate_tc_icc_classification():
     texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
-    gdoc = ' '.join(texts)
-    print gdoc[0:100]
-    print len(gdoc)
-    giant = graph_representation.construct_cooccurrence_network(gdoc, context='sentence', verbose=True)
-    data.pickle_to_file(giant, 'output/giants/cooccurrence/classification.net')
+    giant = data.pickle_from_file('output/giants/cooccurrence/classification.net')
+    if not giant:
+        gdoc = ' '.join(texts)
+        print gdoc[0:100]
+        print len(gdoc)
+        giant = graph_representation.construct_cooccurrence_network(gdoc, context='sentence', verbose=True)
+        data.pickle_to_file(giant, 'output/giants/cooccurrence/classification.net')
 
     rep = {}
     icc = {}
@@ -364,7 +366,7 @@ def evaluate_tc_icc_classification():
         rep[metric] = []
         try:
             icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/output/tc_icc/cooccurrence/classification.icc')
+            data.pickle_to_file(giant, 'output/tc_icc/cooccurrence/classification.icc')
         except:
             print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
             icc[metric] = None

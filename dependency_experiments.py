@@ -720,14 +720,16 @@ def evaluate_tc_icc_classification():
     texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
-    gdeps = {}
-    for i, text in enumerate(texts):
-        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
-        d = pickle.loads(text)
-        for dep in d.keys():
-            gdeps[dep] = gdeps.get(dep, []) + d[dep]
-    giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
-    data.pickle_to_file(giant, 'output/giants/dependency/classification.net')
+    giant = data.pickle_from_file('output/giants/dependency/classification.net')
+    if not giant:
+        gdeps = {}
+        for i, text in enumerate(texts):
+            if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+            d = pickle.loads(text)
+            for dep in d.keys():
+                gdeps[dep] = gdeps.get(dep, []) + d[dep]
+        giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
+        data.pickle_to_file(giant, 'output/giants/dependency/classification.net')
 
     rep = {}
     icc = {}
@@ -738,7 +740,7 @@ def evaluate_tc_icc_classification():
         rep[metric] = []
         try:
             icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/output/tc_icc/dependency/classification.icc')
+            data.pickle_to_file(giant, 'output/tc_icc/dependency/classification.icc')
         except:
             print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
             icc[metric] = None
