@@ -73,11 +73,13 @@ def _cooccurrence_preprocessing(doc, context, already_preprocessed):
             doc[i] = sentence
     return doc
 
-def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
+def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2, verbose=False):
     """Create co-occurrence matrix for *doc* using context window"""
     term_list = np.array(list(set(doc)))
     A = sparse.lil_matrix( (len(term_list), len(term_list)) )
     for i, word in enumerate(doc):
+        if verbose:
+            if i < 10 or i%1000==0: print '    word ',str(i)+' of '+str(len(doc))
         context = doc[i+1:i+1+window_size]
         for context_word in context:
             if word == context_word: continue
@@ -89,11 +91,13 @@ def _window_cooccurrence_matrix(doc, direction='undirected', window_size=2):
                 A[y,x] += 1
     return A, term_list
 
-def _sentence_cooccurrence_matrix(doc, direction='undirected'):
+def _sentence_cooccurrence_matrix(doc, direction='undirected', verbose=False):
     """Create co-occurrence matrix for *doc* using sentence contexts"""
     term_list = np.array(list(set(util.flatten(doc))))
     A = sparse.lil_matrix( (len(term_list), len(term_list)) )
-    for sentence in doc:
+    for i, sentence in enumerate(doc):
+        if verbose:
+            if i < 10 or i%1000==0: print '    sentence ',str(i)+' of '+str(len(doc))
         for w, word in enumerate(sentence):
             for c, context_word in enumerate(sentence):
                 if word == context_word: continue
@@ -104,7 +108,7 @@ def _sentence_cooccurrence_matrix(doc, direction='undirected'):
                 A[x,y] += 1
     return A, term_list
 
-def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='sentence', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None):
+def construct_cooccurrence_network(doc, window_size=2, direction='undirected', context='sentence', already_preprocessed=False, orders=[], order_weights=[1.0,1.0,1.0],doc_id=None,verbose=False):
     """Construct co-occurrence network from text.
 
     *direction* must be 'forward', 'backward' or 'undirected', while  *context*
@@ -120,9 +124,9 @@ def construct_cooccurrence_network(doc, window_size=2, direction='undirected', c
     """
     doc = _cooccurrence_preprocessing(doc, context, already_preprocessed)
     if context is 'sentence':
-        matrix, term_list = _sentence_cooccurrence_matrix(doc, direction)
+        matrix, term_list = _sentence_cooccurrence_matrix(doc, direction, verbose)
     elif context is 'window':
-        matrix, term_list = _window_cooccurrence_matrix(doc, direction, window_size)
+        matrix, term_list = _window_cooccurrence_matrix(doc, direction, window_size, verbose)
     g = nx.DiGraph()
     g.add_nodes_from(term_list)
     if len(orders)==0:
@@ -184,7 +188,7 @@ def construct_random_network(doc, p=0.2):
 
     return graph
 
-def construct_dependency_network(doc, weighted=False, direction='undirected',remove_stop_words=False, exclude=['agent', 'advcl','parataxis']):
+def construct_dependency_network(doc, weighted=False, direction='undirected',remove_stop_words=False, exclude=['agent', 'advcl','parataxis'],verbose=False):
     """Construct a dependency network from *doc*.
 
     Creates a network form *doc* with distinct word used for nodes, and
@@ -197,6 +201,7 @@ def construct_dependency_network(doc, weighted=False, direction='undirected',rem
     graph = nx.DiGraph()
     deps = pickle.loads(doc)
     for dep_type, dep in deps.iteritems():
+        if verbose: print '    dep:',dep_type
         if dep_type in exclude:
             continue
         for tup in dep:
