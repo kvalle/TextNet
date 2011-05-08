@@ -82,7 +82,9 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     labels = {'training':training_labels, 'test':test_labels}
     results = evaluation.evaluate_classification(reps, labels, mode='split')
     print results
-    s = 'classification comparison \nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
+    s = 'classification comparison '
+    if icc: s += 'USING TC-ICC'
+    s += '\nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
     data.write_to_file(s, 'output/comparison/classification')
     return results
 
@@ -162,7 +164,9 @@ def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=No
     print '> Evaluating..'
     results = evaluation.evaluate_retrieval(descriptions_rep, solutions_rep)
     print results
-    s = 'retrieval comparison \nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
+    s = 'retrieval comparison '
+    if icc: s += 'USING TC-ICC'
+    s += '\nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
     data.write_to_file(s, 'output/comparison/retrieval')
     return results
 
@@ -398,12 +402,17 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    #~ classification_comparison_graph(graph_type='co-occurrence', icc=True)
+    classification_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
 
+<<<<<<< HEAD
     #~ retrieval_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
+=======
+    #~ retrieval_comparison_graph(dataset='mir', graph_type='co-occurrence', icc=True)
+    #~ retrieval_comparison_graph(dataset='mir', graph_type='dependency', icc=True)
+>>>>>>> 2a7ac1ca8bffdfa6bb0cd2703a62aa80ac18b465
     #~ retrieval_comparison_freq()
 
     #~ test_document_lengths()

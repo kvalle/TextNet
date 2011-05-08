@@ -715,12 +715,19 @@ def evaluate_tc_icc_classification():
     graph_metrics = graph_representation.get_metrics(False)
 
     print '> Reading cases..'
-    #~ descriptions_path = '../data/tasa/TASA900_dependencies'
-    descriptions_path = '../data/tasa/TASATest_dependencies'
-    texts, labels = data.read_files(descriptions_path)
+    path = '../data/tasa/TASA900_dependencies'
+    #~ path = '../data/tasa/TASATest_dependencies'
+    texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
-    giant = graph_representation.construct_dependency_network(' '.join(texts))
+    gdeps = {}
+    for i, text in enumerate(texts):
+        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+        d = pickle.loads(text)
+        for dep in d.keys():
+            gdeps[dep] = gdeps.get(dep, []) + d[dep]
+    giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
+    data.pickle_to_file(giant, 'output/giants/dependency/classification.net')
 
     rep = {}
     icc = {}
@@ -729,31 +736,41 @@ def evaluate_tc_icc_classification():
         print
         print metric
         rep[metric] = []
-        icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
+        try:
+            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
+            data.pickle_to_file(giant, 'output/output/tc_icc/dependency/classification.icc')
+        except:
+            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+            icc[metric] = None
 
     print '> Creating graph representations..'
     for i, text in enumerate(texts):
         if i%10==0: print '   ',str(i)+'/'+str(len(texts))
         g = graph_representation.construct_dependency_network(text)
         for metric in graph_metrics:
+            if not icc[metric]: continue
             d = graph_representation.graph_to_dict(g, metric, icc[metric])
             rep[metric].append(d)
         g = None # just to make sure..
 
     print '> Creating vector representations..'
     for metric in graph_metrics:
+        if not icc[metric]: continue
         rep[metric] = graph_representation.dicts_to_vectors(rep[metric])
 
     print '> Evaluating..'
     results = {}
     for metric in graph_metrics:
+        if not icc[metric]:
+            results[metric] = None
+            continue
         vectors = rep[metric]
         score = evaluation.evaluate_classification(vectors, labels)
         print '   ', metric, score
         results[metric] = score
 
     pp.pprint(results)
-    data.pickle_to_file(results, 'output/dependencies_tc_icc/classification')
+    data.pickle_to_file(results, 'output/tc_icc/dependency/classification.res')
     return results
 
 if __name__ == "__main__":
