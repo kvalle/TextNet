@@ -775,6 +775,74 @@ def evaluate_tc_icc_classification():
     data.pickle_to_file(results, 'output/tc_icc/dependency/classification.res')
     return results
 
+def evaluate_tc_icc_retrieval():
+    graph_metrics = graph_representation.get_metrics(False)
+
+    print '> Reading cases..'
+    solutions_path  = '../data/air/test_solutions_preprocessed'
+    path            = '../data/air/test_problem_descriptions_dependencies'
+    description_texts, labels = data.read_files(path)
+
+    print '> Building corpus graph..'
+    giant = data.pickle_from_file('output/giants/dependency/retrieval.net')
+    if not giant:
+        gdeps = {}
+        for i, text in enumerate(description_texts):
+            if i%10==0: print '   ',str(i)+'/'+str(len(description_texts))
+            d = pickle.loads(text)
+            for dep in d.keys():
+                gdeps[dep] = gdeps.get(dep, []) + d[dep]
+        giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
+        data.pickle_to_file(giant, 'output/giants/dependency/retrieval.net')
+
+    rep = {}
+    icc = {}
+    print '> Calculating ICCs..'
+    for metric in graph_metrics:
+        print
+        print metric
+        rep[metric] = []
+        try:
+            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
+            data.pickle_to_file(giant, 'output/tc_icc/dependency/retrieval.icc')
+        except:
+            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+            icc[metric] = None
+
+    print '> Creating solution representations..'
+    solutions_texts, labels = data.read_files(solutions_path)
+    solutions_rep = freq_representation.text_to_vector(solutions_texts, freq_representation.FrequencyMetrics.TF_IDF)
+
+    print '> Creating problem description representations..'
+    for i, text in enumerate(description_texts):
+        if i%10==0: print '    document',str(i)+'/'+str(len(description_texts))
+        g = graph_representation.construct_dependency_network(text)
+        for metric in graph_metrics:
+            if not icc[metric]: continue
+            d = graph_representation.graph_to_dict(g, metric, icc[metric])
+            rep[metric].append(d)
+        g = None # just to make sure..
+
+    print '> Creating vector representations..'
+    for metric in graph_metrics:
+        if not icc[metric]: continue
+        rep[metric] = graph_representation.dicts_to_vectors(rep[metric])
+
+    print '> Evaluating..'
+    results = {}
+    for metric in graph_metrics:
+        if not icc[metric]:
+            results[metric] = None
+            continue
+        vectors = rep[metric]
+        score = evaluation.evaluate_retrieval(vectors, solutions_rep)
+        print '   ', metric, score
+        results[metric] = score
+
+    pp.pprint(results)
+    data.pickle_to_file(results, 'output/tc_icc/dependency/retrieval.res')
+    return results
+
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)
     #~ centrality_weights_classification(False)
@@ -804,4 +872,5 @@ if __name__ == "__main__":
     #~ print_degree_distributions('tasa/TASA900')
     #~ print_degree_distributions('air/problem_descriptions')
 
-    evaluate_tc_icc_classification()
+    #~ evaluate_tc_icc_classification()
+    evaluate_tc_icc_retrieval()
