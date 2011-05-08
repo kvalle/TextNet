@@ -434,7 +434,7 @@ def evaluate_tc_icc_retrieval():
         gdoc = ' '.join(description_texts)
         print gdoc[0:100]
         print len(gdoc)
-        giant = graph_representation.construct_cooccurrence_network(gdoc, context='window', verbose=True)
+        giant = graph_representation.construct_cooccurrence_network(gdoc, context='window', already_preprocessed=True, verbose=True)
         data.pickle_to_file(giant, 'output/giants/cooccurrence/retrieval.net')
 
     rep = {}
@@ -458,7 +458,7 @@ def evaluate_tc_icc_retrieval():
     print '> Creating problem description representations..'
     for i, text in enumerate(description_texts):
         if i%10==0: print '    document',str(i)+'/'+str(len(description_texts))
-        g = graph_representation.construct_cooccurrence_network(text, context='window')
+        g = graph_representation.construct_cooccurrence_network(text, already_preprocessed=True, context='window')
         for metric in graph_metrics:
             if not icc[metric]: continue
             d = graph_representation.graph_to_dict(g, metric, icc[metric])
