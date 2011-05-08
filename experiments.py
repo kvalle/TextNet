@@ -402,17 +402,12 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
-    classification_comparison_graph(graph_type='co-occurrence', icc=True)
+    #~ classification_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
 
-<<<<<<< HEAD
-    #~ retrieval_comparison_graph(graph_type='co-occurrence', icc=True)
-    #~ retrieval_comparison_graph(graph_type='dependency', icc=False)
-=======
     #~ retrieval_comparison_graph(dataset='mir', graph_type='co-occurrence', icc=True)
     #~ retrieval_comparison_graph(dataset='mir', graph_type='dependency', icc=True)
->>>>>>> 2a7ac1ca8bffdfa6bb0cd2703a62aa80ac18b465
     #~ retrieval_comparison_freq()
 
     #~ test_document_lengths()
