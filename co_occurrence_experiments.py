@@ -508,6 +508,8 @@ if __name__ == "__main__":
     #~ print_degree_distributions('air/problem_descriptions', context='window')
 
     #~ test_best_classification()
-    #~ evaluate_tc_icc_classification()
+    import dependency_experiments
+    dependency_experiments.evaluate_tc_icc_retrieval()
+    evaluate_tc_icc_classification()
     evaluate_tc_icc_retrieval()
 

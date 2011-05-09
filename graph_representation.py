@@ -200,6 +200,7 @@ def construct_dependency_network(doc, weighted=False, direction='undirected',rem
     """
     graph = nx.DiGraph()
     deps = pickle.loads(doc)
+    doc = None
     for dep_type, dep in deps.iteritems():
         if verbose: print '    dep:',dep_type
         if dep_type in exclude:
