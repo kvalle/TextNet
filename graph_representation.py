@@ -298,10 +298,10 @@ def dicts_to_vectors(dicts, explicit_keys=None):
         features[:,i] = [d.get(token, 0.0) for token in all_tokens]
     return features
 
-def calculate_icc_dict(g, metric):
-    icc = graph.centralities(g, metric)
-    for term in icc:
-        icc[term] = 1.0/(1.0 + icc[term])
+def calculate_icc_dict(centralities):
+    icc = {}
+    for term in centralities:
+        icc[term] = 1.0/(1.0 + centralities[term])
     return icc
 
 ######
@@ -312,23 +312,28 @@ def calculate_icc_dict(g, metric):
 
 from graph import GraphMetrics
 
-def get_metrics(weighted=None):
+def get_metrics(weighted=None, exclude_flow=False):
     """Return list of graph node evaluation metrics.
 
     If *weighted* is not specified, or `None`, all metrics are returned.
     Otherwise metrics suited for (un)*weighted* networks are returned."""
+    metrics = None
     if weighted is None:
-        return graph.mapping.keys()
+        metrics = graph.mapping.keys()
     elif weighted:
-        return [GraphMetrics.WEIGHTED_DEGREE, GraphMetrics.WEIGHTED_IN_DEGREE, GraphMetrics.WEIGHTED_OUT_DEGREE,
+        metrics = [GraphMetrics.WEIGHTED_DEGREE, GraphMetrics.WEIGHTED_IN_DEGREE, GraphMetrics.WEIGHTED_OUT_DEGREE,
         GraphMetrics.WEIGHTED_CLOSENESS, GraphMetrics.CURRENT_FLOW_CLOSENESS,
         GraphMetrics.WEIGHTED_BETWEENNESS, GraphMetrics.CURRENT_FLOW_BETWEENNESS, GraphMetrics.WEIGHTED_LOAD,
         GraphMetrics.EIGENVECTOR, GraphMetrics.PAGERANK, GraphMetrics.HITS_HUBS, GraphMetrics.HITS_AUTHORITIES]
     else:
-        return [GraphMetrics.DEGREE, GraphMetrics.IN_DEGREE, GraphMetrics.OUT_DEGREE,
+        metrics = [GraphMetrics.DEGREE, GraphMetrics.IN_DEGREE, GraphMetrics.OUT_DEGREE,
         GraphMetrics.CLOSENESS, GraphMetrics.CURRENT_FLOW_CLOSENESS,
         GraphMetrics.BETWEENNESS, GraphMetrics.CURRENT_FLOW_BETWEENNESS, GraphMetrics.LOAD,
         GraphMetrics.EIGENVECTOR, GraphMetrics.PAGERANK, GraphMetrics.HITS_HUBS, GraphMetrics.HITS_AUTHORITIES]
+    if exclude_flow:
+        metrics.remove(GraphMetrics.CURRENT_FLOW_BETWEENNESS)
+        metrics.remove(GraphMetrics.CURRENT_FLOW_CLOSENESS)
+    return metrics
 
 ######
 

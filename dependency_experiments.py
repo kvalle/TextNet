@@ -843,6 +843,19 @@ def evaluate_tc_icc_retrieval():
     data.pickle_to_file(results, 'output/tc_icc/dependency/retrieval.res')
     return results
 
+def construct_corpus_network(corpus='air/test_problem_descriptions'):
+    path            = '../data/'+'_dependencies'
+    texts, labels = data.read_files(path)
+
+    gdeps = {}
+    for i, text in enumerate(texts):
+        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+        d = pickle.loads(text)
+        for dep in d.keys():
+            gdeps[dep] = gdeps.get(dep, []) + d[dep]
+    giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
+    data.pickle_to_file(giant, 'output/giants/dependency/'+corpus+'_giant.net')
+
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)
     #~ centrality_weights_classification(False)

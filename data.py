@@ -243,12 +243,13 @@ def write_to_file(data, filename):
 ##
 ######
 
-def pickle_from_file(filename):
+def pickle_from_file(filename, suppress_warning=False):
     """Read file and unpickle contents"""
     try:
         pkl_file = open(filename, 'rb')
     except IOError as e:
-        print '! Unable to open:', filename
+        if not suppress_warning:
+            print '! Unable to open:', filename
         return None
     data = pickle.load(pkl_file)
     pkl_file.close()
@@ -259,7 +260,7 @@ def pickle_to_file(data, filename):
     dir_path = os.path.dirname(filename)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    output = open(filename, 'a+')
+    output = open(filename, 'w+')
     pickle.dump(data, output)
     output.close()
 

@@ -360,21 +360,17 @@ def test_best_classification():
     print '   ', score
 
 def evaluate_tc_icc_classification():
-    graph_metrics = graph_representation.get_metrics(False)
+    graph_metrics = graph_representation.get_metrics(True, exclude_flow=True)
 
     print '> Reading cases..'
-    path = '../data/tasa/TASA900_text'
-    #~ path = '../data/tasa/TASATest_text'
+    #~ corpus = 'tasa/TASA900'
+    corpus = 'tasa/TASATest2'
+    context = 'sentence'
+    path = '../data/'+corpus+'_text'
     texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
-    giant = data.pickle_from_file('output/giants/cooccurrence/classification.net')
-    if not giant:
-        gdoc = ' '.join(texts)
-        print gdoc[0:100]
-        print len(gdoc)
-        giant = graph_representation.construct_cooccurrence_network(gdoc, context='sentence', verbose=True)
-        data.pickle_to_file(giant, 'output/giants/cooccurrence/classification.net')
+    giant = retrieve_corpus_network(corpus, context)
 
     rep = {}
     icc = {}
@@ -383,17 +379,16 @@ def evaluate_tc_icc_classification():
         print
         print metric
         rep[metric] = []
-        try:
-            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/tc_icc/cooccurrence/classification.icc')
-        except:
-            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+        centralities = retrieve_centralities(corpus, context, metric)
+        if centralities:
+            icc[metric] = graph_representation.calculate_icc_dict(centralities)
+        else:
             icc[metric] = None
 
     print '> Creating graph representations..'
     for i, text in enumerate(texts):
         if i%10==0: print '   ',str(i)+'/'+str(len(texts))
-        g = graph_representation.construct_cooccurrence_network(text, context='sentence')
+        g = graph_representation.construct_cooccurrence_network(text, context=context)
         for metric in graph_metrics:
             if not icc[metric]: continue
             d = graph_representation.graph_to_dict(g, metric, icc[metric])
@@ -417,25 +412,21 @@ def evaluate_tc_icc_classification():
         results[metric] = score
 
     pp.pprint(results)
-    data.pickle_to_file(results, 'output/tc_icc/cooccurrence/classification.res')
+    data.pickle_to_file(results, 'output/tc_icc/cooccurrence/'+corpus+'/classification.res')
     return results
 
 def evaluate_tc_icc_retrieval():
-    graph_metrics = graph_representation.get_metrics(False)
+    graph_metrics = graph_representation.get_metrics(True, exclude_flow=True)
 
     print '> Reading cases..'
-    solutions_path  = '../data/air/test_solutions_preprocessed'
-    path            = '../data/air/test_problem_descriptions_preprocessed'
+    corpus = 'air/test3_problem_descriptions'
+    context = 'window'
+    solutions_path  = '../data/air/test3_solutions_preprocessed'
+    path            = '../data/air/test3_problem_descriptions_preprocessed'
     description_texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
-    giant = data.pickle_from_file('output/giants/cooccurrence/retrieval.net')
-    if not giant:
-        gdoc = ' '.join(description_texts)
-        print gdoc[0:100]
-        print len(gdoc)
-        giant = graph_representation.construct_cooccurrence_network(gdoc, context='window', already_preprocessed=True, verbose=True)
-        data.pickle_to_file(giant, 'output/giants/cooccurrence/retrieval.net')
+    giant = retrieve_corpus_network(corpus, context)
 
     rep = {}
     icc = {}
@@ -444,11 +435,10 @@ def evaluate_tc_icc_retrieval():
         print
         print metric
         rep[metric] = []
-        try:
-            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/tc_icc/cooccurrence/retrieval.icc')
-        except:
-            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+        centralities = retrieve_centralities(corpus, context, metric)
+        if centralities:
+            icc[metric] = graph_representation.calculate_icc_dict(centralities)
+        else:
             icc[metric] = None
 
     print '> Creating solution representations..'
@@ -457,7 +447,7 @@ def evaluate_tc_icc_retrieval():
 
     print '> Creating problem description representations..'
     for i, text in enumerate(description_texts):
-        if i%10==0: print '    document',str(i)+'/'+str(len(description_texts))
+        if i%1==0: print '    document',str(i)+'/'+str(len(description_texts))
         g = graph_representation.construct_cooccurrence_network(text, already_preprocessed=True, context='window')
         for metric in graph_metrics:
             if not icc[metric]: continue
@@ -482,8 +472,74 @@ def evaluate_tc_icc_retrieval():
         results[metric] = score
 
     pp.pprint(results)
-    data.pickle_to_file(results, 'output/tc_icc/cooccurrence/retrieval.res')
+    data.pickle_to_file(results, 'output/tc_icc/cooccurrence/'+corpus+'/retrieval.res')
     return results
+
+def store_corpus_network(corpus, context):
+    print '> Constructing corpus network for', corpus
+    path = '../data/'+corpus+'_text'
+    store_path = 'output/giants/co-occurrence/'+corpus+'/'+context+'_graph.net'
+    if data.pickle_from_file(store_path, suppress_warning=True):
+        print '    already present, skipping'
+        return
+    texts, labels = data.read_files(path)
+    gdoc = ' '.join(texts)
+    giant = graph_representation.construct_cooccurrence_network(gdoc, context=context, already_preprocessed=False, verbose=True)
+    print '> Serializing and saving..'
+    data.pickle_to_file(giant, store_path)
+
+def retrieve_corpus_network(corpus, context):
+    path = 'output/giants/co-occurrence/'+corpus+'/'+context+'_graph.net'
+    return data.pickle_from_file(path)
+
+def store_centralities(corpus, context):
+    print '> Calculating and storing centralities for', corpus
+    g = retrieve_corpus_network(corpus, context)
+    metrics = graph_representation.get_metrics(True, exclude_flow=True)
+
+    for metric in metrics:
+        m = metric.split()[0]
+        store_path = 'output/centralities/co-occurrence/'+corpus+'/'+context+'/'+m+'.cent'
+        if data.pickle_from_file(store_path, suppress_warning=True):
+            print '    already present, skipping:', metric
+            continue
+        else:
+            print '    calculating:', metric
+        try:
+            c = graph.centralities(g, metric)
+            data.pickle_to_file(c, store_path)
+        except MemoryError as e:
+            print 'MemoryError :('
+            data.write_to_file('MemoryError while claculating '+metric+' on '+corpus+':\n'+str(e)+'\n\n', 'output/log/errors')
+
+def retrieve_centralities(corpus, context, metric):
+    m = metric.split()[0]
+    return data.pickle_from_file('output/centralities/co-occurrence/'+corpus+'/'+context+'/'+m+'.cent')
+
+def perform_tc_icc_evaluation():
+    #~ corpus = 'air/test3_problem_descriptions'
+    #~ context = 'window'
+    #~ store_corpus_network(corpus, context)
+    #~ store_centralities(corpus, context)
+    #~ evaluate_tc_icc_retrieval()
+
+    #~ corpus = 'tasa/TASATest2'
+    #~ context = 'sentence'
+    #~ store_corpus_network(corpus, context)
+    #~ store_centralities(corpus, context)
+    #~ evaluate_tc_icc_classification()
+
+    #~ corpus = 'tasa/TASA900'
+    #~ context = 'sentence'
+    #~ store_corpus_network(corpus, context)
+    #~ store_centralities(corpus, context)
+    #~ evaluate_tc_icc_classification()
+
+    corpus = 'air/problem_descriptions'
+    context = 'window'
+    store_corpus_network(corpus, context)
+    #~ store_centralities(corpus, context)
+    #~ evaluate_tc_icc_retrieval()
 
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))
@@ -500,14 +556,13 @@ if __name__ == "__main__":
     #~ do_context_sentence_evaluation_retrieval()
 
     #~ corpus_properties('air/problem_descriptions', context='window')
-    #~ corpus_properties('tasa/TASA900', context='sentence')
     #~ compare_stats_to_random('tasa/TASA900')
-    #~ compare_stats_to_random('air/problem_descriptions')
 
     #~ print_degree_distributions('tasa/TASA900', context='sentence')
     #~ print_degree_distributions('air/problem_descriptions', context='window')
 
     #~ test_best_classification()
     #~ evaluate_tc_icc_classification()
-    evaluate_tc_icc_retrieval()
+    #~ evaluate_tc_icc_retrieval()
 
+    perform_tc_icc_evaluation()
