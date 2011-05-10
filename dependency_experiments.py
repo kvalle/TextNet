@@ -779,8 +779,8 @@ def evaluate_tc_icc_retrieval():
     graph_metrics = graph_representation.get_metrics(False)
 
     print '> Reading cases..'
-    solutions_path  = '../data/air/test_solutions_preprocessed'
-    path            = '../data/air/test_problem_descriptions_dependencies'
+    solutions_path  = '../data/air/solutions_preprocessed'
+    path            = '../data/air/problem_descriptions_dependencies'
     description_texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
