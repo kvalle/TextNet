@@ -14,9 +14,9 @@ import freq_representation
 import graph_representation
 import classify
 import evaluation
-import plotter
-import stanford_parser
-import preprocess
+#~ import plotter
+#~ import stanford_parser
+#~ import preprocess
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
@@ -890,18 +890,18 @@ def retrieve_centralities(corpus, metric):
     return data.pickle_from_file('output/centralities/dependency/'+corpus+'/'+m+'.cent')
 
 def perform_tc_icc_evaluation():
-    #~ corpus = 'air/test3_problem_descriptions'
-    #~ store_corpus_network(corpus)
-    #~ store_centralities(corpus)
-    #~ evaluate_tc_icc_retrieval()
+    corpus = 'air/test3_problem_descriptions'
+    store_corpus_network(corpus)
+    store_centralities(corpus)
+    evaluate_tc_icc_retrieval()
 
     #~ corpus = 'tasa/TASATest2'
     #~ store_corpus_network(corpus)
     #~ store_centralities(corpus)
     #~ evaluate_tc_icc_classification()
 
-    corpus = 'tasa/TASA900'
-    store_corpus_network(corpus)
+    #~ corpus = 'tasa/TASA900'
+    #~ store_corpus_network(corpus)
     #~ store_centralities(corpus)
     #~ evaluate_tc_icc_classification()
 
@@ -940,14 +940,14 @@ if __name__ == "__main__":
     #~ print_degree_distributions('air/problem_descriptions')
 
     #~ evaluate_tc_icc_classification()
-    #~ perform_tc_icc_evaluation()
+    perform_tc_icc_evaluation()
 
-    print 'dependency'
-    g = data.pickle_from_file('output/giants/dependency/tasa/TASA900/graph.net')
-    print len(g.nodes())
-    print len(g.edges())
-
-    print 'co-occurrence'
-    g = data.pickle_from_file('output/giants/co-occurrence/tasa/TASA900/sentence_graph.net')
-    print len(g.nodes())
-    print len(g.edges())
+    #~ print 'dependency'
+    #~ g = data.pickle_from_file('output/giants/dependency/tasa/TASA900/graph.net')
+    #~ print len(g.nodes())
+    #~ print len(g.edges())
+#~
+    #~ print 'co-occurrence'
+    #~ g = data.pickle_from_file('output/giants/co-occurrence/tasa/TASA900/sentence_graph.net')
+    #~ print len(g.nodes())
+    #~ print len(g.edges())

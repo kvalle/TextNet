@@ -13,7 +13,7 @@ import freq_representation
 import graph_representation
 import classify
 import evaluation
-import plotter
+#~ import plotter
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
