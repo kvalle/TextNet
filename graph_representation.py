@@ -188,7 +188,7 @@ def construct_random_network(doc, p=0.2):
 
     return graph
 
-def construct_dependency_network(doc, weighted=False, direction='undirected',remove_stop_words=False, exclude=['agent', 'advcl','parataxis'],verbose=False):
+def construct_dependency_network(doc, weighted=False, direction='undirected',remove_stop_words=False, exclude=['agent', 'advcl','parataxis'],verbose=False, unpickle=True):
     """Construct a dependency network from *doc*.
 
     Creates a network form *doc* with distinct word used for nodes, and
@@ -199,7 +199,10 @@ def construct_dependency_network(doc, weighted=False, direction='undirected',rem
     Forward direction means head-dependent, while backward gives dependent-head relations.
     """
     graph = nx.DiGraph()
-    deps = pickle.loads(doc)
+    if unpickle:
+        deps = pickle.loads(doc)
+    else:
+        deps = doc
     for dep_type, dep in deps.iteritems():
         if verbose: print '    dep:',dep_type
         if dep_type in exclude:

@@ -363,8 +363,8 @@ def evaluate_tc_icc_classification():
     graph_metrics = graph_representation.get_metrics(True, exclude_flow=True)
 
     print '> Reading cases..'
-    #~ corpus = 'tasa/TASA900'
-    corpus = 'tasa/TASATest2'
+    corpus = 'tasa/TASA900'
+    #~ corpus = 'tasa/TASATest2'
     context = 'sentence'
     path = '../data/'+corpus+'_text'
     texts, labels = data.read_files(path)
@@ -419,10 +419,10 @@ def evaluate_tc_icc_retrieval():
     graph_metrics = graph_representation.get_metrics(True, exclude_flow=True)
 
     print '> Reading cases..'
-    corpus = 'air/test3_problem_descriptions'
+    corpus = 'air/problem_descriptions'
     context = 'window'
-    solutions_path  = '../data/air/test3_solutions_preprocessed'
-    path            = '../data/air/test3_problem_descriptions_preprocessed'
+    solutions_path  = '../data/air/solutions_preprocessed'
+    path            = '../data/air/problem_descriptions_preprocessed'
     description_texts, labels = data.read_files(path)
 
     print '> Building corpus graph..'
@@ -529,17 +529,17 @@ def perform_tc_icc_evaluation():
     #~ store_centralities(corpus, context)
     #~ evaluate_tc_icc_classification()
 
-    #~ corpus = 'tasa/TASA900'
-    #~ context = 'sentence'
-    #~ store_corpus_network(corpus, context)
-    #~ store_centralities(corpus, context)
-    #~ evaluate_tc_icc_classification()
+    corpus = 'tasa/TASA900'
+    context = 'sentence'
+    store_corpus_network(corpus, context)
+    store_centralities(corpus, context)
+    evaluate_tc_icc_classification()
 
     corpus = 'air/problem_descriptions'
     context = 'window'
     store_corpus_network(corpus, context)
-    #~ store_centralities(corpus, context)
-    #~ evaluate_tc_icc_retrieval()
+    store_centralities(corpus, context)
+    evaluate_tc_icc_retrieval()
 
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))

@@ -843,18 +843,72 @@ def evaluate_tc_icc_retrieval():
     data.pickle_to_file(results, 'output/tc_icc/dependency/retrieval.res')
     return results
 
-def construct_corpus_network(corpus='air/test_problem_descriptions'):
-    path            = '../data/'+'_dependencies'
+def store_corpus_network(corpus):
+    print '> Constructing corpus network for', corpus
+    path = '../data/'+corpus+'_dependencies'
+    store_path = 'output/giants/dependency/'+corpus+'/graph.net'
+    if data.pickle_from_file(store_path, suppress_warning=True):
+        print '    already present, skipping'
+        return
     texts, labels = data.read_files(path)
-
     gdeps = {}
     for i, text in enumerate(texts):
-        if i%10==0: print '   ',str(i)+'/'+str(len(texts))
+        if i%1==0: print '   ',str(i)+'/'+str(len(texts))
         d = pickle.loads(text)
         for dep in d.keys():
             gdeps[dep] = gdeps.get(dep, []) + d[dep]
-    giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
-    data.pickle_to_file(giant, 'output/giants/dependency/'+corpus+'_giant.net')
+    giant = graph_representation.construct_dependency_network(gdeps,verbose=True,unpickle=False)
+    print '> Serializing and saving..'
+    data.pickle_to_file(giant, store_path)
+
+def retrieve_corpus_network(corpus):
+    path = 'output/giants/dependency/'+corpus+'/graph.net'
+    return data.pickle_from_file(path)
+
+def store_centralities(corpus):
+    print '> Calculating and storing centralities for', corpus
+    g = retrieve_corpus_network(corpus)
+    metrics = graph_representation.get_metrics(False, exclude_flow=True)
+
+    for metric in metrics:
+        m = metric.split()[0]
+        store_path = 'output/centralities/dependency/'+corpus+'/'+m+'.cent'
+        if data.pickle_from_file(store_path, suppress_warning=True):
+            print '    already present, skipping:', metric
+            continue
+        else:
+            print '    calculating:', metric
+        try:
+            c = graph.centralities(g, metric)
+            data.pickle_to_file(c, store_path)
+        except MemoryError as e:
+            print 'MemoryError :('
+            data.write_to_file('MemoryError while claculating '+metric+' on '+corpus+':\n'+str(e)+'\n\n', 'output/log/errors')
+
+def retrieve_centralities(corpus, metric):
+    m = metric.split()[0]
+    return data.pickle_from_file('output/centralities/dependency/'+corpus+'/'+m+'.cent')
+
+def perform_tc_icc_evaluation():
+    #~ corpus = 'air/test3_problem_descriptions'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
+    #~ evaluate_tc_icc_retrieval()
+
+    #~ corpus = 'tasa/TASATest2'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
+    #~ evaluate_tc_icc_classification()
+
+    corpus = 'tasa/TASA900'
+    store_corpus_network(corpus)
+    #~ store_centralities(corpus)
+    #~ evaluate_tc_icc_classification()
+
+    #~ corpus = 'air/problem_descriptions'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
+    #~ evaluate_tc_icc_retrieval()
 
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)
@@ -886,4 +940,14 @@ if __name__ == "__main__":
     #~ print_degree_distributions('air/problem_descriptions')
 
     #~ evaluate_tc_icc_classification()
-    evaluate_tc_icc_retrieval()
+    #~ perform_tc_icc_evaluation()
+
+    print 'dependency'
+    g = data.pickle_from_file('output/giants/dependency/tasa/TASA900/graph.net')
+    print len(g.nodes())
+    print len(g.edges())
+
+    print 'co-occurrence'
+    g = data.pickle_from_file('output/giants/co-occurrence/tasa/TASA900/sentence_graph.net')
+    print len(g.nodes())
+    print len(g.edges())
