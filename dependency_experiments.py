@@ -712,7 +712,7 @@ def compare_stats_to_random(dataset):
     pp.pprint(props)
 
 def evaluate_tc_icc_classification():
-    metrics = graph_representation.get_metrics(False, exclude_flow=True)
+    graph_metrics = graph_representation.get_metrics(False, exclude_flow=True)
 
     print '> Reading cases..'
     corpus = 'tasa/TASA900'
@@ -764,7 +764,7 @@ def evaluate_tc_icc_classification():
     return results
 
 def evaluate_tc_icc_retrieval():
-    metrics = graph_representation.get_metrics(False, exclude_flow=True)
+    graph_metrics = graph_representation.get_metrics(False, exclude_flow=True)
 
     print '> Reading cases..'
     corpus = 'air/problem_descriptions'
@@ -876,14 +876,14 @@ def perform_tc_icc_evaluation():
     #~ store_centralities(corpus)
     #~ evaluate_tc_icc_classification()
 
-    corpus = 'tasa/TASA900'
-    store_corpus_network(corpus)
-    store_centralities(corpus)
+    #~ corpus = 'tasa/TASA900'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
     evaluate_tc_icc_classification()
 
-    corpus = 'air/problem_descriptions'
-    store_corpus_network(corpus)
-    store_centralities(corpus)
+    #~ corpus = 'air/problem_descriptions'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
     evaluate_tc_icc_retrieval()
 
 if __name__ == "__main__":
