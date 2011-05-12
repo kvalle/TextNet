@@ -712,24 +712,13 @@ def compare_stats_to_random(dataset):
     pp.pprint(props)
 
 def evaluate_tc_icc_classification():
-    graph_metrics = graph_representation.get_metrics(False)
+    metrics = graph_representation.get_metrics(False, exclude_flow=True)
 
     print '> Reading cases..'
-    path = '../data/tasa/TASA900_dependencies'
+    corpus = 'tasa/TASA900'
+    path = '../data/'+corpus+'_dependencies'
     #~ path = '../data/tasa/TASATest_dependencies'
     texts, labels = data.read_files(path)
-
-    print '> Building corpus graph..'
-    giant = data.pickle_from_file('output/giants/dependency/classification.net')
-    if not giant:
-        gdeps = {}
-        for i, text in enumerate(texts):
-            if i%10==0: print '   ',str(i)+'/'+str(len(texts))
-            d = pickle.loads(text)
-            for dep in d.keys():
-                gdeps[dep] = gdeps.get(dep, []) + d[dep]
-        giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
-        data.pickle_to_file(giant, 'output/giants/dependency/classification.net')
 
     rep = {}
     icc = {}
@@ -738,11 +727,10 @@ def evaluate_tc_icc_classification():
         print
         print metric
         rep[metric] = []
-        try:
-            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/tc_icc/dependency/classification.icc')
-        except:
-            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+        centralities = retrieve_centralities(corpus, metric)
+        if centralities:
+            icc[metric] = graph_representation.calculate_icc_dict(centralities)
+        else:
             icc[metric] = None
 
     print '> Creating graph representations..'
@@ -776,24 +764,13 @@ def evaluate_tc_icc_classification():
     return results
 
 def evaluate_tc_icc_retrieval():
-    graph_metrics = graph_representation.get_metrics(False)
+    metrics = graph_representation.get_metrics(False, exclude_flow=True)
 
     print '> Reading cases..'
+    corpus = 'air/problem_descriptions'
     solutions_path  = '../data/air/solutions_preprocessed'
     path            = '../data/air/problem_descriptions_dependencies'
     description_texts, labels = data.read_files(path)
-
-    print '> Building corpus graph..'
-    giant = data.pickle_from_file('output/giants/dependency/retrieval.net')
-    if not giant:
-        gdeps = {}
-        for i, text in enumerate(description_texts):
-            if i%10==0: print '   ',str(i)+'/'+str(len(description_texts))
-            d = pickle.loads(text)
-            for dep in d.keys():
-                gdeps[dep] = gdeps.get(dep, []) + d[dep]
-        giant = graph_representation.construct_dependency_network(pickle.dumps(gdeps),verbose=True)
-        data.pickle_to_file(giant, 'output/giants/dependency/retrieval.net')
 
     rep = {}
     icc = {}
@@ -802,11 +779,10 @@ def evaluate_tc_icc_retrieval():
         print
         print metric
         rep[metric] = []
-        try:
-            icc[metric] = graph_representation.calculate_icc_dict(giant, metric)
-            data.pickle_to_file(giant, 'output/tc_icc/dependency/retrieval.icc')
-        except:
-            print "GOD FUCKING DAMN IT. FUCKING TOO LITTLE MEMORY DAMN IT. FUCK."
+        centralities = retrieve_centralities(corpus, metric)
+        if centralities:
+            icc[metric] = graph_representation.calculate_icc_dict(centralities)
+        else:
             icc[metric] = None
 
     print '> Creating solution representations..'
@@ -890,25 +866,25 @@ def retrieve_centralities(corpus, metric):
     return data.pickle_from_file('output/centralities/dependency/'+corpus+'/'+m+'.cent')
 
 def perform_tc_icc_evaluation():
-    corpus = 'air/test3_problem_descriptions'
-    store_corpus_network(corpus)
-    store_centralities(corpus)
-    evaluate_tc_icc_retrieval()
+    #~ corpus = 'air/test3_problem_descriptions'
+    #~ store_corpus_network(corpus)
+    #~ store_centralities(corpus)
+    #~ evaluate_tc_icc_retrieval()
 
     #~ corpus = 'tasa/TASATest2'
     #~ store_corpus_network(corpus)
     #~ store_centralities(corpus)
     #~ evaluate_tc_icc_classification()
 
-    #~ corpus = 'tasa/TASA900'
-    #~ store_corpus_network(corpus)
-    #~ store_centralities(corpus)
-    #~ evaluate_tc_icc_classification()
+    corpus = 'tasa/TASA900'
+    store_corpus_network(corpus)
+    store_centralities(corpus)
+    evaluate_tc_icc_classification()
 
-    #~ corpus = 'air/problem_descriptions'
-    #~ store_corpus_network(corpus)
-    #~ store_centralities(corpus)
-    #~ evaluate_tc_icc_retrieval()
+    corpus = 'air/problem_descriptions'
+    store_corpus_network(corpus)
+    store_centralities(corpus)
+    evaluate_tc_icc_retrieval()
 
 if __name__ == "__main__":
     #~ centrality_weights_classification(True)

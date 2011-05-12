@@ -369,9 +369,6 @@ def evaluate_tc_icc_classification():
     path = '../data/'+corpus+'_text'
     texts, labels = data.read_files(path)
 
-    print '> Building corpus graph..'
-    giant = retrieve_corpus_network(corpus, context)
-
     rep = {}
     icc = {}
     print '> Calculating ICCs..'
@@ -424,9 +421,6 @@ def evaluate_tc_icc_retrieval():
     solutions_path  = '../data/air/solutions_preprocessed'
     path            = '../data/air/problem_descriptions_preprocessed'
     description_texts, labels = data.read_files(path)
-
-    print '> Building corpus graph..'
-    giant = retrieve_corpus_network(corpus, context)
 
     rep = {}
     icc = {}
