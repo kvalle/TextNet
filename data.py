@@ -260,9 +260,8 @@ def pickle_to_file(data, filename):
     dir_path = os.path.dirname(filename)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    output = open(filename, 'w+')
-    pickle.dump(data, output)
-    output.close()
+    with open(filename, 'wb') as output
+        pickle.dump(data, output)
 
 ###### encoding utility functions
 
