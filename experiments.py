@@ -394,6 +394,52 @@ def test_document_lengths(dataset='mir'):
         if not d:
             print names[i], "is empty"
 
+def term_centrality_study(doc='air/reports_text/2005/a05a0059.html', num=20):
+    def _print_terms(cents, rep, num):
+        ts = _top_cents(cents, num)
+        terms = []
+        for t in ts:
+            terms.append(t[0])
+        print rep + ' & ' + ', '.join(terms) + ' \\\\'
+    def _top_cents(cents,num):
+        return sorted(cents.iteritems(), key = operator.itemgetter(1), reverse = True)[0:num]
+    def _calc_cents(g, metric, gcents=None):
+        if gcents: icc = graph_representation.calculate_icc_dict(gcents)
+        else: icc = None
+        return graph_representation.graph_to_dict(g, metric, icc)
+
+    import operator
+    import dependency_experiments
+    import co_occurrence_experiments
+
+    dataset = 'air/problem_descriptions'
+    path = '../data/'+doc
+    doc = data.read_file(path)
+
+    metric = graph.GraphMetrics.WEIGHTED_DEGREE
+    context = 'window'
+    g = graph_representation.construct_cooccurrence_network(doc, context=context)
+    cents = _calc_cents(g, metric)
+    _print_terms(cents, 'Co-occurrence TC', num)
+    #~ gcents = co_occurrence_experiments.retrieve_centralities(dataset, context, metric)
+    #~ cents = _calc_cents(g, metric, gcents)
+    #~ _print_terms(cents, 'Co-occurrence TC-ICC', num)
+
+    metric = graph.GraphMetrics.EIGENVECTOR
+    deps = data._text_to_dependencies(doc)
+    g = graph_representation.construct_dependency_network(deps)
+    cents = _calc_cents(g, metric)
+    _print_terms(cents, 'Dependency TC', num)
+    #~ gcents = dependency_experiments.retrieve_centralities(dataset, metric)
+    #~ cents = _calc_cents(g, metric, gcents)
+    #~ _print_terms(cents, 'Dependency TC-ICC', num)
+
+    fdict = freq_representation.text_to_dict([doc], freq_representation.FrequencyMetrics.TF_IDF)[0]
+    _print_terms(fdict, 'TF-IDF', num)
+
+    fdict = freq_representation.text_to_dict([doc], freq_representation.FrequencyMetrics.TF)[0]
+    _print_terms(fdict, 'TF', num)
+
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
     #~ do_retrieval_experiments('air/problem_descriptions', 'air/solutions',[])
@@ -413,4 +459,5 @@ if __name__ == "__main__":
     #~ test_document_lengths()
     #~ solution_similarity_stats(dataset='mir/solutions_preprocessed')
 
-    solution_similarity_stats()
+    #~ solution_similarity_stats()
+    term_centrality_study()

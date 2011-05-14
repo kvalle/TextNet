@@ -262,18 +262,18 @@ class GraphMetrics:
 
     CLOSENESS = 'Closeness'
     WEIGHTED_CLOSENESS = 'Closeness (weighted)'
-    CURRENT_FLOW_CLOSENESS = 'Current-flow closeness'
+    CURRENT_FLOW_CLOSENESS = 'Current-flow-closeness'
 
     BETWEENNESS = 'Betweenness'
     WEIGHTED_BETWEENNESS = 'Betweenness (weighted)'
-    CURRENT_FLOW_BETWEENNESS = 'Current-flow betweenness'
+    CURRENT_FLOW_BETWEENNESS = 'Current-flow-betweenness'
     LOAD = 'Load'
     WEIGHTED_LOAD = 'Load (weighted)'
 
     EIGENVECTOR = 'Eigenvector'
     PAGERANK =  'PageRank'
-    HITS_HUBS = 'HITS (hubs)'
-    HITS_AUTHORITIES = 'HITS (authorities)'
+    HITS_HUBS = 'HITS-hubs'
+    HITS_AUTHORITIES = 'HITS-authorities'
     CLUSTERING_DEGREE = 'Degree-weighted clustering coefficient'
 
 # Dictionary with mapping between constants and functions
