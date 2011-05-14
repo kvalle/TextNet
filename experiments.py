@@ -416,14 +416,14 @@ def term_centrality_study(doc='air/reports_text/2005/a05a0059.html', num=20):
     path = '../data/'+doc
     doc = data.read_file(path)
 
-    metric = graph.GraphMetrics.WEIGHTED_DEGREE
+    metric = graph.GraphMetrics.DEGREE
     context = 'window'
     g = graph_representation.construct_cooccurrence_network(doc, context=context)
     cents = _calc_cents(g, metric)
     _print_terms(cents, 'Co-occurrence TC', num)
-    #~ gcents = co_occurrence_experiments.retrieve_centralities(dataset, context, metric)
-    #~ cents = _calc_cents(g, metric, gcents)
-    #~ _print_terms(cents, 'Co-occurrence TC-ICC', num)
+    gcents = co_occurrence_experiments.retrieve_centralities(dataset, context, metric)
+    cents = _calc_cents(g, metric, gcents)
+    _print_terms(cents, 'Co-occurrence TC-ICC', num)
 
     metric = graph.GraphMetrics.EIGENVECTOR
     deps = data._text_to_dependencies(doc)

@@ -289,10 +289,9 @@ def graph_to_dict(g, metric, icc=None):
                 # excepting for this to detect possible missmatch between icc and doc network
                 # TODO: should be cleaned up once tc-icc eval exp is done
                 print 'KeyError:', str(ke)
-                print 'printing doc centralities:'
-                pp.pprint(centralities)
-                print 'printing ICCs:'
-                pp.pprint(icc)
+                print 'in doc cents:' + str(term in centralities)
+                print 'in doc iccs:' + str(term in icc)
+                centralities[term] = 0.0
 
     return centralities
 

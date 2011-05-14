@@ -13,7 +13,7 @@ import freq_representation
 import graph_representation
 import classify
 import evaluation
-#~ import plotter
+import plotter
 
 numpy.set_printoptions(linewidth = 1000, precision = 3)
 
@@ -213,8 +213,8 @@ def complete_network(path='../data/air/problem_descriptions_text'):
     return g
 
 def plot_results():
-    #~ retr_results = data.pickle_from_file('output/retr_context_10')
-    retr_results = {'Weighted degree (window)': [0.22290305491606582,
+    retr_results = data.pickle_from_file('output/retr_context_10')
+    retr_results = {'Degree (window)': [0.22290305491606582,
                        0.2239404496699994,
                        0.22351183191703122,
                        0.22293583927185456,
@@ -234,37 +234,37 @@ def plot_results():
                               0.22129686184085004,
                               0.22148942934157456,
                               0.22147928890310792],
-                    'Weighted degree (sentence)': [0.21784622825075944]*10,
-                    'PageRank (sentence)': [0.22056586008664569]*10}
-                    #~ 'PageRank (sentence)':[0.223649757653]*10,
-                    #~ 'Weighted degree (sentence)':[0.223449136101]*10}
+                    'PageRank (sentence)': [0.22056586008664569]*10,
+                    'Degree (sentence)': [0.21784622825075944]*10}
+                    #~ #'PageRank (sentence)':[0.223649757653]*10,
+                    #~ #'Weighted degree (sentence)':[0.223449136101]*10}
     pp.pprint(retr_results)
     plotter.plot(range(1,11),retr_results,'retrieval score','n, context size','',[1,10,.216,.225], legend_place="lower right")
 
-    #~ class_results = {'Weighted degree (window)': [0.52777777777777779,
-                       #~ 0.53333333333333333,
-                       #~ 0.53611111111111109,
-                       #~ 0.53333333333333333,
-                       #~ 0.53888888888888886,
-                       #~ 0.54166666666666663,
-                       #~ 0.53611111111111109,
-                       #~ 0.52777777777777779,
-                       #~ 0.53055555555555556,
-                       #~ 0.53055555555555556],
-             #~ 'PageRank (window)': [0.55833333333333335,
-                          #~ 0.55000000000000004,
-                          #~ 0.55277777777777781,
-                          #~ 0.54166666666666663,
-                          #~ 0.5444444444444444,
-                          #~ 0.54722222222222228,
-                          #~ 0.54722222222222228,
-                          #~ 0.53888888888888886,
-                          #~ 0.53888888888888886,
-                          #~ 0.53611111111111109],
-                #~ 'PageRank (sentence)':[0.56666666666666665]*10,
-                #~ 'Weighted degree (sentence)':[0.57499999999999996]*10}
+    #~ class_results = {'Degree (window)': [0.52777777777777779,
+                           #~ 0.53333333333333333,
+                           #~ 0.53611111111111109,
+                           #~ 0.53333333333333333,
+                           #~ 0.53888888888888886,
+                           #~ 0.54166666666666663,
+                           #~ 0.53611111111111109,
+                           #~ 0.52777777777777779,
+                           #~ 0.53055555555555556,
+                           #~ 0.53055555555555556],
+                    #~ 'PageRank (window)': [0.55833333333333335,
+                              #~ 0.55000000000000004,
+                              #~ 0.55277777777777781,
+                              #~ 0.54166666666666663,
+                              #~ 0.5444444444444444,
+                              #~ 0.54722222222222228,
+                              #~ 0.54722222222222228,
+                              #~ 0.53888888888888886,
+                              #~ 0.53888888888888886,
+                              #~ 0.53611111111111109],
+                    #~ 'Degree (sentence)':[0.57499999999999996]*10,
+                    #~ 'PageRank (sentence)':[0.56666666666666665]*10}
     #~ pp.pprint(class_results)
-    #~ plotter.plot(range(1,11),class_results,'classification score','n, context size','',[1,10,.515,.58], legend_place=None)
+    #~ plotter.plot(range(1,11),class_results,'classification score','n, context size','',[1,10,.515,.58], legend_place="upper right")
 
 def corpus_properties(dataset, context):
     """
@@ -537,7 +537,7 @@ def perform_tc_icc_evaluation():
 
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))
-    #~ plot_results()
+    plot_results()
 
     #~ print "------------------------------------- CLASSIFICATION - context window"
     #~ do_context_size_evaluation_classification()
@@ -557,6 +557,6 @@ if __name__ == "__main__":
 
     #~ test_best_classification()
     #~ evaluate_tc_icc_classification()
-    evaluate_tc_icc_retrieval()
+    #~ evaluate_tc_icc_retrieval()
 
     #~ perform_tc_icc_evaluation()
