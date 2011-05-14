@@ -279,10 +279,21 @@ def graph_to_dict(g, metric, icc=None):
 
     If `icc` is provided, values are TC-ICC, otherwise TC is calculated.
     """
+    import pprint as pp
     centralities = graph.centralities(g, metric)
     if icc:
         for term in centralities:
-            centralities[term] = centralities[term] * icc[term]
+            try:
+                centralities[term] = centralities[term] * icc[term]
+            except KeyError as ke:
+                # excepting for this to detect possible missmatch between icc and doc network
+                # TODO: should be cleaned up once tc-icc eval exp is done
+                print 'KeyError:', str(ke)
+                print 'printing doc centralities:'
+                pp.pprint(centralities)
+                print 'printing ICCs:'
+                pp.pprint(icc)
+
     return centralities
 
 def dicts_to_vectors(dicts, explicit_keys=None):

@@ -373,8 +373,7 @@ def evaluate_tc_icc_classification():
     icc = {}
     print '> Calculating ICCs..'
     for metric in graph_metrics:
-        print
-        print metric
+        print '   ', metric
         rep[metric] = []
         centralities = retrieve_centralities(corpus, context, metric)
         if centralities:
@@ -387,6 +386,7 @@ def evaluate_tc_icc_classification():
         if i%10==0: print '   ',str(i)+'/'+str(len(texts))
         g = graph_representation.construct_cooccurrence_network(text, context=context)
         for metric in graph_metrics:
+            print '   ', metric
             if not icc[metric]: continue
             d = graph_representation.graph_to_dict(g, metric, icc[metric])
             rep[metric].append(d)
@@ -426,8 +426,7 @@ def evaluate_tc_icc_retrieval():
     icc = {}
     print '> Calculating ICCs..'
     for metric in graph_metrics:
-        print
-        print metric
+        print '   ', metric
         rep[metric] = []
         centralities = retrieve_centralities(corpus, context, metric)
         if centralities:
@@ -445,6 +444,7 @@ def evaluate_tc_icc_retrieval():
         g = graph_representation.construct_cooccurrence_network(text, already_preprocessed=True, context='window')
         for metric in graph_metrics:
             if not icc[metric]: continue
+            #~ print '   ',metric
             d = graph_representation.graph_to_dict(g, metric, icc[metric])
             rep[metric].append(d)
         g = None # just to make sure..
@@ -557,6 +557,6 @@ if __name__ == "__main__":
 
     #~ test_best_classification()
     #~ evaluate_tc_icc_classification()
-    #~ evaluate_tc_icc_retrieval()
+    evaluate_tc_icc_retrieval()
 
-    perform_tc_icc_evaluation()
+    #~ perform_tc_icc_evaluation()
