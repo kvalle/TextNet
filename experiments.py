@@ -26,6 +26,9 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
 
     `icc` determines whether to use _inverse corpus centrality_ in the vector representations.
     """
+    import co_occurrence_experiments
+    import dependency_experiments
+
     def make_dicts(docs, icc):
         rep = []
         for i, doc in enumerate(docs):
@@ -52,16 +55,15 @@ def classification_comparison_graph(dataset='reuters', graph_type='co-occurrence
     icc_test = None
     if icc:
         print '> Calculating ICC..'
-        print '    training giant'
-        gdoc_training = ' '.join(training_docs)
-        giant_training = gfuns[graph_type](gdoc_training)
-        print '    training icc'
-        icc_training = graph_representation.calculate_icc_dict(giant_training, metrics[graph_type])
-        print '    test giant'
-        gdoc_test = ' '.join(test_docs)
-        giant_test = gfuns[graph_type](gdoc_test)
-        print '    test icc'
-        icc_test = graph_representation.calculate_icc_dict(giant_test, metrics[graph_type])
+        if graph_type is 'co-occurrence':
+            icc_training = co_occurrence_experiments.retrieve_centralities(dataset+'/training', 'sentence', metrics[graph_type])
+        elif graph_type is 'dependency':
+            icc_training = dependency_experiments.retrieve_centralities(dataset+'/training', metrics[graph_type])
+
+        if graph_type is 'co-occurrence':
+            icc_test = co_occurrence_experiments.retrieve_centralities(dataset+'/test', 'sentence', metrics[graph_type])
+        elif graph_type is 'dependency':
+            icc_test = dependency_experiments.retrieve_centralities(dataset+'/test', metrics[graph_type])
 
     print '> Creating representations..'
     training_dicts = make_dicts(training_docs, icc_training)
