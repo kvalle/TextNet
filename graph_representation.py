@@ -296,7 +296,7 @@ def graph_to_dict(g, metric, icc=None):
 
     return centralities
 
-def dicts_to_vectors(dicts, explicit_keys=None):
+def dicts_to_vectors(dicts, explicit_keys=None, remove_stop_words=False):
     """Convert a list of dictionaries to feature-vectors"""
     if not explicit_keys:
         node_set = set()
@@ -306,6 +306,8 @@ def dicts_to_vectors(dicts, explicit_keys=None):
         all_tokens = list(node_set)
     else:
         all_tokens = explicit_keys
+    if remove_stop_words:
+        all_tokens = preprocess.remove_stop_words(all_tokens)
     features = np.zeros((len(all_tokens), len(dicts)))
     for i, d in enumerate(dicts):
         if i%100==0: print '    vector',str(i)+'/'+str(len(dicts))
