@@ -119,7 +119,7 @@ def classification_comparison_freq(dataset='reuters'):
     data.write_to_file(s, 'output/comparison/classification')
     return results
 
-def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=None):
+def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', use_icc=False):
     """
     Experiment used for comparative evaluation of different network
     representations on retrieval.
@@ -128,7 +128,7 @@ def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=No
 
     `icc` determines whether to use _inverse corpus centrality_ in the vector representations.
     """
-    def make_dicts(docs):
+    def make_dicts(docs, icc=None):
         rep = []
         for i, doc in enumerate(docs):
             if i%100==0: print '    graph',str(i)+'/'+str(len(docs))
@@ -153,21 +153,23 @@ def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', icc=No
     solutions_texts, labels = data.read_files(solutions_path)
     solutions_rep = freq_representation.text_to_vector(solutions_texts, freq_representation.FrequencyMetrics.TF_IDF)
 
-    if icc:
-        print '> Constructing giant and calculating ICC..'
-        gdoc = ' '.join(docs)
-        giant = gfuns[graph_type](gdoc)
-        icc = graph_representation.calculate_icc_dict(giant_training, metrics[graph_type])
+    icc = None
+    if use_icc:
+        print '> Calculating ICC..'
+        if graph_type is 'co-occurrence':
+            icc = co_occurrence_experiments.retrieve_centralities(dataset+'/problem_descriptions', 'window', metrics[graph_type])
+        elif graph_type is 'dependency':
+            icc = dependency_experiments.retrieve_centralities(dataset+'/problem_descriptions', metrics[graph_type])
 
     print '> Creating problem description representations..'
-    dicts = make_dicts(docs)
+    dicts = make_dicts(docs, icc)
     descriptions_rep = graph_representation.dicts_to_vectors(dicts)
 
     print '> Evaluating..'
     results = evaluation.evaluate_retrieval(descriptions_rep, solutions_rep)
     print results
     s = 'retrieval comparison '
-    if icc: s += 'USING TC-ICC'
+    if use_icc: s += 'USING TC-ICC'
     s += '\nrepresentation: '+graph_type+'\nresult: '+str(results)+'\n\n\n'
     data.write_to_file(s, 'output/comparison/retrieval')
     return results
@@ -231,6 +233,22 @@ def do_classification_experiments(dataset='tasa/TASA900',
             results['freq'][metric] = evaluation.evaluate_classification(vectors, labels)
 
     print
+    pp.pprint(results)
+    return results
+
+def freq_classification(dataset='tasa/TASA900'):
+    results = {'_dataset':dataset,
+                '_evaluation':'classification'}
+    corpus_path = '../data/'+dataset
+    results['results'] = {}
+    for metric in freq_representation.get_metrics():
+        print metric
+        documents, labels = data.read_files(corpus_path+'_preprocessed')
+        vectors = freq_representation.text_to_vector(documents, metric)
+        r = evaluation.evaluate_classification(vectors, labels, mode='cross-validation')
+        results['results'][metric] = r
+        print '   ', r
+        print
     pp.pprint(results)
     return results
 
@@ -414,7 +432,7 @@ def term_centrality_study(doc='air/reports_text/2005/a05a0059.html', num=20):
     import dependency_experiments
     import co_occurrence_experiments
 
-    dataset = 'air/problem_descriptions'
+    dataset = 'air/reports'
     path = '../data/'+doc
     doc = data.read_file(path)
 
@@ -432,15 +450,50 @@ def term_centrality_study(doc='air/reports_text/2005/a05a0059.html', num=20):
     g = graph_representation.construct_dependency_network(deps)
     cents = _calc_cents(g, metric)
     _print_terms(cents, 'Dependency TC', num)
-    #~ gcents = dependency_experiments.retrieve_centralities(dataset, metric)
-    #~ cents = _calc_cents(g, metric, gcents)
-    #~ _print_terms(cents, 'Dependency TC-ICC', num)
+    gcents = dependency_experiments.retrieve_centralities(dataset, metric)
+    cents = _calc_cents(g, metric, gcents)
+    _print_terms(cents, 'Dependency TC-ICC', num)
 
     fdict = freq_representation.text_to_dict([doc], freq_representation.FrequencyMetrics.TF_IDF)[0]
     _print_terms(fdict, 'TF-IDF', num)
 
     fdict = freq_representation.text_to_dict([doc], freq_representation.FrequencyMetrics.TF)[0]
     _print_terms(fdict, 'TF', num)
+
+def plot_centrality_evaluations():
+    import data
+    labels = ['Degree','Closeness','Current-flow closeness','Betweenness','Current-flow betweenness','Load','Eigenvector','PageRank','HITS Authorities','HITS Hubs']
+
+    d = [
+            [0.5694444444444444,0.5333333333333333],#[0.5555555555555556,0.5333333333333333],
+            [0.525,0.5166666666666667],
+            [0.5194444444444445,0.5111111111111111],
+            [0.4361111111111111,0.43333333333333335],
+            [0.42777777777777776,0.4187],#[0.42777777777777776,0.05],
+            [0.4361111111111111,0.4222222222222222],
+            [0.5183333333333333,0.5055555555555555],
+            [0.5573333333333333,0.5433333333333333],
+            [0.5083333333333333,0.5083333333333333],
+            [0.5083333333333333,0.5083333333333333]]
+    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=1.6, color='black', legend = ['TC','TC-ICC'], legend_sep=0.6)
+    data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_co-occurrence.tex',mode='w')
+
+    d = [
+            [0.52500000000000002,0.5028],
+            [0.58894242452424244,0.5056],#[0.57499999999999996,0.5056],
+            [0.56944444444444442,0.5028],
+            [0.36388888888888887,0.3806],
+            [0.23333333333333334,0.2263],#[0.23333333333333334,0.05],
+            [0.35555555555555557,0.3778],
+            [0.49722222222222223,0.4667],
+            [0.52777777777777779,0.4833],
+            [0.49722222222222223,0.4611],
+            [0.49722222222222223,0.4611]]
+    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=1.6, color='black')
+    data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_dependency.tex',mode='w')
+
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, color='black', labels_only=True)
+    data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_labels.tex',mode='w')
 
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
@@ -450,16 +503,19 @@ if __name__ == "__main__":
     #~ dataset_stats('tasa/TASA900_text')
     #~ solution_similarity_stats()
 
+    #~ plot_centrality_evaluations()
+
     #~ classification_comparison_graph(graph_type='co-occurrence', icc=True)
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
 
-    #~ retrieval_comparison_graph(dataset='mir', graph_type='co-occurrence', icc=True)
-    #~ retrieval_comparison_graph(dataset='mir', graph_type='dependency', icc=True)
+    retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', use_icc=True)
+    retrieval_comparison_graph(dataset='air', graph_type='dependency', use_icc=True)
     #~ retrieval_comparison_freq()
 
     #~ test_document_lengths()
     #~ solution_similarity_stats(dataset='mir/solutions_preprocessed')
 
     #~ solution_similarity_stats()
-    term_centrality_study()
+    #~ term_centrality_study()
+    #~ freq_classification()
