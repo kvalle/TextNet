@@ -156,14 +156,19 @@ def retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', use_ic
     icc = None
     if use_icc:
         print '> Calculating ICC..'
-        if graph_type is 'co-occurrence':
-            icc = co_occurrence_experiments.retrieve_centralities(dataset+'/problem_descriptions', 'window', metrics[graph_type])
-        elif graph_type is 'dependency':
-            icc = dependency_experiments.retrieve_centralities(dataset+'/problem_descriptions', metrics[graph_type])
+        m = metrics[graph_type].split()[0]
+        print graph_type
+        if graph_type == 'co-occurrence':
+            p = 'output/centralities/co-occurrence/'+dataset+'/problem_descriptions/window/'+m+'.cent'
+        elif graph_type == 'dependency':
+            p = 'output/centralities/dependency/'+dataset+'/problem_descriptions/'+m+'.cent'
+        print '    fetching', p
+        icc = data.pickle_from_file(p)
+        print '    icc:', type(icc)
 
     print '> Creating problem description representations..'
     dicts = make_dicts(docs, icc)
-    descriptions_rep = graph_representation.dicts_to_vectors(dicts)
+    descriptions_rep = graph_representation.dicts_to_vectors(dicts)#, remove_stop_words=True)
 
     print '> Evaluating..'
     results = evaluation.evaluate_retrieval(descriptions_rep, solutions_rep)
@@ -193,7 +198,7 @@ def retrieval_comparison_freq(dataset='mir'):
         results[metric] = score
         print score
     pp.pprint(results)
-    s = 'retrieval comparison \nrepresentation: frequency\nresult:\n'+str(results)+'\n\n\n'
+    s = 'retrieval comparison \nrepresentation: frequency\ndataset:'+dataset+' \nresult:\n'+str(results)+'\n\n\n'
     data.write_to_file(s, 'output/comparison/retrieval')
     return results
 
@@ -462,7 +467,7 @@ def term_centrality_study(doc='air/reports_text/2005/a05a0059.html', num=20):
 
 def plot_centrality_evaluations():
     import data
-    labels = ['Degree','Closeness','Current-flow closeness','Betweenness','Current-flow betweenness','Load','Eigenvector','PageRank','HITS Authorities','HITS Hubs']
+    labels = ['~~~~~Degree','Closeness','Current-flow closeness','Betweenness','Current-flow betweenness','Load','Eigenvector','PageRank','HITS Authorities','HITS Hubs']
 
     d = [
             [0.5694444444444444,0.5333333333333333],#[0.5555555555555556,0.5333333333333333],
@@ -475,7 +480,8 @@ def plot_centrality_evaluations():
             [0.5573333333333333,0.5433333333333333],
             [0.5083333333333333,0.5083333333333333],
             [0.5083333333333333,0.5083333333333333]]
-    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=1.6, color='black', legend = ['TC','TC-ICC'], legend_sep=0.6)
+    ys = {.3:'0.0',.35:'...',.4:'0.4',.5:'0.5',.6:'0.6',.7:'0.7',.8:'0.8'}
+    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=3, color='black', legend = ['TC','TC-ICC'], legend_sep=0.6, low_cut=0.3, y_tics=ys, tick=False)
     data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_co-occurrence.tex',mode='w')
 
     d = [
@@ -489,11 +495,56 @@ def plot_centrality_evaluations():
             [0.52777777777777779,0.4833],
             [0.49722222222222223,0.4611],
             [0.49722222222222223,0.4611]]
-    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=1.6, color='black')
+    ys = {.0:'0.0',.1:'',.2:'0.2',.3:'',.4:'0.4',.5:'',.6:'0.6',.7:'',.8:'0.8'}
+    fig = plotter.tikz_barchart(d, None, scale = 3.5, yscale=1.6, color='black', y_tics=ys, tick=False)
     data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_dependency.tex',mode='w')
 
     fig = plotter.tikz_barchart(d, labels, scale = 3.5, color='black', labels_only=True)
     data.write_to_file(fig,'../../masteroppgave/paper/parts/tikz_bar_labels.tex',mode='w')
+
+def plot_classification_comparison_experiment():
+    import data
+    labels = ['Freqency','Co-occurrence','Dependency']
+    legend = ['local','global']
+    d = [[0.6693,0.6375],
+         [0.6880,0.6875],
+         [0.6827,0.6763]]
+    ys = {.4:'0.0',.45:'...',.5:'0.5',.6:'0.6',.7:'0.7',.8:'0.8'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=3, color='black', legend=legend, legend_sep=0.6, low_cut=0.4, y_tics=ys, tick=False)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/comp_classification.tex',mode='w')
+
+def plot_classification_evaluations_experiment():
+    import data
+    labels = ['Freqency','Co-occurrence','Dependency']
+    legend = ['local','global']
+    d = [[0.5678,0.5455], # .., -2
+         [0.5694,0.5333],
+         [0.5889,0.5056]]
+    ys = {.3:'0.0',.35:'...',.4:'0.4',.5:'0.5',.6:'0.6',.7:'0.7',.8:'0.8'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=3, color='black', legend=legend, legend_sep=0.6, low_cut=0.3, y_tics=ys, tick=False)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/eval_classification.tex',mode='w')
+
+def plot_retrieval_comparison_experiment():
+    import data
+    labels = ['Freqency','Co-occurrence','Dependency']
+    legend = ['local','global']
+    d = [[0.2243,0.2392],
+         [0.2205,0.2472],
+         [0.2094,0.2555]]
+    ys = {0:'0.0', .1:'0.1', .2:'0.2', .3:'0.3', .4:'0.4'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=3, color='black', legend=None, y_tics=ys, tick=False)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/comp_retrieval.tex',mode='w')
+
+def plot_retrieval_evaluations_experiment():
+    import data
+    labels = ['Freqency','Co-occurrence','Dependency']
+    legend = ['local','global']
+    d = [[0.2240,0.2459],
+         [0.2227,0.2559],
+         [0.2020,0.2048]]
+    ys = {0:'0.0', .1:'0.1', .2:'0.2', .3:'0.3', .4:'0.4'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=3, color='black', legend=None, y_tics=ys, tick=False)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/eval_retrieval.tex',mode='w')
 
 if __name__ == "__main__":
     #~ do_classification_experiments('tasa/TASA900',[])
@@ -509,9 +560,9 @@ if __name__ == "__main__":
     #~ classification_comparison_graph(graph_type='dependency', icc=True)
     #~ classification_comparison_freq()
 
-    retrieval_comparison_graph(dataset='air', graph_type='co-occurrence', use_icc=True)
-    retrieval_comparison_graph(dataset='air', graph_type='dependency', use_icc=True)
-    #~ retrieval_comparison_freq()
+    #~ retrieval_comparison_graph(dataset='mir', graph_type='co-occurrence', use_icc=False)
+    #~ retrieval_comparison_graph(dataset='mir', graph_type='dependency', use_icc=True)
+    #~ retrieval_comparison_freq('air')
 
     #~ test_document_lengths()
     #~ solution_similarity_stats(dataset='mir/solutions_preprocessed')
@@ -519,3 +570,11 @@ if __name__ == "__main__":
     #~ solution_similarity_stats()
     #~ term_centrality_study()
     #~ freq_classification()
+
+    plot_centrality_evaluations()
+
+    #~ plot_retrieval_comparison_experiment()
+    #~ plot_classification_comparison_experiment()
+
+    #~ plot_retrieval_evaluations_experiment()
+    #~ plot_classification_evaluations_experiment()
