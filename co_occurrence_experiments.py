@@ -508,7 +508,9 @@ def store_centralities(corpus, context):
 
 def retrieve_centralities(corpus, context, metric):
     m = metric.split()[0]
-    return data.pickle_from_file('output/centralities/co-occurrence/'+corpus+'/'+context+'/'+m+'.cent')
+    path = 'output/centralities/co-occurrence/'+corpus+'/'+context+'/'+m+'.cent'
+    print '    retrieving',path
+    return data.pickle_from_file(path)
 
 def perform_tc_icc_evaluation():
     #~ corpus = 'air/test3_problem_descriptions'
