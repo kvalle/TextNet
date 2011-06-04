@@ -229,12 +229,12 @@ def create_dataset(base_path, target_path, processing_fn):
                 if not new_file.closed: new_file.close()
                 if not old_file.closed: old_file.close()
 
-def write_to_file(data, filename):
+def write_to_file(data, filename, mode='a+'):
     """Dump data to file"""
     dir_path = os.path.dirname(filename)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    with open(filename, 'a+') as f:
+    with open(filename, mode) as f:
         f.write(data)
 
 ######
