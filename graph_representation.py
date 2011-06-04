@@ -289,9 +289,10 @@ def graph_to_dict(g, metric, icc=None):
             except KeyError as ke:
                 # excepting for this to detect possible missmatch between icc and doc network
                 # TODO: should be cleaned up once tc-icc eval exp is done
-                print 'KeyError:', str(ke)
-                print 'in doc cents:' + str(term in centralities)
-                print 'in doc iccs:' + str(term in icc)
+                if term not in centralities and term in icc:
+                    print '    !', str(ke), 'found in icc but not in graph centralities'
+                else:
+                    print '    !', str(ke), 'found in graph centralities but not in icc'
                 centralities[term] = 0.0
 
     return centralities
