@@ -158,7 +158,7 @@ def test_histogram():
     colors = ['#3C54FF','#EF4C32','#27A713']
     bar_graph(data, bar_names, colors=None)
 
-def tikz_barchart(data, labels, scale = 1.0, yscale=1.0, xscale=1.0, bar_widths = [7,5], base=.3, skip=0.4, legend=None, grid=True, pad=True, color='darkgray', labels_only=False, axsis=True, legend_sep=1.0, scale_height=True, low_cut=0.0, y_tics=None, tick=True):
+def tikz_barchart(data, labels, scale = 1.0, yscale=1.0, xscale=1.0, bar_widths = [7,5], base=.3, skip=0.4, legend=None, grid=True, pad=True, color='darkgray', labels_only=False, axsis=True, legend_sep=1.0, scale_height=True, low_cut=0.0, y_tics=None, tick=True, grid_step=0.1):
     def data_to_coords(data, base, skip):
         res = []
         for i in range(len(data[0])):
@@ -202,7 +202,7 @@ def tikz_barchart(data, labels, scale = 1.0, yscale=1.0, xscale=1.0, bar_widths 
 
     if grid and not labels_only:
         fig += '% Grid\n'
-        fig += '\draw[help lines,ystep=0.1cm,xstep='+str(width)+'] (0,0) grid ('+str(width)+','+str(max_val)+');\n\n'
+        fig += '\draw[help lines,ystep='+str(grid_step)+'cm,xstep='+str(width)+'] (0,0) grid ('+str(width)+','+str(max_val)+');\n\n'
 
     if legend and not labels_only:
         legend_start = 0.2
