@@ -158,6 +158,90 @@ def test_histogram():
     colors = ['#3C54FF','#EF4C32','#27A713']
     bar_graph(data, bar_names, colors=None)
 
+def tikz_barchart(data, labels, scale = 1.0, yscale=1.0, xscale=1.0, bar_widths = [7,5], base=.3, skip=0.4, legend=None, grid=True, pad=True, color='darkgray', labels_only=False, axsis=True, legend_sep=1.0, scale_height=True, low_cut=0.0, y_tics=None, tick=True):
+    def data_to_coords(data, base, skip):
+        res = []
+        for i in range(len(data[0])):
+            b = base
+            s = ''
+            for d in data:
+                s += '('+str(b)+','+str(d[i])+') '
+                b += skip
+            res.append(s)
+        return res
+
+    def print_labels(labels, base, skip):
+        res = ''
+        b = base + 0.1
+        for name in labels:
+            res += '\draw ('+str(b)+','+str(-lh/2)+') node[left, rotate=30] {\small '+name+'};\n'
+            b += skip
+        return res
+
+    for i in range(len(data)):
+        for j in range(len(data[0])):
+            data[i][j] -= low_cut
+    if scale_height:
+        max_val = max(max(data))
+        max_val += 0.1 - max_val % 0.1
+    else:
+        max_val = 1.0
+    lh = 0.16/yscale
+    bars = data_to_coords(data, base, skip)
+    width = len(data)*skip + float(base)/2
+    if pad:
+        width += 0.2 - width % 0.2
+    else:
+        width -= width%0.2
+
+    fig =  '\\begin{tikzpicture}[ybar,scale='+str(scale)+',xscale='+str(xscale)+',yscale='+str(yscale)+']\n'
+
+    if labels:
+        fig += '% Labels\n'
+        fig += print_labels(labels, base, skip)
+
+    if grid and not labels_only:
+        fig += '% Grid\n'
+        fig += '\draw[help lines,ystep=0.1cm,xstep='+str(width)+'] (0,0) grid ('+str(width)+','+str(max_val)+');\n\n'
+
+    if legend and not labels_only:
+        legend_start = 0.2
+        fig += '% Legend\n'
+        fig += '\draw[color='+color+',fill='+color+'!80] ('+str(legend_start)+','+str(max_val+lh)+') rectangle ('+str(legend_start+0.2)+','+str(max_val+2*lh)+');\n'
+        fig += '\draw ('+str(legend_start+0.2)+','+str(max_val+lh+lh/2)+') node[right] {\small '+legend[0]+'};\n'
+        fig += '\draw[color='+color+'!50,fill='+color+'!20] ('+str(legend_start+legend_sep)+','+str(max_val+lh)+') rectangle ('+str(legend_start+legend_sep+0.2)+','+str(max_val+2*lh)+'); node[right] {\small Weighted};\n'
+        fig += '\draw ('+str(legend_start+legend_sep+0.2)+','+str(max_val+lh+lh/2)+') node[right] {\small '+legend[1]+'};\n\n'
+
+    if not labels_only:
+        fig += '% Bars\n'
+        fig += '\draw[color='+color+',fill='+color+'!80,bar width='+str(bar_widths[0])+']\n'
+        fig += '    plot coordinates{'+bars[0]+'};\n'
+        fig += '\draw[color='+color+'!50,fill='+color+'!20,bar width='+str(bar_widths[1])+',bar shift='+str(bar_widths[0]/3)+', thick] \n'
+        fig += '    plot coordinates{'+bars[1]+'};\n\n'
+
+    if axsis and not labels_only:
+        fig += '% Y-axis\n'
+        fig += '\draw[->, thick] (0,0) -- (0,'+str(max_val)+');\n'
+        fig += '\draw[-, thick] (0,0) -- ('+str(width)+',0);\n'
+        fig += '\\foreach \y/\ytext in {'
+        if not y_tics:
+            y_tics = {0:'0\%', .1:'', .2:'20\%', .3:'', .4:'40\%', .5:'', .6:'60\%', .7:'', .8:'80\%', .9:'', 1:'100\%'}
+        ys = []
+        for i in y_tics:
+            y = i-low_cut
+            if y>=0.0:
+                ys.append([y,y_tics[i]])
+        fig += ','.join([str(y[0])+'/'+y[1] for y in ys if y[0] <= max_val])
+        #~ '.1/,.2/20\%,.3/,.4/40\%,.5/,.6/60\%,.7/,.8/80\%,.9/,1/100\%
+        fig += '}\n'
+        if tick:
+            fig += '\draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white] {$\ytext$};\n\n'
+        else:
+            fig += '\draw[yshift=\y cm] (-1pt,0pt) node[left,fill=white] {$\ytext$};\n\n'
+
+    fig += '\end{tikzpicture}\n'
+    return fig
+
 if  __name__=='__main__':
     #~ plot_context_sizes()
     test_histogram()
