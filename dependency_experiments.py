@@ -14,7 +14,7 @@ import freq_representation
 import graph_representation
 import classify
 import evaluation
-#~ import plotter
+import plotter
 #~ import stanford_parser
 #~ import preprocess
 
@@ -267,15 +267,15 @@ def plot_exp1():
             'unweighted': [0.36388888888888887,0.57499999999999996,0.23333333333333334,0.56944444444444442,0.52500000000000002,0.49722222222222223,0.49722222222222223,0.49722222222222223,0.35555555555555557,0.52777777777777779],
             'weighted': [0.36944444444444446,0.57499999999999996,0.20833333333333334,0.58333333333333337,0.49444444444444446,0.45555555555555555,0.45555555555555555,0.45555555555555555,0.36666666666666664,0.51111111111111107]
         }
-    #~ plotter.bar_graph(data, bar_names, x_label='classification accuracy',colors=colors,legend_place=None)
+    plotter.bar_graph(data, bar_names, x_label='classification accuracy',colors=colors,legend_place=None)
 
     # retrieval
-    bar_names = ['Betweenness','Closeness','Current-flow betweenness','Current-flow closeness','Degree','Eigenvector','HITS authorities','HITS hubs','Load','PageRank']
-    data = {
-            'unweighted':[0.14606637651984622,0.17184314735361236,0.042019078720146409,0.17399729543537901,0.18149811054435275,0.19854658693196564,0.19854658693196564,0.19854658693196564,0.14700372822743263,0.17725358882165362],
-            'weighted':[0.13586098100141117,0.18216618328598347,0.042019078720146409,0.17613717518129621,0.18821229318222113,0.17540014008712554,0.17540014008712554,0.17540014008712554,0.15104493506838745,0.17252331100724849]
-        }
-    plotter.bar_graph(data, bar_names, x_label='retrieval accuracy',colors=colors,legend_place=None)
+    #~ bar_names = ['Betweenness','Closeness','Current-flow betweenness','Current-flow closeness','Degree','Eigenvector','HITS authorities','HITS hubs','Load','PageRank']
+    #~ data = {
+            #~ 'unweighted':[0.14606637651984622,0.17184314735361236,0.042019078720146409,0.17399729543537901,0.18149811054435275,0.19854658693196564,0.19854658693196564,0.19854658693196564,0.14700372822743263,0.17725358882165362],
+            #~ 'weighted':[0.13586098100141117,0.18216618328598347,0.042019078720146409,0.17613717518129621,0.18821229318222113,0.17540014008712554,0.17540014008712554,0.17540014008712554,0.15104493506838745,0.17252331100724849]
+        #~ }
+    #~ plotter.bar_graph(data, bar_names, x_label='retrieval accuracy',colors=colors,legend_place=None)
 
 def stanford_example():
     """
@@ -863,7 +863,9 @@ def store_centralities(corpus):
 
 def retrieve_centralities(corpus, metric):
     m = metric.split()[0]
-    return data.pickle_from_file('output/centralities/dependency/'+corpus+'/'+m+'.cent')
+    path = 'output/centralities/dependency/'+corpus+'/'+m+'.cent'
+    print '    retrieving',path
+    return data.pickle_from_file(path)
 
 def perform_tc_icc_evaluation():
     #~ corpus = 'air/test3_problem_descriptions'
@@ -891,7 +893,7 @@ if __name__ == "__main__":
     #~ centrality_weights_classification(False)
     #~ centrality_weights_retrieval(True)
     #~ centrality_weights_retrieval(False)
-    #~ plot_exp1()
+    plot_exp1()
     #~ plot_type_evaluation()
     #~ pp.pprint(data.pickle_from_file('output/dependencies/exp1_retr_weighted'))
     #~ stanford_example()
@@ -916,7 +918,7 @@ if __name__ == "__main__":
     #~ print_degree_distributions('air/problem_descriptions')
 
     #~ evaluate_tc_icc_classification()
-    perform_tc_icc_evaluation()
+    #~ perform_tc_icc_evaluation()
 
     #~ print 'dependency'
     #~ g = data.pickle_from_file('output/giants/dependency/tasa/TASA900/graph.net')
