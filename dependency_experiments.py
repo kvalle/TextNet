@@ -257,25 +257,38 @@ def plot_exp1():
     """
     Plotting the results of the weight evaluation experiment.
     """
-    colors = ['#3C54FF','#EF4C32','#27A713']
+    legend = ['unweighted', 'weighted']
+    labels = ['Degree','Closeness','Current-flow closeness','Betweenness','Current-flow betweenness','Load','Eigenvector','PageRank','HITS authorities','HITS hubs']
 
     # classification
-    bar_names = ['Betweenness','Closeness','Current-flow betweenness',
-                'Current-flow closeness','Degree','Eigenvector',
-                'HITS authorities','HITS hubs','Load', 'PageRank']
-    data = {
-            'unweighted': [0.36388888888888887,0.57499999999999996,0.23333333333333334,0.56944444444444442,0.52500000000000002,0.49722222222222223,0.49722222222222223,0.49722222222222223,0.35555555555555557,0.52777777777777779],
-            'weighted': [0.36944444444444446,0.57499999999999996,0.20833333333333334,0.58333333333333337,0.49444444444444446,0.45555555555555555,0.45555555555555555,0.45555555555555555,0.36666666666666664,0.51111111111111107]
-        }
-    plotter.bar_graph(data, bar_names, x_label='classification accuracy',colors=colors,legend_place=None)
+    d = [[0.52500000000000002,0.49444444444444446], # Degree
+        [0.57499999999999996,0.57499999999999996], # Closeness
+        [0.56944444444444442,0.58333333333333337], # Current-flow closeness
+        [0.36388888888888887,0.36944444444444446], # Betweenness
+        [0.23333333333333334,0.20833333333333334], # Current-flow betweenness
+        [0.35555555555555557,0.36666666666666664], # Load
+        [0.49722222222222223,0.45555555555555555], # Eigenvector
+        [0.52777777777777779,0.51111111111111107], # PageRank
+        [0.49722222222222223,0.45555555555555555], # HITS authorities
+        [0.49722222222222223,0.45555555555555555]] # HITS hubs
+    ys = {0:'0.0',.1:'0.1',.2:'0.2', .3:'0.3',.4:'0.4',.5:'0.5',.6:'0.6'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=2.8, color='black', legend=legend, legend_sep=1.0, tick=False, y_tics=ys)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/dependency_eval_class.tex',mode='w')
 
     # retrieval
-    #~ bar_names = ['Betweenness','Closeness','Current-flow betweenness','Current-flow closeness','Degree','Eigenvector','HITS authorities','HITS hubs','Load','PageRank']
-    #~ data = {
-            #~ 'unweighted':[0.14606637651984622,0.17184314735361236,0.042019078720146409,0.17399729543537901,0.18149811054435275,0.19854658693196564,0.19854658693196564,0.19854658693196564,0.14700372822743263,0.17725358882165362],
-            #~ 'weighted':[0.13586098100141117,0.18216618328598347,0.042019078720146409,0.17613717518129621,0.18821229318222113,0.17540014008712554,0.17540014008712554,0.17540014008712554,0.15104493506838745,0.17252331100724849]
-        #~ }
-    #~ plotter.bar_graph(data, bar_names, x_label='retrieval accuracy',colors=colors,legend_place=None)
+    d = [[0.18149811054435275,0.18821229318222113], # Degree
+        [0.17184314735361236,0.18216618328598347], # Closeness
+        [0.14606637651984622,0.13586098100141117], # Betweenness
+        [0.17399729543537901,0.17613717518129621], # Current-flow closeness
+        [0.042019078720146409,0.042019078720146409], # Current-flow betweenness
+        [0.14700372822743263,0.15104493506838745], # Load
+        [0.19854658693196564,0.17540014008712554], # Eigenvector
+        [0.17725358882165362,0.17252331100724849], # PageRank
+        [0.19854658693196564,0.17540014008712554], # HITS authorities
+        [0.19854658693196564,0.17540014008712554]] # HITS hubs
+    ys = {0:'0.0',.05:'0.05', .1:'0.1',.15:'0.15', .2:'0.2'}
+    fig = plotter.tikz_barchart(d, labels, scale = 3.5, yscale=8, color='black', legend=legend, legend_sep=1.0, tick=False, grid_step=0.05, y_tics=ys)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/dependency_eval_retr.tex',mode='w')
 
 def stanford_example():
     """
