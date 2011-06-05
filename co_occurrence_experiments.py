@@ -212,6 +212,64 @@ def complete_network(path='../data/air/problem_descriptions_text'):
     pp.pprint(g)
     return g
 
+def plot_context_evaluation():
+    options = {
+        'Degree (window)': 'mark=*,blue',
+        'PageRank (window)': 'mark=*,red',
+        'Degree (sentence)': 'dashed,blue',
+        'PageRank (sentence)': 'dashed,red'}
+    retr_results = {
+        'Degree (window)': [0.22290305491606582,
+                            0.2239404496699994,
+                            0.22351183191703122,
+                            0.22293583927185456,
+                            0.2216027852882311,
+                            0.22232860216650002,
+                            0.22230162622918934,
+                            0.22287683186704185,
+                            0.22266252053221772,
+                            0.22237418794670616],
+        'PageRank (window)': [0.21772129149181993,
+                            0.21884861149427587,
+                            0.22063142971295358,
+                            0.21893898241891538,
+                            0.21973766615441442,
+                            0.22054672890564322,
+                            0.22099589130745473,
+                            0.22129686184085004,
+                            0.22148942934157456,
+                            0.22147928890310792],
+        'PageRank (sentence)': [0.22056586008664569]*10,
+        'Degree (sentence)': [0.21784622825075944]*10}
+    fig = plotter.tikz_plot(retr_results, options, xlabel='Context size', ylabel='Performance', legend=False)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/co-occ_context_eval_retr.tex',mode='w')
+
+    class_results = {
+        'Degree (window)': [0.52777777777777779,
+                           0.53333333333333333,
+                           0.53611111111111109,
+                           0.53333333333333333,
+                           0.53888888888888886,
+                           0.54166666666666663,
+                           0.53611111111111109,
+                           0.52777777777777779,
+                           0.53055555555555556,
+                           0.53055555555555556],
+        'PageRank (window)': [0.55833333333333335,
+                              0.55000000000000004,
+                              0.55277777777777781,
+                              0.54166666666666663,
+                              0.5444444444444444,
+                              0.54722222222222228,
+                              0.54722222222222228,
+                              0.53888888888888886,
+                              0.53888888888888886,
+                              0.53611111111111109],
+        'Degree (sentence)':[0.57499999999999996]*10,
+        'PageRank (sentence)':[0.56666666666666665]*10}
+    fig = plotter.tikz_plot(class_results, options, xlabel='Context size', ylabel='Performance', legend=True)
+    data.write_to_file(fig,'../../masteroppgave/report/imgs/tikz/co-occ_context_eval_class.tex',mode='w')
+
 def plot_results():
     retr_results = data.pickle_from_file('output/retr_context_10')
     retr_results = {'Degree (window)': [0.22290305491606582,
@@ -539,7 +597,7 @@ def perform_tc_icc_evaluation():
 
 if __name__ == "__main__":
     #~ pp.pprint(data.pickle_from_file('output/retr_context_sentence_take2'))
-    plot_results()
+    #~ plot_results()
 
     #~ print "------------------------------------- CLASSIFICATION - context window"
     #~ do_context_size_evaluation_classification()
@@ -562,3 +620,5 @@ if __name__ == "__main__":
     #~ evaluate_tc_icc_retrieval()
 
     #~ perform_tc_icc_evaluation()
+
+    plot_context_evaluation()

@@ -242,6 +242,44 @@ def tikz_barchart(data, labels, scale = 1.0, yscale=1.0, xscale=1.0, bar_widths 
     fig += '\end{tikzpicture}\n'
     return fig
 
+
+def tikz_plot(dataseries, plot_options={}, height='8cm', width='\\textwidth', xlabel='', ylabel='',legend=True):
+    fig = ''
+    #~ fig  = '\pgfkeys{/pgf/number format/.cd,std,fixed zerofill,precision=3}\n'
+    fig += '\pgfplotsset{width='+width+',height='+height+'}\n'
+    fig += '\pgfplotsset{every axis/.append style={\n'
+    fig += '    thick,\n'
+    fig += '    tick style={semithick}}}\n'
+    fig += '\\begin{tikzpicture}\n'
+    fig += '    \\begin{axis}[\n'
+    fig += '      stack plots=false,\n'
+    fig += '      enlarge x limits=true,\n'
+    fig += '      yticklabel style={/pgf/number format/.cd, fixed, fixed zerofill, precision=3,},\n'
+    fig += '      ylabel style={yshift=0.2cm},\n'
+    fig += '      xtick=data,\n'
+    if xlabel: fig += '      xlabel='+xlabel+',\n'
+    if ylabel: fig += '      ylabel='+ylabel+',\n'
+    fig += '      legend style={\n'
+    if legend:
+        fig += '          anchor=base,at={(0.5,1.1)},\n'
+    fig += '          cells={anchor=west}}\n'
+    fig += '    ]\n'
+
+    for name in dataseries:
+        fig += '    \\addplot'
+        if plot_options.has_key(name):
+            fig += '['+plot_options[name]+']'
+        fig += ' coordinates { '
+        series = dataseries[name]
+        for i in range(len(series)):
+            fig += '('+str(i+1)+', '+str(series[i])+') '
+        fig += '};\n'
+        if legend: fig += '    \\addlegendentry{'+name+'}\n'
+
+    fig += '    \end{axis}\n'
+    fig += '\end{tikzpicture}\n'
+    return fig
+
 if  __name__=='__main__':
     #~ plot_context_sizes()
     test_histogram()
